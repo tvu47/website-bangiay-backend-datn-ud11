@@ -1,6 +1,6 @@
 package com.snackman.datnud11.repo;
 
-import com.bangiay.snackman.entity.Employee;
+import com.snackman.datnud11.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

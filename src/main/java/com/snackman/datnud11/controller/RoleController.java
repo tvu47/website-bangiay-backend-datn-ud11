@@ -1,8 +1,8 @@
 package com.snackman.datnud11.controller;
 
-import com.snackman.employeeservice.entity.Roles;
-import com.snackman.employeeservice.repo.RolesRepository;
-import com.snackman.employeeservice.utils.generic.GenericObjFindById;
+import com.snackman.datnud11.entity.Roles;
+import com.snackman.datnud11.repo.RolesRepository;
+import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

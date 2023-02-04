@@ -1,8 +1,8 @@
 package com.snackman.datnud11.controller;
 
-import com.snackman.employeeservice.entity.Employee;
-import com.snackman.employeeservice.repo.EmployeeRepository;
-import com.snackman.employeeservice.utils.generic.GenericObjFindById;
+import com.snackman.datnud11.entity.Employee;
+import com.snackman.datnud11.repo.EmployeeRepository;
+import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

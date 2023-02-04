@@ -1,6 +1,6 @@
 package com.snackman.datnud11.repo;
 
-import com.bangiay.snackman.entity.PaymentType;
+import com.snackman.datnud11.entity.PaymentType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

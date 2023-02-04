@@ -1,8 +1,8 @@
 package com.snackman.datnud11.controller;
 
-import com.snackman.billservice.entity.Bill;
-import com.snackman.billservice.repo.BillRepository;
-import com.snackman.billservice.utils.generic.GenericObjFindById;
+import com.snackman.datnud11.entity.Bill;
+import com.snackman.datnud11.repo.BillRepository;
+import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

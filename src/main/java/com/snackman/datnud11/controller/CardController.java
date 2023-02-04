@@ -1,8 +1,8 @@
 package com.snackman.datnud11.controller;
 
-import com.snackman.billservice.entity.Card;
-import com.snackman.billservice.repo.CardRepository;
-import com.snackman.billservice.utils.generic.GenericObjFindById;
+import com.snackman.datnud11.entity.Card;
+import com.snackman.datnud11.repo.CardRepository;
+import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

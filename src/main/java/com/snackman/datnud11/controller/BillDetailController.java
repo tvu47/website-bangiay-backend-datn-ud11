@@ -1,8 +1,8 @@
 package com.snackman.datnud11.controller;
 
-import com.snackman.billservice.entity.BillDetails;
-import com.snackman.billservice.repo.BillDetailsRepository;
-import com.snackman.billservice.utils.generic.GenericObjFindById;
+import com.snackman.datnud11.entity.BillDetails;
+import com.snackman.datnud11.repo.BillDetailsRepository;
+import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class BillDetailController {
     }
     @PutMapping
     public ResponseEntity<BillDetails> updateBillDetailById(@RequestBody BillDetails billDetails){
-        BillDetails billDetailsUpdate = new GenericObjFindById<BillDetails>().findByIdObject(billDetailsRepository.findById(billDetails.getId()));
+        BillDetails billDetailsUpdate = new GenericObjFindById<BillDetails>().findByIdObject(billDetailsRepository.findById(billDetails.getBillId()));
         return new ResponseEntity<>(billDetailsRepository.save(billDetailsUpdate), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
