@@ -2,6 +2,8 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.repo.CustomersRepository;
+import com.snackman.datnud11.services.CustomerService;
+import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,8 @@ import java.util.List;
 public class CustomerController {
     @Autowired
     CustomersRepository customersRepository;
-
+    @Autowired
+    CustomerService customerService;
     @GetMapping
     public ResponseEntity<List<Customers>> getCustomers(){
         return new ResponseEntity<>(customersRepository.findAll(), HttpStatus.OK);
@@ -25,13 +28,13 @@ public class CustomerController {
         return new ResponseEntity<>(customersRepository.save(customers), HttpStatus.CREATED);
     }
     @PutMapping
-    public ResponseEntity<Customers> updateCustomerById(@RequestBody Customers customers){
-        Customers customersUpdate = new GenericObjFindById<Customers>().findByIdObject(customersRepository.findById(customers.getId()));
-        return new ResponseEntity<>(customersRepository.save(customersUpdate), HttpStatus.CREATED);
+    public ResponseEntity<Customers> updateCustomerById(@RequestBody Customers customers) throws CustomNotFoundException {
+        customerService.checkCustomerExist(customers.getId());
+        return new ResponseEntity<>(customersRepository.save(customers), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> DeleteCustomersById(@PathVariable(name = "id") Long id){
-        Customers customers = new GenericObjFindById<Customers>().findByIdObject(customersRepository.findById(id));
+    public ResponseEntity<String> DeleteCustomersById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{
+        Customers customers = customerService.checkCustomerExist(id);
         customersRepository.delete(customers);
         return new ResponseEntity<>("Delete Successfully!",HttpStatus.NO_CONTENT);
     }

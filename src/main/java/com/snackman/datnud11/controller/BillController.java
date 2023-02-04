@@ -2,6 +2,8 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.repo.BillRepository;
+import com.snackman.datnud11.services.BillService;
+import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class BillController {
     @Autowired
     BillRepository billRepository;
 
+    @Autowired
+    BillService billService;
+
     @GetMapping
     public ResponseEntity<List<Bill>> getBills(){
         return new ResponseEntity<>(billRepository.findAll(), HttpStatus.OK);
@@ -27,13 +32,13 @@ public class BillController {
         return new ResponseEntity<>(billRepository.save(bill), HttpStatus.CREATED);
     }
     @PutMapping
-    public ResponseEntity<Bill> updateBillById(@RequestBody Bill billUpdate){
-        new GenericObjFindById<Bill>().findByIdObject(billRepository.findById(billUpdate.getId()));
+    public ResponseEntity<Bill> updateBillById(@RequestBody Bill billUpdate) throws CustomNotFoundException {
+        billService.checkBillExist(billUpdate.getId());
         return new ResponseEntity<>(billRepository.save(billUpdate), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> DeleteBillById(@PathVariable(name = "id") Long id){
-        Bill bill = new GenericObjFindById<Bill>().findByIdObject(billRepository.findById(id));
+    public ResponseEntity<String> deleteBillById(@PathVariable(name = "id") Long id)throws CustomNotFoundException{
+        Bill bill = billService.checkBillExist(id);
         billRepository.delete(bill);
         return new ResponseEntity<>("Delete Successfully!",HttpStatus.NO_CONTENT);
     }

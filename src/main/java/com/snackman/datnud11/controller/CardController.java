@@ -2,6 +2,8 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.entity.Card;
 import com.snackman.datnud11.repo.CardRepository;
+import com.snackman.datnud11.services.CardService;
+import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,8 @@ import java.util.List;
 public class CardController {
     @Autowired
     CardRepository cardRepository;
-
+    @Autowired
+    CardService cardService;
     @GetMapping
     public ResponseEntity<List<Card>> getCards(){
         return new ResponseEntity<>(cardRepository.findAll(), HttpStatus.OK);
@@ -25,13 +28,13 @@ public class CardController {
         return new ResponseEntity<>(cardRepository.save(card), HttpStatus.CREATED);
     }
     @PutMapping
-    public ResponseEntity<Card> updateCardById(@RequestBody Card card){
-        Card cardUpdate = new GenericObjFindById<Card>().findByIdObject(cardRepository.findById(card.getId()));
-        return new ResponseEntity<>(cardRepository.save(cardUpdate), HttpStatus.CREATED);
+    public ResponseEntity<Card> updateCardById(@RequestBody Card card)throws CustomNotFoundException {
+        cardService.checkCardExist(card.getId());
+        return new ResponseEntity<>(cardRepository.save(card), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> DeleteCardById(@PathVariable(name = "id") Long id){
-        Card bill = new GenericObjFindById<Card>().findByIdObject(cardRepository.findById(id));
+    public ResponseEntity<String> DeleteCardById(@PathVariable(name = "id") Long id)throws CustomNotFoundException{
+        Card bill = cardService.checkCardExist(id);
         cardRepository.delete(bill);
         return new ResponseEntity<>("Delete Successfully!",HttpStatus.NO_CONTENT);
     }

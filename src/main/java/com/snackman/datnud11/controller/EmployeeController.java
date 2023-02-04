@@ -2,6 +2,8 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.entity.Employee;
 import com.snackman.datnud11.repo.EmployeeRepository;
+import com.snackman.datnud11.services.EmployeeService;
+import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,8 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     EmployeeRepository employeeRepository;
-
+    @Autowired
+    EmployeeService employeeService;
     @GetMapping
     public ResponseEntity<List<Employee>> getEmployee(){
         return new ResponseEntity<>(employeeRepository.findAll(), HttpStatus.OK);
@@ -24,15 +27,15 @@ public class EmployeeController {
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee){
         return new ResponseEntity<>(employeeRepository.save(employee), HttpStatus.CREATED);
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployeeById(@PathVariable(name = "id") Long id){
-        Employee customers = new GenericObjFindById<Employee>().findByIdObject(employeeRepository.findById(id));
-        return new ResponseEntity<>(customers, HttpStatus.CREATED);
+    @PutMapping
+    public ResponseEntity<Employee> updateEmployeeById(@RequestBody Employee employee) throws CustomNotFoundException {
+        employeeService.checkEmployeeExist(employee.getId());
+        return new ResponseEntity<>(employee, HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> DeleteEmployeeById(@PathVariable(name = "id") Long id){
-        Employee customers = new GenericObjFindById<Employee>().findByIdObject(employeeRepository.findById(id));
-        employeeRepository.delete(customers);
+    public ResponseEntity<String> DeleteEmployeeById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{
+        Employee employee = employeeService.checkEmployeeExist(id);
+        employeeRepository.delete(employee);
         return new ResponseEntity<>("Delete Successfully!",HttpStatus.NO_CONTENT);
     }
 }
