@@ -17,30 +17,34 @@ import java.util.List;
 @RequestMapping("/api/v1/bills")
 @Slf4j
 public class BillController {
-    @Autowired
-    BillRepository billRepository;
 
-    @Autowired
-    BillService billService;
+	@Autowired
+	BillRepository billRepository;
 
-    @GetMapping
-    public ResponseEntity<List<Bill>> getBills(){
-        return new ResponseEntity<>(billRepository.findAll(), HttpStatus.OK);
-    }
-    @PostMapping
-    public ResponseEntity<Bill> createBill(@RequestBody Bill bill){
-        return new ResponseEntity<>(billRepository.save(bill), HttpStatus.CREATED);
-    }
-    @PutMapping
-    public ResponseEntity<Bill> updateBillById(@RequestBody Bill billUpdate) throws CustomNotFoundException {
-        billService.checkBillExist(billUpdate.getId());
-        return new ResponseEntity<>(billRepository.save(billUpdate), HttpStatus.CREATED);
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBillById(@PathVariable(name = "id") Long id)throws CustomNotFoundException{
-        Bill bill = billService.checkBillExist(id);
-        billRepository.delete(bill);
-        return new ResponseEntity<>("Delete Successfully!",HttpStatus.NO_CONTENT);
-    }
+	@Autowired
+	BillService billService;
+
+	@GetMapping
+	public ResponseEntity<List<Bill>> getBills() {
+		return new ResponseEntity<>(billRepository.findAll(), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<Bill> createBill(@RequestBody Bill bill) {
+		return new ResponseEntity<>(billRepository.save(bill), HttpStatus.CREATED);
+	}
+
+	@PutMapping
+	public ResponseEntity<Bill> updateBillById(@RequestBody Bill billUpdate) throws CustomNotFoundException {
+		billService.checkBillExist(billUpdate.getId());
+		return new ResponseEntity<>(billRepository.save(billUpdate), HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteBillById(@PathVariable(name = "id") Long id) throws CustomNotFoundException {
+		Bill bill = billService.checkBillExist(id);
+		billRepository.delete(bill);
+		return new ResponseEntity<>("Delete Successfully!", HttpStatus.NO_CONTENT);
+	}
 
 }

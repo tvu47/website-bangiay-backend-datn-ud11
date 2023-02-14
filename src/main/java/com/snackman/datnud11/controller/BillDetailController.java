@@ -16,28 +16,33 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/bill-details")
 public class BillDetailController {
-    @Autowired
-    BillDetailsRepository billDetailsRepository;
-    @Autowired
-    BillDetailService billDetailService;
+	@Autowired
+	BillDetailsRepository billDetailsRepository;
+	@Autowired
+	BillDetailService billDetailService;
 
-    @GetMapping
-    public ResponseEntity<List<BillDetails>> getBillDetails(){
-        return new ResponseEntity<>(billDetailsRepository.findAll(), HttpStatus.OK);
-    }
-    @PostMapping
-    public ResponseEntity<BillDetails> createBillDetail(@RequestBody BillDetails billDetails){
-        return new ResponseEntity<>(billDetailsRepository.save(billDetails), HttpStatus.CREATED);
-    }
-    @PutMapping
-    public ResponseEntity<BillDetails> updateBillDetailById(@RequestBody BillDetails billDetails) throws CustomNotFoundException {
-        billDetailService.checkBillDetailsExist(billDetails.getBillId());
-        return new ResponseEntity<>(billDetailsRepository.save(billDetails), HttpStatus.CREATED);
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> DeleteBillDetailById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{
-        BillDetails bill = billDetailService.checkBillDetailsExist(id);
-        billDetailsRepository.delete(bill);
-        return new ResponseEntity<>("Delete Successfully!",HttpStatus.NO_CONTENT);
-    }
+	@GetMapping
+	public ResponseEntity<List<BillDetails>> getBillDetails() {
+		return new ResponseEntity<>(billDetailsRepository.findAll(), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<BillDetails> createBillDetail(@RequestBody BillDetails billDetails) {
+		return new ResponseEntity<>(billDetailsRepository.save(billDetails), HttpStatus.CREATED);
+	}
+
+	@PutMapping
+	public ResponseEntity<BillDetails> updateBillDetailById(@RequestBody BillDetails billDetails)
+			throws CustomNotFoundException {
+		billDetailService.checkBillDetailsExist(billDetails.getBillId());
+		return new ResponseEntity<>(billDetailsRepository.save(billDetails), HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> DeleteBillDetailById(@PathVariable(name = "id") Long id)
+			throws CustomNotFoundException {
+		BillDetails bill = billDetailService.checkBillDetailsExist(id);
+		billDetailsRepository.delete(bill);
+		return new ResponseEntity<>("Delete Successfully!", HttpStatus.NO_CONTENT);
+	}
 }

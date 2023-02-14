@@ -3,6 +3,8 @@ package com.snackman.datnud11.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Table(name = "products")
 @Data
@@ -25,4 +27,7 @@ public class Products {
     private String manufactureAddress;
     @Column(name ="status")
     private boolean status;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Size> sizes;
 }

@@ -15,27 +15,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/employee")
 public class EmployeeController {
-    @Autowired
-    EmployeeRepository employeeRepository;
-    @Autowired
-    EmployeeService employeeService;
-    @GetMapping
-    public ResponseEntity<List<Employee>> getEmployee(){
-        return new ResponseEntity<>(employeeRepository.findAll(), HttpStatus.OK);
-    }
-    @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee){
-        return new ResponseEntity<>(employeeRepository.save(employee), HttpStatus.CREATED);
-    }
-    @PutMapping
-    public ResponseEntity<Employee> updateEmployeeById(@RequestBody Employee employee) throws CustomNotFoundException {
-        employeeService.checkEmployeeExist(employee.getId());
-        return new ResponseEntity<>(employee, HttpStatus.CREATED);
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> DeleteEmployeeById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{
-        Employee employee = employeeService.checkEmployeeExist(id);
-        employeeRepository.delete(employee);
-        return new ResponseEntity<>("Delete Successfully!",HttpStatus.NO_CONTENT);
-    }
+	@Autowired
+	EmployeeRepository employeeRepository;
+	@Autowired
+	EmployeeService employeeService;
+
+	@GetMapping
+	public ResponseEntity<List<Employee>> getEmployee() {
+		return new ResponseEntity<>(employeeRepository.findAll(), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+		return new ResponseEntity<>(employeeRepository.save(employee), HttpStatus.CREATED);
+	}
+
+	@PutMapping
+	public ResponseEntity<Employee> updateEmployeeById(@RequestBody Employee employee) throws CustomNotFoundException {
+		employeeService.checkEmployeeExist(employee.getId());
+		return new ResponseEntity<>(employee, HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> DeleteEmployeeById(@PathVariable(name = "id") Long id)
+			throws CustomNotFoundException {
+		Employee employee = employeeService.checkEmployeeExist(id);
+		employeeRepository.delete(employee);
+		return new ResponseEntity<>("Delete Successfully!", HttpStatus.NO_CONTENT);
+	}
 }
