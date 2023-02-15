@@ -1,6 +1,6 @@
 package com.snackman.datnud11.controller;
 
-import com.snackman.datnud11.entity.RoleEmployee;
+import com.snackman.datnud11.entity.RoleUser;
 import com.snackman.datnud11.repo.RoleEmployeeRepository;
 import com.snackman.datnud11.services.RoleEmployeeService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
@@ -19,22 +19,22 @@ public class RoleEmployeeController {
     @Autowired
     RoleEmployeeRepository roleEmployeeRepository;
     @GetMapping
-    public ResponseEntity<List<RoleEmployee>> getRolesEmployee(){
+    public ResponseEntity<List<RoleUser>> getRolesEmployee(){
         return new ResponseEntity<>(roleEmployeeRepository.findAll(), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<RoleEmployee> createRolesEmployee(@RequestBody RoleEmployee roleEmployee){
-        return new ResponseEntity<>(roleEmployeeRepository.save(roleEmployee), HttpStatus.CREATED);
+    public ResponseEntity<RoleUser> createRolesEmployee(@RequestBody RoleUser roleUser){
+        return new ResponseEntity<>(roleEmployeeRepository.save(roleUser), HttpStatus.CREATED);
     }
     @PutMapping
-    public ResponseEntity<RoleEmployee> updateRolesEmployeeById(@RequestBody RoleEmployee roleEmployee) throws CustomNotFoundException {
-        roleEmployeeService.checkRoleEmployeeExist(roleEmployee.getEmployeeId());
-        return new ResponseEntity<>(roleEmployee, HttpStatus.CREATED);
+    public ResponseEntity<RoleUser> updateRolesEmployeeById(@RequestBody RoleUser roleUser) throws CustomNotFoundException {
+        roleEmployeeService.checkRoleEmployeeExist(roleUser.getEmployeeId());
+        return new ResponseEntity<>(roleUser, HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteRolesEmployeeById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{
-        RoleEmployee roleEmployee =  roleEmployeeService.checkRoleEmployeeExist(id);
-        roleEmployeeRepository.delete(roleEmployee);
+        RoleUser roleUser =  roleEmployeeService.checkRoleEmployeeExist(id);
+        roleEmployeeRepository.delete(roleUser);
         return new ResponseEntity<>("Delete Successfully!",HttpStatus.NO_CONTENT);
     }
 }
