@@ -19,6 +19,8 @@ public class Employee {
     private String lastName;
     @Column(name = "full_name")
     private String fullName;
+    @Column(name = "birthday")
+    private Date birthday;
     @Column(name = "email")
     private String email;
     @Column(name = "gender")
