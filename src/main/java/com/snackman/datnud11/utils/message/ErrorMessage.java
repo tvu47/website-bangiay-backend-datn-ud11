@@ -2,6 +2,8 @@ package com.snackman.datnud11.utils.message;
 
 public enum ErrorMessage {
     ERROR_MESSAGE_NOT_FOUND("DATA NOT FOUND"),
+    ERROR_MESSAGE_PERMISSION_DENIED("permission denied !"),
+    ERROR_MESSAGE_LOGIN_FALSE("LOGIN FALSE."),
     ERROR_MESSAGE_WRONG_FORMAT("DATA FORMAT IS WRONG"),
     ERROR_MESSAGE_NULL("DATA IS NULL"),
     ;

@@ -2,15 +2,11 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.ProductDTO;
 import com.snackman.datnud11.entity.Products;
-import com.snackman.datnud11.repo.ProductsRepository;
-import com.snackman.datnud11.repo.RoleEmployeeRepository;
 import com.snackman.datnud11.services.ProductService;
-import com.snackman.datnud11.services.RoleEmployeeService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

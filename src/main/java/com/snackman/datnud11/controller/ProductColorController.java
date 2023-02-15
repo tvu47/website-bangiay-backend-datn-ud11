@@ -2,8 +2,6 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.entity.ProductColor;
 import com.snackman.datnud11.repo.ProductColorRepository;
-import com.snackman.datnud11.repo.RoleEmployeeRepository;
-import com.snackman.datnud11.services.RoleEmployeeService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
