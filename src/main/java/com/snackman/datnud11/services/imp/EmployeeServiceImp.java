@@ -1,7 +1,8 @@
-package com.snackman.datnud11.services;
+package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.entity.Employee;
 import com.snackman.datnud11.repo.EmployeeRepository;
+import com.snackman.datnud11.services.EmployeeService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.message.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package com.snackman.datnud11.services;
 
+import com.snackman.datnud11.dto.SizeDTO;
 import com.snackman.datnud11.entity.Size;
 
 import java.util.List;
@@ -16,4 +17,5 @@ public interface SizeService {
 
     List<Size> findAll();
 
+    List<Size> findByProductId(Long productId);
 }

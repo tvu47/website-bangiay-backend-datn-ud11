@@ -1,13 +1,17 @@
 package com.snackman.datnud11.entity;
 
+import com.snackman.datnud11.dto.SizeDTO;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
 @Table(name = "size")
 @Data
-@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +22,15 @@ public class Size {
     private String sizeName;
 
     @Column(name = "active_status")
-    private boolean activeStatus;
+    private Boolean activeStatus;
 
-    @ManyToOne()
-    @JoinColumn(name = "product_id")
-    private Products product;
+    @Column(name = "product_id")
+    private Long productId;
+
+    public Size(SizeDTO sizeDTO){
+        this.id = sizeDTO.getId();
+        this.sizeName = sizeDTO.getSizeName();
+        this.productId = sizeDTO.getProductId();
+        this.activeStatus = sizeDTO.getActiveStatus();
+    }
 }

@@ -1,7 +1,8 @@
-package com.snackman.datnud11.services;
+package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.entity.Colors;
 import com.snackman.datnud11.repo.ColorsRepository;
+import com.snackman.datnud11.services.ColorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ColorServiceImp implements ColorService{
+public class ColorServiceImp implements ColorService {
 
     @Autowired
     private ColorsRepository repo;
@@ -42,5 +43,10 @@ public class ColorServiceImp implements ColorService{
     @Override
     public List<Colors> findAll() {
         return this.repo.findAll();
+    }
+
+    @Override
+    public List<Colors> findByProductId(Long productId) {
+        return this.repo.findByProductId(productId);
     }
 }

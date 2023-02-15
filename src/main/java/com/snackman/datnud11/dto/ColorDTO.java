@@ -14,11 +14,12 @@ public class ColorDTO {
     private String name;
     private Boolean status;
 
-    public Colors convertToColors(){
-        Colors colors = new Colors();
-        colors.setId(this.id);
-        colors.setColorName(this.name);
-        colors.setStatus(this.status);
-        return colors;
+    private Long productId;
+
+    public ColorDTO(Colors colors){
+        this.id = colors.getId();
+        this.name = colors.getColorName();
+        this.status = colors.getStatus();
+        this.productId = colors.getProductId();
     }
 }

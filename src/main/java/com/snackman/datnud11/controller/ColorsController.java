@@ -2,10 +2,7 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.ColorDTO;
 import com.snackman.datnud11.entity.Colors;
-import com.snackman.datnud11.repo.ColorsRepository;
-import com.snackman.datnud11.repo.RoleEmployeeRepository;
-import com.snackman.datnud11.services.ColorServiceImp;
-import com.snackman.datnud11.services.RoleEmployeeService;
+import com.snackman.datnud11.services.ColorService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,30 +15,35 @@ import java.util.List;
 @RequestMapping("/api/v1/color")
 public class ColorsController {
     @Autowired
-    private ColorServiceImp colorServiceImp;
+    private ColorService colorService;
     
-    @GetMapping("get-all")
+    @GetMapping()
     public ResponseEntity<List<Colors>> getColors(){
-        return new ResponseEntity<>(colorServiceImp.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(colorService.findAll(), HttpStatus.OK);
     }
-    @PostMapping("create")
+    @PostMapping()
     public ResponseEntity<Colors> createColor(@RequestBody ColorDTO colorDTO){
-        Colors color = colorDTO.convertToColors();
-        return new ResponseEntity<>(colorServiceImp.save(color), HttpStatus.CREATED);
+        Colors color = new Colors(colorDTO);
+        return new ResponseEntity<>(colorService.save(color), HttpStatus.CREATED);
     }
-    @PutMapping("update")
+    @PutMapping()
     public ResponseEntity<Colors> updateColor(@RequestBody ColorDTO colorDTO) throws CustomNotFoundException {
-        Colors color = colorDTO.convertToColors();
-        return new ResponseEntity<>(colorServiceImp.save(color), HttpStatus.CREATED);
+        Colors color = new Colors(colorDTO);
+        return new ResponseEntity<>(colorService.save(color), HttpStatus.CREATED);
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteColorById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{
         try {
-            Colors color = this.colorServiceImp.findById(id);
-            this.colorServiceImp.delete(color);
+            Colors color = this.colorService.findById(id);
+            this.colorService.delete(color);
         }catch(Exception e){
             System.out.println(e.getMessage());
         }
         return ResponseEntity.ok("Delete successfully!");
+    }
+
+    @GetMapping("/product/{id}")
+    public ResponseEntity<List<Colors>> getColorsByProductId(@PathVariable(name = "id") Long productId){
+        return new ResponseEntity<>(this.colorService.findByProductId(productId),HttpStatus.OK);
     }
 }
