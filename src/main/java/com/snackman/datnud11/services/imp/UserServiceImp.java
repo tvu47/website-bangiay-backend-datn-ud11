@@ -29,14 +29,10 @@ public class UserServiceImp implements UserServices , UserDetailsService {
     private final RolesRepository rolesRepository;
 
     private final PasswordEncoder passwordEncoder;
-
-
     @Override
     public EmployeeDTO saveUser(UsersDTO users) {
         Optional<Employee> optionalEmployee = employeeRepository.findEmployeeByUsername(users.getUsername());
-        if (optionalEmployee.isEmpty()){
-            throw new CustomNotFoundException("usename ");
-        }
+       return null;
     }
 
     @Override
