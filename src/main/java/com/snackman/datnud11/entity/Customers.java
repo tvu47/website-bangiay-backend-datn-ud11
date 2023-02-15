@@ -29,4 +29,6 @@ public class Customers {
     private String address;
     @Column(name = "create_time")
     private Date createTime;
+    @Column(name = "password")
+    private String password;
 }

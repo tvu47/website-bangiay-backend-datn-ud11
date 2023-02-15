@@ -29,8 +29,6 @@ public class Employee {
     private String address;
     @Column(name = "username")
     private String username;
-    @Column(name = "password")
-    private String password;
     @Column(name = "create_time")
     private Date createTime;
     @Column(name = "status")
