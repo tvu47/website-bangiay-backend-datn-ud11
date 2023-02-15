@@ -14,7 +14,7 @@ public class RoleUser {
 	@Column(name = "role_id", nullable = false)
 	private Long id;
 	@Column(name = "user_id", nullable = false)
-	private Long employeeId;
+	private Long userId;
 	@Column(name = "status")
 	private boolean status;
 	@Column(name = "create_time")
