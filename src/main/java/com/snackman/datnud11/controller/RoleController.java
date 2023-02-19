@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/roles")
+@RequestMapping("/api/v1/admin/roles")
 public class RoleController {
     @Autowired
     RolesRepository rolesRepository;

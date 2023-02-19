@@ -13,5 +13,5 @@ import java.util.Collection;
 public class UsersDTO {
     private String username;
     private String password;
-    private Collection<String> role_user = new ArrayList<>();
+//    private Collection<String> role_user = new ArrayList<>();
 }

@@ -28,7 +28,7 @@ public class RoleEmployeeController {
     }
     @PutMapping
     public ResponseEntity<RoleUser> updateRolesEmployeeById(@RequestBody RoleUser roleUser) throws CustomNotFoundException {
-        roleEmployeeService.checkRoleEmployeeExist(roleUser.getEmployeeId());
+        roleEmployeeService.checkRoleEmployeeExist(roleUser.getUserId());
         return new ResponseEntity<>(roleUser, HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")

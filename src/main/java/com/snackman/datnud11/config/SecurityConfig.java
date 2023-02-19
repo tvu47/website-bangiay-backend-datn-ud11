@@ -31,7 +31,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(configuration));
-        customAuthenticationFilter.setFilterProcessesUrl("/api/login");
+        customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
         http.csrf().disable();
 //        http.authorizeHttpRequests().antMatchers("/api/login/**").permitAll();
 //        http.authorizeHttpRequests().antMatchers(HttpMethod.POST, "/api/login").permitAll();

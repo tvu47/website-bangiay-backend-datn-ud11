@@ -3,7 +3,6 @@ package com.snackman.datnud11.services.imp;
 import com.snackman.datnud11.dto.EmployeeDTO;
 import com.snackman.datnud11.dto.RolesDTO;
 import com.snackman.datnud11.dto.UsersDTO;
-import com.snackman.datnud11.entity.Employee;
 import com.snackman.datnud11.entity.RoleUser;
 import com.snackman.datnud11.entity.Roles;
 import com.snackman.datnud11.entity.Users;
@@ -52,7 +51,7 @@ public class UserServiceImp implements UserServices , UserDetailsService {
     public Users saveUser(UsersDTO users) {
         Users user = new Users();
         user.setUsername(users.getUsername());
-        user.setPassword(user.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(true);
         return userRepository.save(user);
     }
@@ -68,11 +67,11 @@ public class UserServiceImp implements UserServices , UserDetailsService {
     @Override
     public UsersDTO getUserByUsername(String username) {
 
-        Optional<Users> userOptional = userRepository.findUserByUsername(username);
-        if (userOptional.isEmpty()){
+        Users users = userRepository.findUserByUsername(username);
+        if (users==null){
             throw new CustomNullException(username+ ErrorMessage.ERROR_MESSAGE_NOT_FOUND.toString());
         }
-        return userMap.shouldMapUserToUserDto(userOptional.get());
+        return userMap.shouldMapUserToUserDto(users);
     }
 
     @Override
@@ -81,7 +80,7 @@ public class UserServiceImp implements UserServices , UserDetailsService {
         User user = (User) authentication.getPrincipal();
         if (username == user.getUsername() && passwordEncoder.encode(password) == user.getPassword()){
             log.info("login successfully!");
-            return employeeMap.shouldMapEmployeeToDto(employeeRepository.findEmployeeByUsername(username).get());
+            return employeeMap.shouldMapEmployeeToDto(employeeRepository.findEmployeeByUsername(username));
         }
         log.error("login false!");
         throw new CustomNullException(username+ErrorMessage.ERROR_MESSAGE_LOGIN_FALSE.toString());
@@ -89,18 +88,18 @@ public class UserServiceImp implements UserServices , UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Users> usersOptional = userRepository.findUserByUsername(username);
-        if (usersOptional.isEmpty()){
+        Users usersOptional = userRepository.findUserByUsername(username);
+        if (usersOptional == null){
             throw new CustomNullException(username+ErrorMessage.ERROR_MESSAGE_NOT_FOUND.toString());
         }
-        Optional<List<RoleUser>> roleUserList = roleUserRepository.getIdRoleByIdUser(usersOptional.get().getId());
+        Optional<List<RoleUser>> roleUserList = roleUserRepository.getIdRoleByIdUser(usersOptional.getId());
         if (roleUserList.isEmpty()){
             throw new CustomNullException(username+ErrorMessage.ERROR_MESSAGE_PERMISSION_DENIED.toString());
         }
         Optional<List<Roles>> roles = rolesRepository.getRolesByIdRoleList(getListIdRole(roleUserList.get()));
         Collection<SimpleGrantedAuthority>authorities =new ArrayList<>();
         roles.get().stream().forEach(roles1 -> authorities.add(new SimpleGrantedAuthority(roles1.getRoleName())));
-        return new User(usersOptional.get().getUsername(), usersOptional.get().getPassword(), authorities);
+        return new User(usersOptional.getUsername(), usersOptional.getPassword(), authorities);
     }
 
     private List<Long> getListIdRole(List<RoleUser> roleUserList){
