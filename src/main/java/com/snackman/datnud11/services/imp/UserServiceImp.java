@@ -88,6 +88,7 @@ public class UserServiceImp implements UserServices , UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("login loadUserByUsername!");
         Users usersOptional = userRepository.findUserByUsername(username);
         if (usersOptional == null){
             throw new CustomNullException(username+ErrorMessage.ERROR_MESSAGE_NOT_FOUND.toString());
@@ -97,7 +98,7 @@ public class UserServiceImp implements UserServices , UserDetailsService {
             throw new CustomNullException(username+ErrorMessage.ERROR_MESSAGE_PERMISSION_DENIED.toString());
         }
         Optional<List<Roles>> roles = rolesRepository.getRolesByIdRoleList(getListIdRole(roleUserList.get()));
-        Collection<SimpleGrantedAuthority>authorities =new ArrayList<>();
+        Collection<SimpleGrantedAuthority>authorities = new ArrayList<>();
         roles.get().stream().forEach(roles1 -> authorities.add(new SimpleGrantedAuthority(roles1.getRoleName())));
         return new User(usersOptional.getUsername(), usersOptional.getPassword(), authorities);
     }

@@ -3,6 +3,7 @@ package com.snackman.datnud11.config;
 import com.snackman.datnud11.filters.CustomAuthenticationFilter;
 import com.snackman.datnud11.filters.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,9 +20,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
@@ -30,10 +34,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+        log.info("SecurityConfig....");
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager(configuration));
-        customAuthenticationFilter.setFilterProcessesUrl("/api/v1/login");
+        http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.csrf().disable();
-//        http.authorizeHttpRequests().antMatchers("/api/login/**").permitAll();
+        http.authorizeHttpRequests().anyRequest().permitAll();
 //        http.authorizeHttpRequests().antMatchers(HttpMethod.POST, "/api/login").permitAll();
 //        http.authorizeHttpRequests().antMatchers("/api/**").permitAll();
 //        http.authorizeHttpRequests().antMatchers("/admin/**").
