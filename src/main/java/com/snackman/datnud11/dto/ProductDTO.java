@@ -19,7 +19,7 @@ public class ProductDTO {
 
     private Double price;
 
-    private String description;
+    private String content;
 
     private Long discountId;
 
@@ -27,14 +27,17 @@ public class ProductDTO {
 
     private Boolean status;
 
+    private Long materialId;
+
     public ProductDTO(Products products){
         this.id = products.getId();
         this.categoryId = products.getCategoryId();
         this.productName = products.getProductName();
         this.price = products.getPrice();
-        this.description = products.getDescription();
+        this.content = products.getContent();
         this.discountId = products.getDiscountId();
         this.manufactureAddress = products.getManufactureAddress();
         this.status = products.getStatus();
+        this.materialId = products.getMaterialId();
     }
 }

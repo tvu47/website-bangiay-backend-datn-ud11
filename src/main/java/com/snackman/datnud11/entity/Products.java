@@ -22,19 +22,22 @@ public class Products {
     @Column(name = "category_id")
     private Long categoryId;
 
+    @Column(name = "material_id")
+    private Long materialId;
+
     @Column(name = "product_name")
     private String productName;
 
     @Column(name = "price", precision = 10, scale = 2)
     private Double price;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "content")
+    private String content;
 
     @Column(name = "discount_id", nullable = false)
     private Long discountId;
 
-    @Column(name = "manufacture_address")
+    @Column(name = "manufacture")
     private String manufactureAddress;
 
     @Column(name ="status")
@@ -45,9 +48,10 @@ public class Products {
         this.categoryId = productDTO.getCategoryId();
         this.productName = productDTO.getProductName();
         this.price = productDTO.getPrice();
-        this.description = productDTO.getDescription();
+        this.content = productDTO.getContent();
         this.discountId = productDTO.getDiscountId();
         this.manufactureAddress = productDTO.getManufactureAddress();
         this.status = productDTO.getStatus();
+        this.materialId = productDTO.getMaterialId();
     }
 }

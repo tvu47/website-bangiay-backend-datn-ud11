@@ -15,13 +15,13 @@ import lombok.ToString;
 public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "size_id", nullable = false)
     private Long id;
 
     @Column(name = "size_name")
     private String sizeName;
 
-    @Column(name = "active_status")
+    @Column(name = "status")
     private Boolean activeStatus;
 
     @Column(name = "product_id")
