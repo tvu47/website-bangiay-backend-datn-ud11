@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface RoleUserRepository extends JpaRepository<RoleUser, Long> {
-    @Query(value = "select * from role_user where user_id=:userId",nativeQuery = true)
-    Optional<List<RoleUser>> getIdRoleByIdUser(@Param("userId") Long userId);
+    @Query(value = "select role from role_user where username=:username",nativeQuery = true)
+    List<String> getRoleListByUsername(@Param("username") String username);
 }

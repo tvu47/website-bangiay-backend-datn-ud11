@@ -13,10 +13,10 @@ public class RoleUser {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private Long id;
-	@Column(name = "role_id", nullable = false)
-	private Long roleId;
-	@Column(name = "user_id", nullable = false)
-	private Long userId;
+	@Column(name = "role", nullable = false)
+	private String role;
+	@Column(name = "username", nullable = false)
+	private String username;
 	@Column(name = "status")
 	private boolean status;
 	@Column(name = "create_time")
