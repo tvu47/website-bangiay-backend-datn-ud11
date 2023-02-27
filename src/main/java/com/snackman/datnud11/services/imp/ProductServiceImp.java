@@ -62,6 +62,24 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
+    public List<Products> getAllOrderByPrice(String typeSort) {
+        if(typeSort.equals("asc")){
+            return this.repo.findOrderPriceASC();
+        } else {
+            return this.repo.findOrderPriceDESC();
+        }
+    }
+
+    @Override
+    public List<Products> getAllOrderByName(String typeSort) {
+        if(typeSort.equals("asc")){
+            return this.repo.findOrderByNameASC();
+        } else {
+            return this.repo.findOrderByNameDESC();
+        }
+    }
+
+    @Override
     public List<Products> searchProducts(Map<String, List<String>> params) throws Exception{
         if(params.containsKey(SearchProducts.FIND_BY_PRODUCT_NAME.paramName)){
             String productName = params.get(SearchProducts.FIND_BY_PRODUCT_NAME.paramName).get(0);
@@ -76,6 +94,14 @@ public class ProductServiceImp implements ProductService {
         if(params.containsKey(SearchProducts.FIND_BY_PRICE_RANGE.paramName)){
             List<String> range = params.get(SearchProducts.FIND_BY_PRICE_RANGE.paramName);
             return this.findByPriceRange(Double.parseDouble(range.get(0)), Double.parseDouble(range.get(1)));
+        }
+        if(params.containsKey(SearchProducts.ORDER_BY_PRICE.paramName)){
+            String order = params.get(SearchProducts.ORDER_BY_PRICE.paramName).get(0);
+            return this.getAllOrderByPrice(order);
+        }
+        if(params.containsKey(SearchProducts.ORDER_BY_NAME.paramName)){
+            String order = params.get(SearchProducts.ORDER_BY_NAME.paramName).get(0);
+            return this.getAllOrderByName(order);
         }
 
         throw new Exception("Not found products");

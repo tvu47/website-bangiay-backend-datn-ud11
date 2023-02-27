@@ -41,6 +41,7 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public List<Category> findAll() {
+        System.out.println("find all");
         return this.repo.findAll();
     }
 }

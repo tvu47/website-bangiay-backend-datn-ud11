@@ -24,5 +24,9 @@ public interface ProductService {
 
     List<Products> findByPriceRange(Double min, Double max);
 
+    List<Products> getAllOrderByPrice(String typeSort);
+
+    List<Products> getAllOrderByName(String typeSort);
+
     List<Products> searchProducts(Map<String, List<String>> params) throws Exception;
 }
