@@ -21,6 +21,6 @@ public class Discounts {
     private Date endDiscountTime;
     @Column(name = "value_discount")
     private int valueDiscount;
-    @Column(name = "status_discount")
-    private boolean statusDiscount;
+    @Column(name = "status")
+    private boolean status;
 }

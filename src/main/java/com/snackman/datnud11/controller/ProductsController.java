@@ -2,7 +2,9 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.ProductDTO;
 import com.snackman.datnud11.entity.Products;
+import com.snackman.datnud11.responses.ProductsResponse;
 import com.snackman.datnud11.services.ProductService;
+import com.snackman.datnud11.services.ZProductService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,14 +15,16 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/api/v1/products")
 public class ProductsController {
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ZProductService zProductService;
 
     @GetMapping
-    public ResponseEntity<List<Products>> getAll(){
-        return new ResponseEntity<>(this.productService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<ProductsResponse>> getAll(){
+        return new ResponseEntity<>(this.zProductService.getAllProductResponses(), HttpStatus.OK);
     }
     @PostMapping
     public ResponseEntity<Products> createProduct(@RequestBody ProductDTO productDTO){

@@ -15,8 +15,8 @@ public class Materials {
     private Long id;
     @Column(name = "material_name")
     private String materialName;
-    @Column(name = "import_address")
-    private String importAddress;
+    @Column(name = "material_location")
+    private String materialLocation;
     @Column(name = "import_date")
     private Date importDate;
     @Column(name ="status")
