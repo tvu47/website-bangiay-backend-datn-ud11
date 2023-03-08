@@ -1,5 +1,6 @@
-package com.snackman.datnud11.config;
+package com.snackman.datnud11.filters;
 
+import com.snackman.datnud11.config.JwtService;
 import com.snackman.datnud11.repo.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -35,6 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     final String authHeader = request.getHeader("Authorization");
     final String jwt;
     final String username;
+    log.info("authHeader : {}", authHeader);
     if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
       log.error("auth header is require.. ");
       filterChain.doFilter(request, response);

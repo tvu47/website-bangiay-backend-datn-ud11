@@ -17,7 +17,7 @@ import java.util.Map;
 public class ProductsController {
     @Autowired
     private ProductService productService;
-    
+
     @GetMapping
     public ResponseEntity<List<Products>> getAll(){
         return new ResponseEntity<>(this.productService.findAll(), HttpStatus.OK);

@@ -9,10 +9,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @SpringBootApplication
-@ComponentScan({"com.snackman.datnud11.controller","com.snackman.datnud11.controller.auth",
+@ComponentScan({"com.snackman.datnud11.controller",
+		"com.snackman.datnud11.controller.auth",
+		"com.snackman.datnud11.filters",
 		"com.snackman.datnud11.services.imp",
 		"com.snackman.datnud11.utils",
 		"com.snackman.datnud11.config"})
