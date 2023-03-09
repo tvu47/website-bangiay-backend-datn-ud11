@@ -30,14 +30,22 @@ public class ZProductServiceImp implements ZProductService {
     @Autowired
     MaterialsRepository materialsRepository;
     @Autowired
-    ProductsRepository productsRepository;
+    ProductService productService;
 
     @Autowired
     private ImageService imageService;
 
     @Override
     public List<ProductsResponse> getAllProductResponses() {
-        return formatProductToProductResponse(productsRepository.findAll());
+        return formatProductToProductResponse(productService.findAll());
+    }
+
+    @Override
+    public List<ProductsResponse> findByProductId(Long id) throws Exception {
+        List<Products> products = new ArrayList<>();
+        products.add(this.productService.findById(id));
+        List<ProductsResponse> productsResponses = this.formatProductToProductResponse(products);
+        return productsResponses;
     }
 
     private List<ProductsResponse> formatProductToProductResponse(List<Products> productsList){

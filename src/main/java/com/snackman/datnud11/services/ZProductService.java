@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ZProductService {
     List<ProductsResponse> getAllProductResponses();
+
+    List<ProductsResponse> findByProductId(Long id) throws Exception;
 }
