@@ -32,6 +32,10 @@ public class ProductsResponse {
 
     private List<Images> images;
 
+    private List<Size> sizes;
+
+    private List<Colors> colors;
+
     public ProductsResponse(Products products){
         this.id = products.getId();
         this.productName = products.getProductName();

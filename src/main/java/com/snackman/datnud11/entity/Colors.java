@@ -17,7 +17,7 @@ public class Colors {
     @Column(name = "color_id", nullable = false)
     private Long id;
 
-    @Column(name = "color_name")
+    @Column(name = "name_color")
     private String colorName;
 
     @Column(name ="status")

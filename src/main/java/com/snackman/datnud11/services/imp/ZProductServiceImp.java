@@ -9,9 +9,7 @@ import com.snackman.datnud11.repo.DiscountsRepository;
 import com.snackman.datnud11.repo.MaterialsRepository;
 import com.snackman.datnud11.repo.ProductsRepository;
 import com.snackman.datnud11.responses.ProductsResponse;
-import com.snackman.datnud11.services.ImageService;
-import com.snackman.datnud11.services.ProductService;
-import com.snackman.datnud11.services.ZProductService;
+import com.snackman.datnud11.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +31,13 @@ public class ZProductServiceImp implements ZProductService {
     ProductService productService;
 
     @Autowired
+    private SizeService sizeService;
+
+    @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private ColorService colorService;
 
     @Override
     public List<ProductsResponse> getAllProductResponses() {
@@ -60,6 +64,8 @@ public class ZProductServiceImp implements ZProductService {
         productsList.stream().forEach(products -> {
             ProductsResponse productsResponse = new ProductsResponse(products);
             productsResponse.setImages(this.imageService.getImagesByProductId(products.getId()));
+            productsResponse.setSizes(this.sizeService.findByProductId(products.getId()));
+            productsResponse.setColors(this.colorService.findByProductId(products.getId()));
             productsResponse.setCategory(categoryMap.get(products.getCategoryId()));
             productsResponse.setMaterials(materialsMap.get(products.getMaterialId()));
             productsResponse.setDiscounts(discountsMap.get(products.getDiscountId()));
