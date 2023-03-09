@@ -52,7 +52,7 @@ public class ZProductServiceImp implements ZProductService {
         return productsResponses;
     }
 
-    private List<ProductsResponse> formatProductToProductResponse(List<Products> productsList){
+    public List<ProductsResponse> formatProductToProductResponse(List<Products> productsList){
         List<ProductsResponse> productsResponsesList = new ArrayList<>();
         // get id list
         Map<String, List<Long>> idList = getListIds(productsList);

@@ -11,24 +11,24 @@ import java.util.List;
 @Repository
 public interface ProductsRepository extends JpaRepository<Products, Long> {
 
-    @Query(value = "select * from product where product_name like %:name%", nativeQuery = true)
+    @Query(value = "select * from products where product_name like %:name%", nativeQuery = true)
     List<Products> findByName(@Param("name") String name);
 
-    @Query(value = "select * from product where category_id = :categoryId", nativeQuery = true)
+    @Query(value = "select * from products where category_id = :categoryId", nativeQuery = true)
     List<Products> findByCategoryId(@Param("categoryId") Long categoryId);
 
-    @Query(value = "select * from product where price between :min and :max", nativeQuery = true)
+    @Query(value = "select * from products where price between :min and :max", nativeQuery = true)
     List<Products> findByPriceRange(@Param("min") Double min, @Param("max") Double max);
 
-    @Query(value = "select * from product order by price asc", nativeQuery = true)
+    @Query(value = "select * from products order by price asc", nativeQuery = true)
     List<Products> findOrderPriceASC();
-    @Query(value = "select * from product order by price desc", nativeQuery = true)
+    @Query(value = "select * from products order by price desc", nativeQuery = true)
     List<Products> findOrderPriceDESC();
 
-    @Query(value = "select * from product order by product_name asc", nativeQuery = true)
+    @Query(value = "select * from products order by product_name asc", nativeQuery = true)
     List<Products> findOrderByNameASC();
 
-    @Query(value = "select * from product order by product_name desc", nativeQuery = true)
+    @Query(value = "select * from products order by product_name desc", nativeQuery = true)
     List<Products> findOrderByNameDESC();
 
 }
