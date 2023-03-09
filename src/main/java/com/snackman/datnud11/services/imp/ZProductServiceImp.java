@@ -9,6 +9,7 @@ import com.snackman.datnud11.repo.DiscountsRepository;
 import com.snackman.datnud11.repo.MaterialsRepository;
 import com.snackman.datnud11.repo.ProductsRepository;
 import com.snackman.datnud11.responses.ProductsResponse;
+import com.snackman.datnud11.services.ImageService;
 import com.snackman.datnud11.services.ProductService;
 import com.snackman.datnud11.services.ZProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class ZProductServiceImp implements ZProductService {
     @Autowired
     ProductsRepository productsRepository;
 
+    @Autowired
+    private ImageService imageService;
+
     @Override
     public List<ProductsResponse> getAllProductResponses() {
         return formatProductToProductResponse(productsRepository.findAll());
@@ -47,6 +51,7 @@ public class ZProductServiceImp implements ZProductService {
 
         productsList.stream().forEach(products -> {
             ProductsResponse productsResponse = new ProductsResponse(products);
+            productsResponse.setImages(this.imageService.getImagesByProductId(products.getId()));
             productsResponse.setCategory(categoryMap.get(products.getCategoryId()));
             productsResponse.setMaterials(materialsMap.get(products.getMaterialId()));
             productsResponse.setDiscounts(discountsMap.get(products.getDiscountId()));

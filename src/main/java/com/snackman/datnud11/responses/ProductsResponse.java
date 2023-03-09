@@ -1,13 +1,12 @@
 package com.snackman.datnud11.responses;
 
-import com.snackman.datnud11.entity.Category;
-import com.snackman.datnud11.entity.Discounts;
-import com.snackman.datnud11.entity.Materials;
-import com.snackman.datnud11.entity.Products;
+import com.snackman.datnud11.entity.*;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,6 +29,8 @@ public class ProductsResponse {
     private String manufactureAddress;
 
     private Boolean status;
+
+    private List<Images> images;
 
     public ProductsResponse(Products products){
         this.id = products.getId();
