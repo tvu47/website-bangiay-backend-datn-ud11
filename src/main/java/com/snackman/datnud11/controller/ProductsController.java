@@ -43,8 +43,13 @@ public class ProductsController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<Products>> searchProducts(@RequestBody Map<String,List<String>> params) throws Exception {
-        return new ResponseEntity<>(this.productService.searchProducts(params), HttpStatus.OK);
+    public ResponseEntity<List<ProductsResponse>> searchProducts(@RequestBody Map<String,List<String>> params) throws Exception {
+        return new ResponseEntity<>(this.zProductService.formatProductToProductResponse(this.productService.searchProducts(params)), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<ProductsResponse>> findById(@PathVariable(name = "id") Long id) throws Exception {
+        return new ResponseEntity<>(this.zProductService.findByProductId(id), HttpStatus.OK);
     }
 }
 
