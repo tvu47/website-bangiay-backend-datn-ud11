@@ -1,8 +1,6 @@
 package com.snackman.datnud11.config;
 
-import com.snackman.datnud11.repo.UserRepository;
-import com.snackman.datnud11.services.UserServices;
-import com.snackman.datnud11.services.auth.UserAuthorizationService;
+import com.snackman.datnud11.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,11 +19,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class ApplicationConfig {
     @Autowired
-    UserServices userServices;
+    CustomerService customerService;
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> userServices.getUserDetailFromDB(username);
+        return username -> customerService.getUserDetailFromDB(username);
     }
     @Bean
     public AuthenticationProvider authenticationProvider() {

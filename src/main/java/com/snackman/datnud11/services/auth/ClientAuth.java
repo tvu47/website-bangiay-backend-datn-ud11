@@ -1,10 +1,9 @@
 package com.snackman.datnud11.services.auth;
 
-import com.snackman.datnud11.services.UserServices;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,21 +11,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-public class UserAuth implements UserDetails {
-    private String username;
+public class ClientAuth implements UserDetails {
+    private String email;
     private String password;
-    private List<String> role;
+    private List<String> roles;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        role.stream().forEach(role1 ->{
-            authorities.add(new SimpleGrantedAuthority(role1));
-        });
+            authorities.add(new SimpleGrantedAuthority("CLIENT_ROLE"));
         return authorities;
     }
 
@@ -37,7 +33,7 @@ public class UserAuth implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan({"com.snackman.datnud11.controller",
 		"com.snackman.datnud11.controller.auth",
 		"com.snackman.datnud11.filters",
+		"com.snackman.datnud11.filters.impl.response",
 		"com.snackman.datnud11.services.imp",
 		"com.snackman.datnud11.utils",
 		"com.snackman.datnud11.config"})

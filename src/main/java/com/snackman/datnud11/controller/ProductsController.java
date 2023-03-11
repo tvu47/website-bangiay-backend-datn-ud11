@@ -7,6 +7,7 @@ import com.snackman.datnud11.services.ProductService;
 import com.snackman.datnud11.services.ZProductService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,9 @@ public class ProductsController {
     private ZProductService zProductService;
 
     @GetMapping
+    @Cacheable("products")
     public ResponseEntity<List<ProductsResponse>> getAll(){
+        System.out.println("product is getting data...");
         return new ResponseEntity<>(this.zProductService.getAllProductResponses(), HttpStatus.OK);
     }
     @PostMapping
