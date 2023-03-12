@@ -23,4 +23,8 @@ public class Bill {
 	private Date createTime;
 	@Column(name = "payment_status")
 	private boolean paymentStatus;
+	@Column(name ="address")
+	private String address;
+
+
 }

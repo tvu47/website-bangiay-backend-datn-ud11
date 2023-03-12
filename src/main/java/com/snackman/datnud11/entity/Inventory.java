@@ -17,14 +17,17 @@ public class Inventory {
     private Long productId;
     @Column(name = "quantity")
     private int quatity;
-    @Column(name = "amount_value", precision = 10, scale = 2)
-    private double amount;
     @Column(name = "price", precision = 10, scale = 2)
     private double price;
-    @Column(name = "import_time")
+    @Column(name = "import_date")
     private Date importTime;
-    @Column(name ="brand")
-    private String brand;
     @Column(name ="status")
     private boolean status;
+
+    @Column(name = "sku")
+    private String sku;
+    @Column(name = "color")
+    private Long color;
+    @Column(name = "size")
+    private Long size;
 }
