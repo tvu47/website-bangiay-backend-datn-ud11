@@ -1,5 +1,6 @@
 package com.snackman.datnud11.config;
 
+import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.services.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,13 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> customerService.getUserDetailFromDB(username);
+        return username -> {
+            try {
+                return customerService.getUserDetailFromDB(username);
+            } catch (UserNotfoundException e) {
+                throw new RuntimeException(e);
+            }
+        };
     }
     @Bean
     public AuthenticationProvider authenticationProvider() {

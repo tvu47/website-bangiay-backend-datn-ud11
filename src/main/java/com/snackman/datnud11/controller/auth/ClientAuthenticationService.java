@@ -1,8 +1,11 @@
 package com.snackman.datnud11.controller.auth;
 
 import com.snackman.datnud11.config.JwtService;
+import com.snackman.datnud11.dto.request.ClientLoginRequest;
 import com.snackman.datnud11.dto.request.ClientRegisterRequest;
 import com.snackman.datnud11.entity.Customers;
+import com.snackman.datnud11.exceptions.UserExistedException;
+import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.ClientInformationResponse;
 import com.snackman.datnud11.services.CustomerService;
@@ -25,12 +28,8 @@ public class ClientAuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public ClientInformationResponse register(ClientRegisterRequest request) {
-    Customers customers = customerService.findCustomerByEmail(request.getEmail());
-    if (customers != null){
-      return null;
-    }
-
+  public ClientInformationResponse register(ClientRegisterRequest request) throws UserExistedException {
+    customerService.checkEmailExist(request.getEmail());
     var user = ClientAuth.builder().email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
         .roles(List.of("CLIENT_ROLE"))
@@ -43,7 +42,7 @@ public class ClientAuthenticationService {
         .email(request.getEmail())
         .build();
   }
-  public ClientInformationResponse clientLogin(ClientRegisterRequest request) {
+  public ClientInformationResponse clientLogin(ClientLoginRequest request) throws UserNotfoundException {
     try {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(

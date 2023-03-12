@@ -12,10 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientRegisterRequest {
+public class ClientLoginRequest {
     @NotEmpty(message = "email must not be empty")
     @Email(message = "email should be a valid email")
     private String email;
     private String password;
-    private String rePassword;
 }

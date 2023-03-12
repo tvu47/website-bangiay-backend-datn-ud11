@@ -1,6 +1,7 @@
 package com.snackman.datnud11.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,6 +19,7 @@ public class Customers {
     @Column(name = "last_name")
     private String lastName;
     @Column(name = "email")
+    @Email(message = "email must not be invalid")
     private String email;
     @Column(name = "gender")
     private boolean gender;
@@ -29,4 +31,6 @@ public class Customers {
     private Date createTime;
     @Column(name = "password")
     private String password;
+    @Column(name = "status")
+    private String status;
 }
