@@ -1,5 +1,6 @@
 package com.snackman.datnud11.services.imp;
 
+import com.snackman.datnud11.dto.PaymentDTO;
 import com.snackman.datnud11.entity.Inventory;
 import com.snackman.datnud11.repo.InventoryRepository;
 import com.snackman.datnud11.responses.InventoryResponse;
@@ -33,9 +34,28 @@ public class InventoryServiceImp implements InventoryService {
     }
 
     @Override
+    public Inventory findBySku(String sku) {
+        return this.repo.findBySku(sku);
+    }
+
+    @Override
     public InventoryResponse getProductById(Long id) throws Exception {
         List<Inventory> inventory = this.repo.findByProductId(id);
         return this.convertInventoryToInventoryResponse(inventory);
+    }
+
+    @Override
+    public boolean validProductsOrder(List<PaymentDTO.ProductOrder> productOrders) {
+        for(PaymentDTO.ProductOrder productOrder: productOrders){
+            if(productOrder.getQuantity() < 1){
+                return false;
+            }
+            Inventory inventory = this.findBySku(productOrder.getSku());
+            if(inventory == null || inventory.getQuatity() < productOrder.getQuantity()){
+                return false;
+            }
+        }
+        return true;
     }
 
     private InventoryResponse convertInventoryToInventoryResponse(List<Inventory> list) throws Exception {
