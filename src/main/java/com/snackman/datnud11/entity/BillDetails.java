@@ -17,22 +17,16 @@ public class BillDetails {
     private Long productId;
     @Column(name = "bill_id")
     private Long billId;
-    @Column(name = "employee_id")
-    private Long employeeId;
-    @Column(name = "payment_id")
-    private Long paymentId;
-    @Column(name = "quatity")
-    private int quatity;
-    @Column(name = "amount", precision = 10, scale = 2)
-    private double amount;
+    @Column(name = "quantity")
+    private Integer quantity;
     @Column(name = "cost", precision = 10, scale = 2)
-    private double cost;
+    private Double cost;
     @Column(name = "saleprice", precision = 10, scale = 2)
-    private double saleprice;
+    private Double saleprice;
     @Column(name = "value_discount", precision = 10, scale = 2)
-    private double valueDiscount;
+    private Double valueDiscount;
     @Column(name = "create_time")
     private Date createTime;
-    @Column(name = "payment_status")
-    private boolean payment_status;
+    @Column(name = "status")
+    private Boolean status;
 }

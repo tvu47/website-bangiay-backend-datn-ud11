@@ -14,6 +14,7 @@ public interface CustomerService {
 
     boolean checkEmailExist(String email) throws UserExistedException;
 
+    Customers createCustomer(Customers customers);
+
     Customers findCustomerByEmail(String email) throws UserNotfoundException;
-    UserDetails getUserDetailFromDB(String username) throws UserNotfoundException;
 }
