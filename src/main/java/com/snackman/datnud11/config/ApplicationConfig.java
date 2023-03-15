@@ -1,8 +1,10 @@
 package com.snackman.datnud11.config;
 
 import com.snackman.datnud11.consts.EmailConstant;
+import com.snackman.datnud11.exceptions.RoleNotFoundException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.services.CustomerService;
+import com.snackman.datnud11.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,14 +27,15 @@ import java.util.Properties;
 @RequiredArgsConstructor
 public class ApplicationConfig {
     @Autowired
-    CustomerService customerService;
-
+    UserService userService;
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> {
             try {
-                return customerService.getUserDetailFromDB(username);
+                return userService.getUserDetailFromDB(username);
             } catch (UserNotfoundException e) {
+                throw new RuntimeException(e);
+            } catch (RoleNotFoundException e) {
                 throw new RuntimeException(e);
             }
         };

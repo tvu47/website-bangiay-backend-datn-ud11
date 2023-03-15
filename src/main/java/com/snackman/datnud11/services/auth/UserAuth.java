@@ -15,14 +15,16 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Builder
-public class ClientAuth implements UserDetails {
+public class UserAuth implements UserDetails {
     private String email;
     private String password;
     private List<String> roles;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("CLIENT_ROLE"));
+        roles.stream().forEach(role ->{
+            authorities.add(new SimpleGrantedAuthority(role));
+        });
         return authorities;
     }
 

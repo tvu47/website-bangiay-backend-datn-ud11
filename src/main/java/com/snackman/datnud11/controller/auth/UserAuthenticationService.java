@@ -10,7 +10,7 @@ import com.snackman.datnud11.exceptions.UserRegisterException;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.ClientInformationResponse;
 import com.snackman.datnud11.services.CustomerService;
-import com.snackman.datnud11.services.auth.ClientAuth;
+import com.snackman.datnud11.services.auth.UserAuth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,11 +57,11 @@ public class UserAuthenticationService {
     if (customers == null) {
       throw new UsernameNotFoundException("user not found exception");
     }
-    ClientAuth clientAuth = new ClientAuth();
-    clientAuth.setEmail(customers.getEmail());
-    clientAuth.setPassword(customers.getPassword());
-    clientAuth.setRoles(List.of("CLIENT_ROLE"));
-    var jwtToken = jwtService.generateToken(clientAuth);
+    UserAuth userAuth = new UserAuth();
+    userAuth.setEmail(customers.getEmail());
+    userAuth.setPassword(customers.getPassword());
+    userAuth.setRoles(List.of("CLIENT_ROLE"));
+    var jwtToken = jwtService.generateToken(userAuth);
     return ClientInformationResponse.builder()
             .email(customers.getEmail())
             .token(jwtToken)

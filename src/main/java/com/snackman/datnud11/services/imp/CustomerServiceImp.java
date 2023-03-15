@@ -5,7 +5,7 @@ import com.snackman.datnud11.exceptions.UserExistedException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.services.CustomerService;
-import com.snackman.datnud11.services.auth.ClientAuth;
+import com.snackman.datnud11.services.auth.UserAuth;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.message.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +47,13 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     @Cacheable("userDetails")
-    public ClientAuth getUserDetailFromDB(String username) throws UserNotfoundException {
+    public UserAuth getUserDetailFromDB(String username) throws UserNotfoundException {
         System.out.println("loading userdetail ...");
         Customers customers = findCustomerByEmail(username);
-        ClientAuth clientAuth = new ClientAuth();
-        clientAuth.setEmail(customers.getEmail());
-        clientAuth.setPassword(customers.getPassword());
-        return clientAuth;
+        UserAuth userAuth = new UserAuth();
+        userAuth.setEmail(customers.getEmail());
+        userAuth.setPassword(customers.getPassword());
+        return userAuth;
     }
 
 
