@@ -1,11 +1,12 @@
 package com.snackman.datnud11.controller.auth;
 
 import com.snackman.datnud11.config.JwtService;
-import com.snackman.datnud11.dto.request.ClientLoginRequest;
-import com.snackman.datnud11.dto.request.ClientRegisterRequest;
+import com.snackman.datnud11.dto.request.UserLoginRequest;
+import com.snackman.datnud11.dto.request.UserRegisterRequest;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.UserExistedException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
+import com.snackman.datnud11.exceptions.UserRegisterException;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.ClientInformationResponse;
 import com.snackman.datnud11.services.CustomerService;
@@ -21,28 +22,27 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ClientAuthenticationService {
+public class UserAuthenticationService {
   private final CustomerService customerService;
   private final CustomersRepository customersRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public ClientInformationResponse register(ClientRegisterRequest request) throws UserExistedException {
+  public ClientInformationResponse register(UserRegisterRequest request) throws UserExistedException, UserRegisterException {
     customerService.checkEmailExist(request.getEmail());
-    var user = ClientAuth.builder().email(request.getEmail())
-        .password(passwordEncoder.encode(request.getPassword()))
-        .roles(List.of("CLIENT_ROLE"))
-        .build();
+    if (request.getPassword() != request.getRePassword()){
+      throw new UserRegisterException("Password and repeat-password is not equal !!!");
+    }
     Customers customers1 = new Customers();
-    customers1.setEmail(user.getEmail());
-    customers1.setPassword(user.getPassword());
+//    customers1.setEmail(user.getEmail());
+//    customers1.setPassword(user.getPassword());
     customersRepository.save(customers1);
     return ClientInformationResponse.builder()
         .email(request.getEmail())
         .build();
   }
-  public ClientInformationResponse clientLogin(ClientLoginRequest request) throws UserNotfoundException {
+  public ClientInformationResponse clientLogin(UserLoginRequest request) throws UserNotfoundException {
     try {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(

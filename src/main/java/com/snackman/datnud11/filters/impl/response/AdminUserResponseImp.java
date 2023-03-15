@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ClientUserResponseImp extends AbstractUserResponseFilter {
+public class AdminUserResponseImp extends AbstractUserResponseFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
