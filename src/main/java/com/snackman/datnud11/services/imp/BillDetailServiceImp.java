@@ -9,18 +9,29 @@ import com.snackman.datnud11.utils.message.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BillDetailServiceImp implements BillDetailService {
     @Autowired
-    BillDetailsRepository billDetailsRepository;
+    BillDetailsRepository repo;
     @Override
     public BillDetails checkBillDetailsExist(Long id) throws CustomNotFoundException {
-        Optional<BillDetails> billDetailsOptional = billDetailsRepository.findById(id);
+        Optional<BillDetails> billDetailsOptional = repo.findById(id);
         if (billDetailsOptional.isEmpty()){
             throw new CustomNotFoundException(ErrorMessage.ERROR_MESSAGE_NOT_FOUND.toString());
         }
         return billDetailsOptional.get();
+    }
+
+    @Override
+    public List<BillDetails> findByBillId(Long id) {
+        return this.repo.findByBillId(id);
+    }
+
+    @Override
+    public BillDetails save(BillDetails billDetails) {
+        return this.repo.save(billDetails);
     }
 }
