@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -20,28 +21,32 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 @Slf4j
 public class SecurityConfiguration {
-
-  private final JwtAuthenticationFilter jwtAuthFilter;
-  private final AuthenticationProvider authenticationProvider;
-  private final LogoutHandler logoutHandler;
+  @Autowired
+  private JwtAuthenticationFilter jwtAuthFilter;
+  @Autowired
+  private AuthenticationProvider authenticationProvider;
+  @Autowired
+  private UserDetailsService userDetailsService;
+  @Autowired
+  private LogoutHandler logoutHandler;
   private LogoutService logoutService;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    log.info("security config");
     http
         .csrf()
             .disable()
         .authorizeHttpRequests()
-            .requestMatchers("/api/v1/admin/management/**","/api/v1/category").hasRole("ADMIN_ROLE")
-            .requestMatchers("/api/v1/admin/login","/api/v1/products/**","/api/v1/client/**","/api/v1/inventory/**","/api/v1/payment/**")
+            .requestMatchers("/api/v1/account/**").hasAuthority("ADMIN_ROLE")
+            .requestMatchers("/api/v1/admin/login","/api/v1/products/**","/api/v1/inventory/**","/api/v1/payment/**")
             .permitAll()
-            .requestMatchers("/api/v1/card").hasRole("CLIENT_ROLE")
+            .requestMatchers("/api/v1/card").hasAuthority("CLIENT_ROLE")
             .anyRequest()
             .authenticated()
+            .and()
+            .rememberMe().userDetailsService(userDetailsService)
             .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

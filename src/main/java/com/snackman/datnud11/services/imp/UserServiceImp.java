@@ -34,7 +34,6 @@ public class UserServiceImp implements UserService {
         }
         return usersOptional.get();
     }
-
     public List<String> getListRoleByUsername(String username) throws RoleNotFoundException {
         Optional<List<RoleUser>> roleUserOptional = roleUserRepo.findRoleUserByUsername(username);
 
@@ -45,8 +44,8 @@ public class UserServiceImp implements UserService {
         roleUserOptional.get().forEach(roleUser -> roles.add(roleUser.getRole()));
         return roles;
     }
-
     @Override
+    @Cacheable(value = "user_details_from_db")
     public UserDetails getUserDetailFromDB(String username) throws UserNotfoundException, RoleNotFoundException {
         System.out.println("loading userdetail ...");
         Users users = findUserByUsername(username);
@@ -56,7 +55,6 @@ public class UserServiceImp implements UserService {
         userAuth.setRoles(getListRoleByUsername(username));
         return userAuth;
     }
-
     @Override
     public Users createUsers(String username, String password) {
         Users users = new Users();
@@ -69,7 +67,6 @@ public class UserServiceImp implements UserService {
         }
         return null;
     }
-
     @Override
     public RoleUser createRoleUser(RoleUser roleUser) {
         RoleUser roleUser1 = roleUserRepo.save(roleUser);

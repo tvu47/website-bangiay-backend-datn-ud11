@@ -1,13 +1,11 @@
 package com.snackman.datnud11.controller.auth;
 
 import com.snackman.datnud11.config.JwtService;
+import com.snackman.datnud11.config.SecurityConfiguration;
 import com.snackman.datnud11.dto.request.UserLoginRequest;
 import com.snackman.datnud11.dto.request.UserRegisterRequest;
 import com.snackman.datnud11.entity.Customers;
-import com.snackman.datnud11.exceptions.RoleNotFoundException;
-import com.snackman.datnud11.exceptions.UserExistedException;
-import com.snackman.datnud11.exceptions.UserNotfoundException;
-import com.snackman.datnud11.exceptions.UserRegisterException;
+import com.snackman.datnud11.exceptions.*;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.AdminUserResponse;
 import com.snackman.datnud11.responses.ClientInformationResponse;
@@ -33,8 +31,7 @@ public class UserAuthenticationService {
   private final UserService userService;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
-  public AdminUserResponse getAdminLogin(UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException {
-    log.info("context authUser : {}", SecurityContextHolder.getContext().getAuthentication());
+  public AdminUserResponse getAdminLogin(UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException, BadLoginException {
     try {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -44,8 +41,8 @@ public class UserAuthenticationService {
       );
     }catch (Exception e){
       e.printStackTrace();
+      throw new BadLoginException("Username or password is wrong.");
     }
-
     UserAuth userAuth = (UserAuth) userService.getUserDetailFromDB(request.getUsername());
     var jwtToken = jwtService.generateToken(userAuth);
     return AdminUserResponse.builder()
