@@ -15,6 +15,13 @@ public class BillDetails {
     private Long customerId;
     @Column(name = "product_id")
     private Long productId;
+
+    @Column(name = "product_name")
+    private String productName;
+    @Column(name= "color_name")
+    private String colorName;
+    @Column(name = "size_name")
+    private String sizeName;
     @Column(name = "bill_id")
     private Long billId;
     @Column(name = "quantity")

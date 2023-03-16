@@ -2,6 +2,8 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.repo.BillRepository;
+import com.snackman.datnud11.responses.BillResponse;
+import com.snackman.datnud11.responses.NoticeResponse;
 import com.snackman.datnud11.services.BillService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.generic.GenericObjFindById;
@@ -22,11 +24,11 @@ public class BillController {
 	BillRepository billRepository;
 
 	@Autowired
-	BillService billService;
+	private BillService billService;
 
 	@GetMapping
-	public ResponseEntity<List<Bill>> getBills() {
-		return new ResponseEntity<>(billRepository.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<BillResponse>> getBills() {
+		return new ResponseEntity<>(this.billService.getAllBill(), HttpStatus.OK);
 	}
 
 	@PostMapping
@@ -45,6 +47,12 @@ public class BillController {
 		Bill bill = billService.checkBillExist(id);
 		billRepository.delete(bill);
 		return new ResponseEntity<>("Delete Successfully!", HttpStatus.NO_CONTENT);
+	}
+
+	@PostMapping("/accept/{id}")
+	public ResponseEntity<NoticeResponse> acceptBill(@PathVariable(name = "id") Long id) throws Exception {
+		this.billService.acceptBill(id);
+		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Duyệt đơn hàng thành công!"), HttpStatus.OK);
 	}
 
 }
