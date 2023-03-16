@@ -2,6 +2,7 @@ package com.snackman.datnud11.config;
 
 import com.snackman.datnud11.filters.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfiguration {
 
   private final JwtAuthenticationFilter jwtAuthFilter;
@@ -29,25 +31,27 @@ public class SecurityConfiguration {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    log.info("security config");
     http
         .csrf()
             .disable()
         .authorizeHttpRequests()
-        .requestMatchers("/api/v1/products/**","/api/v1/client/**","/api/v1/inventory/**","/api/v1/payment/**")
-          .permitAll()
-        .anyRequest()
-          .authenticated()
-        .and()
-          .sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .requestMatchers("/api/v1/admin/management/**","/api/v1/category").hasRole("ADMIN_ROLE")
+            .requestMatchers("/api/v1/admin/login","/api/v1/products/**","/api/v1/client/**","/api/v1/inventory/**","/api/v1/payment/**")
+            .permitAll()
+            .requestMatchers("/api/v1/card").hasRole("CLIENT_ROLE")
+            .anyRequest()
+            .authenticated()
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authenticationProvider(authenticationProvider)
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .logout()
             .logoutUrl("/api/v1/admin/users/logout")
             .addLogoutHandler(logoutHandler)
-            .logoutSuccessHandler((request,response,authentication)-> SecurityContextHolder.clearContext())
-    ;
+            .logoutSuccessHandler((request,response,authentication)-> SecurityContextHolder.clearContext());
 
     return http.build();
   }

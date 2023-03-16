@@ -30,10 +30,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class UserAuthenticationService {
-//  private final UserService userService;
+  private final UserService userService;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   public AdminUserResponse getAdminLogin(UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException {
+    log.info("context authUser : {}", SecurityContextHolder.getContext().getAuthentication());
     try {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -45,8 +46,7 @@ public class UserAuthenticationService {
       e.printStackTrace();
     }
 
-//    UserAuth userAuth = (UserAuth) userService.getUserDetailFromDB(request.getUsername());
-    UserAuth userAuth= new UserAuth();
+    UserAuth userAuth = (UserAuth) userService.getUserDetailFromDB(request.getUsername());
     var jwtToken = jwtService.generateToken(userAuth);
     return AdminUserResponse.builder()
             .username(userAuth.getUsername())
