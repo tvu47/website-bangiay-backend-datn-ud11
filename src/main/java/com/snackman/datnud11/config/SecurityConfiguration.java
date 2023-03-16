@@ -36,22 +36,7 @@ public class SecurityConfiguration {
         .csrf()
             .disable()
         .authorizeHttpRequests()
-<<<<<<< Updated upstream
-            .requestMatchers("/api/v1/admin/management/**","/api/v1/category").hasRole("ADMIN_ROLE")
-            .requestMatchers("/api/v1/admin/login","/api/v1/products/**","/api/v1/client/**","/api/v1/inventory/**","/api/v1/payment/**")
-            .permitAll()
-            .requestMatchers("/api/v1/card").hasRole("CLIENT_ROLE")
-            .anyRequest()
-            .authenticated()
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-=======
-        .requestMatchers("/api/v1/auth/authenticate","/api/v1/products/**","/api/v1/client/**","/api/v1/inventory/**","/api/v1/payment/**",
-                "/api/v1/bills/**")
+        .requestMatchers("/api/v1/auth/authenticate","/api/v1/products/**","/api/v1/client/**","/api/v1/inventory/**","/api/v1/payment/**","/api/v1/admin/**")
           .permitAll()
         .anyRequest()
           .authenticated()
@@ -61,12 +46,10 @@ public class SecurityConfiguration {
         .and()
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
->>>>>>> Stashed changes
             .logout()
             .logoutUrl("/api/v1/admin/users/logout")
             .addLogoutHandler(logoutHandler)
             .logoutSuccessHandler((request,response,authentication)-> SecurityContextHolder.clearContext());
-
     return http.build();
   }
 }
