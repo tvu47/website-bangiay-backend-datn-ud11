@@ -1,9 +1,11 @@
 package com.snackman.datnud11.services.imp;
 
+import com.snackman.datnud11.consts.Gender;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.UserExistedException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
+import com.snackman.datnud11.responses.CustomerResponse;
 import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.services.auth.UserAuth;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,6 +47,27 @@ public class CustomerServiceImp implements CustomerService {
             return customersOptional;
         }
         return null;
+    }
+
+    @Override
+    public List<CustomerResponse> findAll() {
+        List<Customers> list = this.customersRepository.findAll();
+        List<CustomerResponse> customerResponses = new ArrayList<>();
+        for(Customers customer : list){
+            CustomerResponse customerResponse = new CustomerResponse();
+            customerResponse.setId(customer.getId());
+            customerResponse.setFirstName(customer.getFirstName());
+            customerResponse.setLastName(customer.getLastName());
+            customerResponse.setAddress(customer.getAddress());
+            customerResponse.setGender(Gender.findGender(customer.getGender()).name);
+            customerResponse.setPhone(customer.getPhoneNumber());
+            customerResponse.setEmail(customer.getEmail());
+            customerResponse.setCreateTime(customer.getCreateTimeFormat());
+            customerResponse.setActive(customer.getStatus());
+            customerResponses.add(customerResponse);
+        }
+
+        return customerResponses;
     }
 
     @Override

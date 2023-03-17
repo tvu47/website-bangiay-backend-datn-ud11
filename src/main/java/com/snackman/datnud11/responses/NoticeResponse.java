@@ -10,5 +10,5 @@ public class NoticeResponse {
 
     private Integer code;
     private String content;
-
+    private Object object;
 }

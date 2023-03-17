@@ -51,8 +51,17 @@ public class BillController {
 
 	@PostMapping("/accept/{id}")
 	public ResponseEntity<NoticeResponse> acceptBill(@PathVariable(name = "id") Long id) throws Exception {
-		this.billService.acceptBill(id);
-		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Duyệt đơn hàng thành công!"), HttpStatus.OK);
+		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Duyệt đơn hàng thành công!", this.billService.acceptBill(id)), HttpStatus.OK);
 	}
+
+	@PostMapping("/cancel/{id}")
+	public ResponseEntity<NoticeResponse> cancelBill(@PathVariable(name = "id") Long id) throws Exception {
+		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Đã hủy đơn hàng!",this.billService.cancelBill(id)), HttpStatus.OK);
+	}
+	@PostMapping("/delivered/{id}")
+	public ResponseEntity<NoticeResponse> deliveredBill(@PathVariable(name = "id") Long id) throws Exception {
+		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Giao hàng thành công!",this.billService.deliveredBill(id)), HttpStatus.OK);
+	}
+
 
 }

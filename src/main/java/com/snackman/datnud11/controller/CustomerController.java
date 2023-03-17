@@ -2,6 +2,7 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.repo.CustomersRepository;
+import com.snackman.datnud11.responses.CustomerResponse;
 import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.generic.GenericObjFindById;
@@ -18,11 +19,11 @@ public class CustomerController {
 	@Autowired
 	CustomersRepository customersRepository;
 	@Autowired
-	CustomerService customerService;
+	private CustomerService customerService;
 
 	@GetMapping
-	public ResponseEntity<List<Customers>> getCustomers() {
-		return new ResponseEntity<>(customersRepository.findAll(), HttpStatus.OK);
+	public ResponseEntity<List<CustomerResponse>> getCustomers() {
+		return new ResponseEntity<>(this.customerService.findAll(), HttpStatus.OK);
 	}
 
 	@PostMapping
