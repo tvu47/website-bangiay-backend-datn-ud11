@@ -44,9 +44,4 @@ public class ColorServiceImp implements ColorService {
     public List<Colors> findAll() {
         return this.repo.findAll();
     }
-
-    @Override
-    public List<Colors> findByProductId(Long productId) {
-        return this.repo.findByProductId(productId);
-    }
 }

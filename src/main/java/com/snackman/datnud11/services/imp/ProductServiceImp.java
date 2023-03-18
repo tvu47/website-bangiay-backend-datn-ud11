@@ -1,12 +1,20 @@
 package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.consts.SearchProducts;
+import com.snackman.datnud11.entity.Inventory;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.repo.ProductsRepository;
+import com.snackman.datnud11.responses.ProductManagerResponse;
+import com.snackman.datnud11.services.CategoryService;
+import com.snackman.datnud11.services.InventoryService;
+import com.snackman.datnud11.services.MaterialService;
 import com.snackman.datnud11.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,6 +24,16 @@ public class ProductServiceImp implements ProductService {
 
     @Autowired
     private ProductsRepository repo;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private MaterialService materialService;
+
+    @Lazy
+    @Autowired
+    private InventoryService inventoryService;
 
     @Override
     public Products save(Products products) {
@@ -105,5 +123,37 @@ public class ProductServiceImp implements ProductService {
         }
 
         throw new Exception("Not found products");
+    }
+
+    @Override
+    public List<ProductManagerResponse> findAllProductsManager() throws Exception {
+        List<ProductManagerResponse> list = new ArrayList<>();
+        List<Products> products = this.findAll();
+        for(Products product : products){
+            ProductManagerResponse response = new ProductManagerResponse();
+            response.setId(product.getId());
+            response.setName(product.getProductName());
+            response.setContent(product.getContent());
+            response.setStatus(product.getStatus());
+            response.setManufactory(product.getManufactureAddress());
+            response.setCategory(this.categoryService.findById(product.getCategoryId()).getCategoryName());
+            response.setMaterial(this.materialService.findById(product.getMaterialId()).getMaterialName());
+
+            List<Inventory> inventories = this.inventoryService.findByProductId(product.getId());
+            List<ProductManagerResponse.Inventory> listInventories = new ArrayList<>();
+            response.setInventories(listInventories);
+            for(Inventory inventory : inventories){
+                ProductManagerResponse.Inventory i = new ProductManagerResponse.Inventory();
+                i.setId(inventory.getId());
+                i.setSku(inventory.getSku());
+                i.setColor(inventory.getColorName());
+                i.setSize(inventory.getSizeName());
+                i.setQuantity(inventory.getQuatity());
+                i.setPrice(inventory.getPrice());
+                listInventories.add(i);
+            }
+            list.add(response);
+        }
+        return list;
     }
 }

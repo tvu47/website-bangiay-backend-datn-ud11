@@ -24,13 +24,9 @@ public class Size {
     @Column(name = "status")
     private Boolean activeStatus;
 
-    @Column(name = "product_id")
-    private Long productId;
-
     public Size(SizeDTO sizeDTO){
         this.id = sizeDTO.getId();
         this.sizeName = sizeDTO.getSizeName();
-        this.productId = sizeDTO.getProductId();
         this.activeStatus = sizeDTO.getActiveStatus();
     }
 }

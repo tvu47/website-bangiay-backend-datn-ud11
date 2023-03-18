@@ -19,9 +19,6 @@ public class ProductsResponse {
     private Materials materials;
 
     private String productName;
-
-    private Double price;
-
     private String content;
 
     private Discounts discounts;
@@ -39,7 +36,6 @@ public class ProductsResponse {
     public ProductsResponse(Products products){
         this.id = products.getId();
         this.productName = products.getProductName();
-        this.price = products.getPrice();
         this.content = products.getContent();
         this.manufactureAddress = products.getManufactureAddress();
         this.status = products.getStatus();

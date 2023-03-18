@@ -45,9 +45,4 @@ public class SizeServiceImp implements SizeService {
     public List<Size> findAll() {
         return this.repo.findAll();
     }
-
-    @Override
-    public List<Size> findByProductId(Long productId) {
-        return this.repo.findByProductId(productId);
-    }
 }

@@ -23,13 +23,9 @@ public class Colors {
     @Column(name ="status")
     private Boolean status;
 
-    @Column(name = "product_id")
-    private Long productId;
-
     public Colors(ColorDTO colorDTO){
         this.id = colorDTO.getId();
         this.colorName = colorDTO.getName();
         this.status = colorDTO.getStatus();
-        this.productId = colorDTO.getProductId();
     }
 }

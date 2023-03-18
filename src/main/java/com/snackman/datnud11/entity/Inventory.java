@@ -30,4 +30,8 @@ public class Inventory {
     private Long color;
     @Column(name = "size")
     private Long size;
+    @Column(name = "color_name")
+    private String colorName;
+    @Column(name = "size_name")
+    private String sizeName;
 }

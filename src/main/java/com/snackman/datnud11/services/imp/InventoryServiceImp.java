@@ -17,9 +17,6 @@ public class InventoryServiceImp implements InventoryService {
     private InventoryRepository repo;
 
     @Autowired
-    private ProductService productService;
-
-    @Autowired
     private ZProductService zProductService;
 
     @Autowired
@@ -36,6 +33,11 @@ public class InventoryServiceImp implements InventoryService {
     @Override
     public Inventory findBySku(String sku) {
         return this.repo.findBySku(sku);
+    }
+
+    @Override
+    public List<Inventory> findByProductId(Long id) {
+        return this.repo.findByProductId(id);
     }
 
     @Override

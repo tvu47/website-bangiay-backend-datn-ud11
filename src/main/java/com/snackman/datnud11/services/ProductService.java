@@ -2,6 +2,8 @@ package com.snackman.datnud11.services;
 
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.entity.Size;
+import com.snackman.datnud11.responses.ProductManagerResponse;
+import com.snackman.datnud11.responses.ProductsResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -29,4 +31,6 @@ public interface ProductService {
     List<Products> getAllOrderByName(String typeSort);
 
     List<Products> searchProducts(Map<String, List<String>> params) throws Exception;
+
+    List<ProductManagerResponse> findAllProductsManager() throws Exception;
 }

@@ -59,16 +59,12 @@ public class ZProductServiceImp implements ZProductService {
 
         Map<Long, Materials> materialsMap = getMaterialByListId(idList.get("material"));
         Map<Long, Category> categoryMap= getCategoryByListId(idList.get("category"));
-        Map<Long, Discounts> discountsMap = getDiscountByListId(idList.get("discount"));
 
         productsList.stream().forEach(products -> {
             ProductsResponse productsResponse = new ProductsResponse(products);
             productsResponse.setImages(this.imageService.getImagesByProductId(products.getId()));
-            productsResponse.setSizes(this.sizeService.findByProductId(products.getId()));
-            productsResponse.setColors(this.colorService.findByProductId(products.getId()));
             productsResponse.setCategory(categoryMap.get(products.getCategoryId()));
             productsResponse.setMaterials(materialsMap.get(products.getMaterialId()));
-            productsResponse.setDiscounts(discountsMap.get(products.getDiscountId()));
             productsResponsesList.add(productsResponse);
         });
         return productsResponsesList;
@@ -77,12 +73,10 @@ public class ZProductServiceImp implements ZProductService {
     private Map<String, List<Long>> getListIds(List<Products> productsList){
         List<Long> materialListId = new ArrayList<>();
         List<Long> categoryListId = new ArrayList<>();
-        List<Long> discountListId = new ArrayList<>();
 
         productsList.stream().forEach(products -> {
             materialListId.add(products.getMaterialId());
             categoryListId.add(products.getCategoryId());
-            discountListId.add(products.getDiscountId());
         });
         Map<String, List<Long>> listMapIds = new HashMap<>();
         listMapIds.put("material", materialListId);

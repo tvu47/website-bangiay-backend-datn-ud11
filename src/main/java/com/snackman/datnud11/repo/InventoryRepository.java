@@ -17,4 +17,5 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
     @Query(value = "select * from inventory where sku = :sku", nativeQuery = true)
     Inventory findBySku(@Param("sku") String sku);
+
 }

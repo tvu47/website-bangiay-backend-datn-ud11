@@ -17,11 +17,7 @@ public class ProductDTO {
 
     private String productName;
 
-    private Double price;
-
     private String content;
-
-    private Long discountId;
 
     private String manufactureAddress;
 
@@ -33,9 +29,7 @@ public class ProductDTO {
         this.id = products.getId();
         this.categoryId = products.getCategoryId();
         this.productName = products.getProductName();
-        this.price = products.getPrice();
         this.content = products.getContent();
-        this.discountId = products.getDiscountId();
         this.manufactureAddress = products.getManufactureAddress();
         this.status = products.getStatus();
         this.materialId = products.getMaterialId();

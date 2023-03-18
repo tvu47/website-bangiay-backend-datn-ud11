@@ -16,6 +16,4 @@ public interface SizeService {
     Size findById(Long id) throws Exception;
 
     List<Size> findAll();
-
-    List<Size> findByProductId(Long productId);
 }

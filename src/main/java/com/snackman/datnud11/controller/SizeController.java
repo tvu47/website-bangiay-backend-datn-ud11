@@ -36,8 +36,4 @@ public class SizeController {
         this.sizeService.delete(id);
         return ResponseEntity.ok("Delete Successfully!");
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<List<Size>> findByProductId(@PathVariable(name = "id") Long id){
-        return new ResponseEntity<>(this.sizeService.findByProductId(id), HttpStatus.OK);
-    }
 }
