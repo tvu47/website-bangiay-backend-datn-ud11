@@ -100,6 +100,23 @@ public class BillServiceImp implements BillService {
     }
 
     @Override
+    public Bill deliveredBill(Long id) throws Exception {
+        Bill bill = this.findById(id);
+        bill.setStatus(BillStatus.DA_GIAO.status);
+        this.save(bill);
+        return bill;
+    }
+
+    @Override
+    public Bill cancelBill(Long id) throws Exception {
+        Bill bill = this.findById(id);
+        bill.setStatus(BillStatus.DA_HUY.status);
+        this.save(bill);
+        return bill;
+    }
+
+
+    @Override
     public List<BillResponse> getAllBill() {
         List<BillResponse> bills = new ArrayList<>();
         List<Bill> list = this.billRepository.findAll();
@@ -112,6 +129,7 @@ public class BillServiceImp implements BillService {
             billResponse.setEmail(b.getEmail());
             billResponse.setPhone(b.getPhone());
             billResponse.setAddress(b.getAddress());
+            billResponse.setCreateTime(b.getCreateTimeFormat());
             billResponse.setDetails(this.billDetailService.findByBillId(b.getId()));
             bills.add(billResponse);
         }

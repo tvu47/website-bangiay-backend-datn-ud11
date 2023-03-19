@@ -29,8 +29,8 @@ public class PaymentController {
         if(!this.inventoryService.validProductsOrder(paymentDTO.getProductsOrder())){
             return new ResponseEntity("",HttpStatus.OK);
         }
-        this.billService.payment(paymentDTO);
-        return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(), "Đặt hàng thành công!"),HttpStatus.OK);
+        return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(), "Đặt hàng thành công!",
+                this.billService.payment(paymentDTO)),HttpStatus.OK);
     }
 
 

@@ -28,14 +28,8 @@ public class Products {
     @Column(name = "product_name")
     private String productName;
 
-    @Column(name = "price", precision = 10, scale = 2)
-    private Double price;
-
     @Column(name = "content")
     private String content;
-
-    @Column(name = "discount_id", nullable = false)
-    private Long discountId;
 
     @Column(name = "manufacture")
     private String manufactureAddress;
@@ -47,9 +41,7 @@ public class Products {
         this.id = productDTO.getId();
         this.categoryId = productDTO.getCategoryId();
         this.productName = productDTO.getProductName();
-        this.price = productDTO.getPrice();
         this.content = productDTO.getContent();
-        this.discountId = productDTO.getDiscountId();
         this.manufactureAddress = productDTO.getManufactureAddress();
         this.status = productDTO.getStatus();
         this.materialId = productDTO.getMaterialId();

@@ -2,6 +2,8 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.ProductDTO;
 import com.snackman.datnud11.entity.Products;
+import com.snackman.datnud11.responses.NoticeResponse;
+import com.snackman.datnud11.responses.ProductManagerResponse;
 import com.snackman.datnud11.responses.ProductsResponse;
 import com.snackman.datnud11.services.ProductService;
 import com.snackman.datnud11.services.ZProductService;
@@ -30,8 +32,8 @@ public class ProductsController {
         return new ResponseEntity<>(this.zProductService.getAllProductResponses(), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<Products> createProduct(@RequestBody ProductDTO productDTO){
-        return new ResponseEntity<>(this.productService.save(new Products(productDTO)), HttpStatus.CREATED);
+    public ResponseEntity<NoticeResponse> createProduct(@RequestBody ProductDTO productDTO){
+        return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Thêm mới sản phẩm thành công",this.productService.save(new Products(productDTO))), HttpStatus.CREATED);
     }
     @PutMapping
     public ResponseEntity<Products> updateProduct(@RequestBody Products product ) throws CustomNotFoundException {
@@ -50,6 +52,11 @@ public class ProductsController {
     @GetMapping("/{id}")
     public ResponseEntity<List<ProductsResponse>> findById(@PathVariable(name = "id") Long id) throws Exception {
         return new ResponseEntity<>(this.zProductService.findByProductId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductManagerResponse>> findAllProductManager() throws Exception{
+        return new ResponseEntity<>(this.productService.findAllProductsManager(), HttpStatus.OK);
     }
 }
 

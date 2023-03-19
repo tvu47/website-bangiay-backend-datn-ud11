@@ -13,13 +13,9 @@ public class ColorDTO {
     private Long id;
     private String name;
     private Boolean status;
-
-    private Long productId;
-
     public ColorDTO(Colors colors){
         this.id = colors.getId();
         this.name = colors.getColorName();
         this.status = colors.getStatus();
-        this.productId = colors.getProductId();
     }
 }

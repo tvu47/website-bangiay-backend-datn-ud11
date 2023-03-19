@@ -16,6 +16,4 @@ public interface ColorService {
 
     List<Colors> findAll();
 
-    List<Colors> findByProductId(Long productId);
-
 }

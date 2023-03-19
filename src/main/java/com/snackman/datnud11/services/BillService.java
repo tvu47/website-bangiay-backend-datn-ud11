@@ -18,5 +18,9 @@ public interface BillService{
 
     Bill acceptBill(Long id) throws Exception;
 
+    Bill deliveredBill(Long id) throws Exception;
+
+    Bill cancelBill(Long id) throws Exception;
+
     List<BillResponse> getAllBill();
 }

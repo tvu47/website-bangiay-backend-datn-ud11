@@ -41,9 +41,4 @@ public class ColorsController {
         }
         return ResponseEntity.ok("Delete successfully!");
     }
-
-    @GetMapping("/product/{id}")
-    public ResponseEntity<List<Colors>> getColorsByProductId(@PathVariable(name = "id") Long productId){
-        return new ResponseEntity<>(this.colorService.findByProductId(productId),HttpStatus.OK);
-    }
 }

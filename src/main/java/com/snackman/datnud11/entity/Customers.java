@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -22,7 +23,7 @@ public class Customers {
     @Email(message = "email must not be invalid")
     private String email;
     @Column(name = "gender")
-    private boolean gender;
+    private Integer gender;
     @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "address")
@@ -32,5 +33,10 @@ public class Customers {
     @Column(name = "password")
     private String password;
     @Column(name = "status")
-    private String status;
+    private Boolean status;
+
+    public String getCreateTimeFormat(){
+        SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return fm.format(this.createTime);
+    }
 }

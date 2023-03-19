@@ -12,6 +12,8 @@ public interface InventoryService {
 
     Inventory findBySku(String sku);
 
+    List<Inventory> findByProductId(Long id);
+
     InventoryResponse getProductById(Long id) throws Exception;
 
     boolean validProductsOrder(List<PaymentDTO.ProductOrder> productOrders);
