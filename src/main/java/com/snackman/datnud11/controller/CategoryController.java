@@ -20,6 +20,7 @@ public class CategoryController {
     
     @GetMapping
     public ResponseEntity<List<Category>> getCategories(){
+        System.out.println("security context 2.2 jwt: "+ SecurityContextHolder.getContext().getAuthentication());
         return new ResponseEntity<>(this.categoryService.findAll(), HttpStatus.OK);
     }
     @PostMapping

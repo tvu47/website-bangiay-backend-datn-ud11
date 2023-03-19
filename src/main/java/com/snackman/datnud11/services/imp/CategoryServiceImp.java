@@ -4,6 +4,7 @@ import com.snackman.datnud11.entity.Category;
 import com.snackman.datnud11.repo.CategoryRepository;
 import com.snackman.datnud11.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public List<Category> findAll() {
         System.out.println("find all");
+        System.out.println("security context 2.3 jwt: "+ SecurityContextHolder.getContext().getAuthentication());
         return this.repo.findAll();
     }
 }

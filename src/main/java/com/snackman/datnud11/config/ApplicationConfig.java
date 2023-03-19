@@ -55,20 +55,6 @@ public class ApplicationConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                        .allowedOrigins("http://localhost:4200")
-//                        .allowedMethods("GET","POST","PATCH", "OPTIONS", "HEAD")
-//                        .maxAge(3600)
-//                        .allowCredentials(true);
-//            }
-//        };
-//    }
-
 
     @Bean
     public JavaMailSender getJavaMailSender() {

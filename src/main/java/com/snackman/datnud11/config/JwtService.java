@@ -1,5 +1,6 @@
 package com.snackman.datnud11.config;
 
+import com.snackman.datnud11.exceptions.JwtTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,15 +29,25 @@ public class JwtService {
   }
 
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-    final Claims claims = extractAllClaims(token);
+    final Claims claims;
+    try {
+      claims = extractAllClaims(token);
+    }catch (Exception e){
+      e.printStackTrace();
+      try {
+        throw new JwtTokenException("Token is BAD...");
+      } catch (JwtTokenException ex) {
+        ex.printStackTrace();
+        throw new RuntimeException(ex);
+      }
+    }
     return claimsResolver.apply(claims);
   }
 
+  @Cacheable(value = "jwt_token_authen")
   public String generateToken(UserDetails userDetails) {
     return generateToken(new HashMap<>(), userDetails);
   }
-
-  @Cacheable(value = "token")
   public String generateToken(
       Map<String, Object> extraClaims,
       UserDetails userDetails
@@ -56,9 +67,15 @@ public class JwtService {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
   }
-
+  private boolean isTokenIat(String token) {
+    return extractTimeCreated(token).before(new Date());
+  }
   private boolean isTokenExpired(String token) {
     return extractExpiration(token).before(new Date());
+  }
+
+  public Date extractTimeCreated(String token) {
+    return extractClaim(token, Claims::getIssuedAt);
   }
 
   private Date extractExpiration(String token) {

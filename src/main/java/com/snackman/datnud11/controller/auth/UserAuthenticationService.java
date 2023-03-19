@@ -12,10 +12,13 @@ import com.snackman.datnud11.responses.ClientInformationResponse;
 import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.services.UserService;
 import com.snackman.datnud11.services.auth.UserAuth;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,6 +35,7 @@ public class UserAuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   public AdminUserResponse getAdminLogin(UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException, BadLoginException {
+    System.out.println("security context 2.2 jwt: "+ SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     try {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -45,6 +49,7 @@ public class UserAuthenticationService {
     }
     UserAuth userAuth = (UserAuth) userService.getUserDetailFromDB(request.getUsername());
     var jwtToken = jwtService.generateToken(userAuth);
+
     return AdminUserResponse.builder()
             .username(userAuth.getUsername())
             .token(jwtToken)
@@ -52,4 +57,18 @@ public class UserAuthenticationService {
             .build();
   }
 
+  @CacheEvict(value = "jwt_token_authen")
+  public String toAdminLogout(){
+    String status = "false";
+    try {
+      System.out.println("security context 3 jwt: "+ SecurityContextHolder.getContext().getAuthentication());
+      SecurityContext context = SecurityContextHolder.getContext();
+      SecurityContextHolder.clearContext();
+      context.setAuthentication(null);
+      status = "true";
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+    return status;
+  }
 }
