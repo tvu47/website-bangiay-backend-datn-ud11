@@ -1,13 +1,17 @@
 package com.snackman.datnud11.config;
 
+import com.snackman.datnud11.exceptions.BadRequestException;
 import com.snackman.datnud11.exceptions.JwtTokenException;
+import com.snackman.datnud11.services.TokenService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Cache;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,8 @@ import java.util.function.Function;
 @Service
 @Slf4j
 public class JwtService {
+  @Autowired
+  private TokenService tokenService;
 
   private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
@@ -29,25 +35,13 @@ public class JwtService {
   }
 
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-    final Claims claims;
-    try {
-      claims = extractAllClaims(token);
-    }catch (Exception e){
-      e.printStackTrace();
-      try {
-        throw new JwtTokenException("Token is BAD...");
-      } catch (JwtTokenException ex) {
-        ex.printStackTrace();
-        throw new RuntimeException(ex);
-      }
-    }
+    final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
   }
-
-  @Cacheable(value = "jwt_token_authen")
   public String generateToken(UserDetails userDetails) {
     return generateToken(new HashMap<>(), userDetails);
   }
+  @Cacheable("jwt_token")
   public String generateToken(
       Map<String, Object> extraClaims,
       UserDetails userDetails
@@ -63,21 +57,13 @@ public class JwtService {
         .compact();
   }
 
-  public boolean isTokenValid(String token, UserDetails userDetails) {
+  public boolean isTokenValid(String token, UserDetails userDetails) throws BadRequestException {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
-  }
-  private boolean isTokenIat(String token) {
-    return extractTimeCreated(token).before(new Date());
   }
   private boolean isTokenExpired(String token) {
     return extractExpiration(token).before(new Date());
   }
-
-  public Date extractTimeCreated(String token) {
-    return extractClaim(token, Claims::getIssuedAt);
-  }
-
   private Date extractExpiration(String token) {
     return extractClaim(token, Claims::getExpiration);
   }

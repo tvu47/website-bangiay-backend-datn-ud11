@@ -5,17 +5,21 @@ import com.snackman.datnud11.config.SecurityConfiguration;
 import com.snackman.datnud11.dto.request.UserLoginRequest;
 import com.snackman.datnud11.dto.request.UserRegisterRequest;
 import com.snackman.datnud11.entity.Customers;
+import com.snackman.datnud11.entity.TokenJwt;
 import com.snackman.datnud11.exceptions.*;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.AdminUserResponse;
 import com.snackman.datnud11.responses.ClientInformationResponse;
 import com.snackman.datnud11.services.CustomerService;
+import com.snackman.datnud11.services.TokenService;
 import com.snackman.datnud11.services.UserService;
 import com.snackman.datnud11.services.auth.UserAuth;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
@@ -34,8 +38,8 @@ public class UserAuthenticationService {
   private final UserService userService;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
-  public AdminUserResponse getAdminLogin(UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException, BadLoginException {
-    System.out.println("security context 2.2 jwt: "+ SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+  private final TokenService tokenService;
+  public AdminUserResponse getAdminLogin(UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException, BadLoginException, JwtTokenException {
     try {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -47,28 +51,37 @@ public class UserAuthenticationService {
       e.printStackTrace();
       throw new BadLoginException("Username or password is wrong.");
     }
-    UserAuth userAuth = (UserAuth) userService.getUserDetailFromDB(request.getUsername());
-    var jwtToken = jwtService.generateToken(userAuth);
 
+    var jwtToken = this.generateTokenFromUserAuthenticated(request.getUsername());
+    TokenJwt tokenJwt = new TokenJwt();
+    tokenJwt.setToken(jwtToken);
+    tokenJwt.setUsername(request.getUsername());
+    tokenJwt.setExpire(true);
+    tokenService.saveToken(tokenJwt);
     return AdminUserResponse.builder()
-            .username(userAuth.getUsername())
             .token(jwtToken)
-            .roles(userAuth.getRoles())
             .build();
   }
 
-  @CacheEvict(value = "jwt_token_authen")
+
+  @Caching(evict = {
+          @CacheEvict(value = "user_details", allEntries = true ),
+          @CacheEvict(value = "jwt_token", allEntries = true )
+  })
   public String toAdminLogout(){
     String status = "false";
     try {
-      System.out.println("security context 3 jwt: "+ SecurityContextHolder.getContext().getAuthentication());
       SecurityContext context = SecurityContextHolder.getContext();
       SecurityContextHolder.clearContext();
       context.setAuthentication(null);
       status = "true";
-    }catch (Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return status;
+  }
+  public String generateTokenFromUserAuthenticated (String username) throws RoleNotFoundException, UserNotfoundException {
+    UserAuth userAuth = (UserAuth) userService.getUserDetailFromDB(username);
+    return jwtService.generateToken(userAuth);
   }
 }

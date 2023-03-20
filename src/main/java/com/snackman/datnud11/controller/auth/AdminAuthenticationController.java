@@ -2,6 +2,7 @@ package com.snackman.datnud11.controller.auth;
 
 import com.snackman.datnud11.dto.request.UserLoginRequest;
 import com.snackman.datnud11.exceptions.BadLoginException;
+import com.snackman.datnud11.exceptions.JwtTokenException;
 import com.snackman.datnud11.exceptions.RoleNotFoundException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.responses.AdminUserResponse;
@@ -24,7 +25,7 @@ import java.net.http.HttpResponse;
 public class AdminAuthenticationController {
   private final UserAuthenticationService service;
   @PostMapping("/login")
-  public ResponseEntity<AdminUserResponse> login(@Valid @RequestBody UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException, BadLoginException {
+  public ResponseEntity<AdminUserResponse> login(@Valid @RequestBody UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException, BadLoginException, JwtTokenException {
     AdminUserResponse adminUserResponse = service.getAdminLogin(request);
     return new ResponseEntity<>(adminUserResponse, HttpStatus.OK);
   }
@@ -36,7 +37,7 @@ public class AdminAuthenticationController {
   public ResponseEntity<String> loginError(){
     return ResponseEntity.ok("error somewhere ...");
   }
-  @GetMapping("/logout")
+  @PostMapping("/logout")
   public ResponseEntity<String> logout() {
         return ResponseEntity.ok(service.toAdminLogout());
   }

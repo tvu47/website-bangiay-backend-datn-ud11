@@ -43,7 +43,6 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public List<Category> findAll() {
         System.out.println("find all");
-        System.out.println("security context 2.3 jwt: "+ SecurityContextHolder.getContext().getAuthentication());
         return this.repo.findAll();
     }
 }

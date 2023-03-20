@@ -10,6 +10,7 @@ import com.snackman.datnud11.repo.UserRepository;
 import com.snackman.datnud11.services.UserService;
 import com.snackman.datnud11.services.auth.UserAuth;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.User;
@@ -45,7 +46,7 @@ public class UserServiceImp implements UserService {
         return roles;
     }
     @Override
-    @Cacheable(value = "user_details_from_db")
+    @Cacheable("user_details")
     public UserDetails getUserDetailFromDB(String username) throws UserNotfoundException, RoleNotFoundException {
         System.out.println("loading userdetail ...");
         Users users = findUserByUsername(username);
