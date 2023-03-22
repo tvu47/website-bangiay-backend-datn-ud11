@@ -14,6 +14,7 @@ import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.services.TokenService;
 import com.snackman.datnud11.services.UserService;
 import com.snackman.datnud11.services.auth.UserAuth;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +37,14 @@ import java.util.List;
 @Slf4j
 public class UserAuthenticationService {
   private final UserService userService;
-  private final JwtService jwtService;
+  @Resource
+  private JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final TokenService tokenService;
   public AdminUserResponse getAdminLogin(UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException, BadLoginException, JwtTokenException {
+//    UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    log.info("username : {}", request.getUsername());
+    log.info("password : {}", request.getPassword());
     try {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(
@@ -49,20 +54,13 @@ public class UserAuthenticationService {
       );
     }catch (Exception e){
       e.printStackTrace();
-      throw new BadLoginException("Username or password is wrong.");
     }
-
-    var jwtToken = this.generateTokenFromUserAuthenticated(request.getUsername());
-    TokenJwt tokenJwt = new TokenJwt();
-    tokenJwt.setToken(jwtToken);
-    tokenJwt.setUsername(request.getUsername());
-    tokenJwt.setExpire(true);
-    tokenService.saveToken(tokenJwt);
+    String token = jwtService.getSessionJwt(null);
+    log.info("token in service auth: {}", token);
     return AdminUserResponse.builder()
-            .token(jwtToken)
+            .token(token)
             .build();
   }
-
 
   @Caching(evict = {
           @CacheEvict(value = "user_details", allEntries = true ),
@@ -80,8 +78,8 @@ public class UserAuthenticationService {
     }
     return status;
   }
-  public String generateTokenFromUserAuthenticated (String username) throws RoleNotFoundException, UserNotfoundException {
-    UserAuth userAuth = (UserAuth) userService.getUserDetailFromDB(username);
-    return jwtService.generateToken(userAuth);
-  }
+//  public String generateTokenFromUserAuthenticated (String username) throws RoleNotFoundException, UserNotfoundException {
+//    UserAuth userAuth = (UserAuth) userService.getUserDetailFromDB(username);
+//    return jwtService.generateToken(userAuth);
+//  }
 }

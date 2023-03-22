@@ -1,11 +1,12 @@
 package com.snackman.datnud11.config;
 
-import com.snackman.datnud11.filters.JwtAuthenticationFilter;
+import com.snackman.datnud11.filters.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -27,11 +29,17 @@ import java.util.Arrays;
 @Slf4j
 public class SecurityConfiguration {
   @Autowired
-  private JwtAuthenticationFilter jwtAuthFilter;
+  private JwtAuthentication1Filter jwtAuthentication1Filter;
+  @Autowired
+  private GenerateJwtTokenFilter generateJwtTokenFilter;
+  @Autowired
+  private ValidateJwtTokenFilter validateJwtTokenFilter;
+  @Autowired
+  private AuthorJwtTokenFilter authorJwtTokenFilter;
+  @Autowired
+  private UserDetailsFilter userDetailsFilter;
   @Autowired
   private AuthenticationProvider authenticationProvider;
-  @Autowired
-  private UserDetailsService userDetailsService;
   @Autowired
   private LogoutHandler logoutHandler;
   private LogoutService logoutService;
@@ -50,13 +58,15 @@ public class SecurityConfiguration {
             .anyRequest()
             .authenticated()
             .and()
-            .rememberMe().userDetailsService(userDetailsService)
-            .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtAuthentication1Filter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(validateJwtTokenFilter, BasicAuthenticationFilter.class)
+            .addFilterBefore(authorJwtTokenFilter, BasicAuthenticationFilter.class)
+            .addFilterAfter(generateJwtTokenFilter, BasicAuthenticationFilter.class)
+            .addFilterAfter(userDetailsFilter , BasicAuthenticationFilter.class)
             .logout()
             .logoutUrl("/api/v1/admin/users/logout")
             .addLogoutHandler(logoutHandler)

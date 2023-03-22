@@ -59,14 +59,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       throw e;
     }
 
-
       if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
         try {
           TokenJwt tokenFromServer = tokenService.getTokenByUsername(username);
 
-          System.out.println("token from server: "+tokenFromServer.getToken());
-          System.out.println("token from client: "+authToken);
           if (tokenFromServer.getToken() != authToken){
             throw new BadRequestException("Request is bad. try login again...");
           }

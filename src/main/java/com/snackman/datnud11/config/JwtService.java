@@ -3,20 +3,23 @@ package com.snackman.datnud11.config;
 import com.snackman.datnud11.exceptions.BadRequestException;
 import com.snackman.datnud11.exceptions.JwtTokenException;
 import com.snackman.datnud11.services.TokenService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,20 +44,37 @@ public class JwtService {
   public String generateToken(UserDetails userDetails) {
     return generateToken(new HashMap<>(), userDetails);
   }
-  @Cacheable("jwt_token")
   public String generateToken(
       Map<String, Object> extraClaims,
       UserDetails userDetails
   ) {
     log.info("generating token...");
+    extraClaims.put("authorities", userDetails.getAuthorities());
     return Jwts
         .builder()
+            .setIssuer("Eazy Bank")
         .setClaims(extraClaims)
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
         .signWith(getSignInKey(), SignatureAlgorithm.HS256)
         .compact();
+  }
+  public void validateAccessToken(String token){
+    Claims claims = Jwts.parserBuilder()
+            .setSigningKey(SECRET_KEY)
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    String username = String.valueOf(claims.get("username"));
+    Collection<GrantedAuthority> collectionRole = (Collection<GrantedAuthority>) claims.get("authorities");
+    Authentication auth = new UsernamePasswordAuthenticationToken(username, null, collectionRole);
+    SecurityContextHolder.getContext().setAuthentication(auth);
+  }
+
+  @Cacheable(value = "jwt_token", sync = true)
+  public String getSessionJwt(String jwt){
+      return jwt;
   }
 
   public boolean isTokenValid(String token, UserDetails userDetails) throws BadRequestException {
