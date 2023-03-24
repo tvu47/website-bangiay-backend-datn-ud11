@@ -25,8 +25,8 @@ import java.net.http.HttpResponse;
 public class AdminAuthenticationController {
   private final UserAuthenticationService service;
   @PostMapping("/login")
-  public ResponseEntity<AdminUserResponse> login(@Valid @RequestBody UserLoginRequest request) throws UserNotfoundException, RoleNotFoundException, BadLoginException, JwtTokenException {
-    AdminUserResponse adminUserResponse = service.getAdminLogin(request);
+  public ResponseEntity<AdminUserResponse> login(@RequestAttribute(name = "token") String token) throws UserNotfoundException, RoleNotFoundException, BadLoginException, JwtTokenException {
+    AdminUserResponse adminUserResponse = service.getAdminLogin(token);
     return new ResponseEntity<>(adminUserResponse, HttpStatus.OK);
   }
   @GetMapping("/home")

@@ -26,8 +26,4 @@ public class TokenServiceImp implements TokenService {
     public TokenJwt getTokenByUsername(String username) {
         return tokenJwtRepo.findTokenJwtByUsernameAndExpiress(username);
     }
-    @Override
-    public TokenJwt hasExpiredTime(String username) {
-        return tokenJwtRepo.setIsExpired(username);
-    }
 }
