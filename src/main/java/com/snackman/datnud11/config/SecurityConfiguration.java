@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -43,6 +44,8 @@ public class SecurityConfiguration {
   private UserServiceImp userServiceImp;
   @Autowired
   private AuthenticationProvider authenticationProvider;
+  @Autowired
+  private HandleFilterException handleFilterException;
   private final AuthenticationConfiguration configuration;
 
   @Bean
@@ -68,6 +71,7 @@ public class SecurityConfiguration {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authenticationProvider(authenticationProvider)
+            .addFilterBefore(handleFilterException, LogoutFilter.class)
             .addFilterBefore(validateJwtTokenFilter, BasicAuthenticationFilter.class)
             .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(configuration), userDetailsService), JwtAuthenticationFilter.class)
             .addFilterAfter(generateJwtTokenFilter, BasicAuthenticationFilter.class)

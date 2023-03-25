@@ -48,8 +48,7 @@ public class ValidateJwtTokenFilter extends OncePerRequestFilter {
         try {
             username = jwtService.extractUsername(jwt);
         }catch (ExpiredJwtException e){
-            log.error("Token has expired....");
-            throw e;
+            throw new BadCredentialsException("Token has expried ...");
         }
         log.error("username extract :{}", username);
         // username is define
