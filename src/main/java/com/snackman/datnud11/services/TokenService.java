@@ -6,5 +6,4 @@ import com.snackman.datnud11.exceptions.JwtTokenException;
 public interface TokenService {
     TokenJwt saveToken(TokenJwt token) throws JwtTokenException;
     TokenJwt getTokenByUsername(String username);
-    TokenJwt hasExpiredTime(String username);
 }

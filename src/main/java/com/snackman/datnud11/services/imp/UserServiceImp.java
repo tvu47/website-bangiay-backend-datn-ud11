@@ -46,7 +46,6 @@ public class UserServiceImp implements UserService {
         return roles;
     }
     @Override
-    @Cacheable("user_details")
     public UserDetails getUserDetailFromDB(String username) throws UserNotfoundException, RoleNotFoundException {
         System.out.println("loading userdetail ...");
         Users users = findUserByUsername(username);
