@@ -54,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     try {
       username = jwtService.extractUsername(authToken);
     }catch (ExpiredJwtException e){
-//      tokenService.hasExpiredTime()
+      tokenService.hasExpiredTime();
       log.error("Token has expired....");
       throw e;
     }
