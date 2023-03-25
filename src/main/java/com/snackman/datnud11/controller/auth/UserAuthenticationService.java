@@ -17,11 +17,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class UserAuthenticationService {
-  @Autowired
-  private AuthenticationManager authenticationManager;
-  @Autowired
-  private TokenService tokenService;
-
   public AdminUserResponse getAdminLogin(String token) throws UserNotfoundException, RoleNotFoundException, BadLoginException, JwtTokenException {
     return AdminUserResponse.builder()
             .token(token)
@@ -44,8 +39,4 @@ public class UserAuthenticationService {
     }
     return status;
   }
-//  public String generateTokenFromUserAuthenticated (String username) throws RoleNotFoundException, UserNotfoundException {
-//    UserAuth userAuth = (UserAuth) userService.getUserDetailFromDB(username);
-//    return jwtService.generateToken(userAuth);
-//  }
 }

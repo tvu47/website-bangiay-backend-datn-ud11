@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,7 +27,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private UserDetailsService userDetailsService;
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService){
         this.userDetailsService = userDetailsService;
-        super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/v1/admin/login", "POST"));
+        super.setRequiresAuthenticationRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/api/v1/admin/login", "POST"),
+                new AntPathRequestMatcher("/api/v1/customers/login", "POST")));
         this.setAuthenticationManager(authenticationManager);
     }
 

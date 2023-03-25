@@ -2,16 +2,21 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.consts.Gender;
 import com.snackman.datnud11.entity.Customers;
+import com.snackman.datnud11.entity.RoleUser;
 import com.snackman.datnud11.exceptions.UserExistedException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.CustomerResponse;
 import com.snackman.datnud11.services.CustomerService;
+import com.snackman.datnud11.services.EmailSenderService;
+import com.snackman.datnud11.services.RoleUserService;
+import com.snackman.datnud11.services.UserService;
 import com.snackman.datnud11.services.auth.UserAuth;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.message.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +26,13 @@ import java.util.Optional;
 @Service
 public class CustomerServiceImp implements CustomerService {
     @Autowired
-    CustomersRepository customersRepository;
+    private CustomersRepository customersRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private EmailSenderService emailSenderService;
     @Override
     public Customers checkCustomerExist(Long id) throws CustomNotFoundException {
         Optional<Customers> customersOptional = customersRepository.findById(id);
@@ -79,6 +90,54 @@ public class CustomerServiceImp implements CustomerService {
         return customersOptional.get();
     }
 
+    @Override
+    public CustomerResponse login(String username) throws UserNotfoundException {
+        Optional<Customers> customers = customersRepository.findCustomersByEmail(username);
+        if (customers.isEmpty()){
+            throw new UserNotfoundException("Customer not found in database");
+        }
+        CustomerResponse customerResponse = new CustomerResponse();
+        customerResponse.setEmail(customers.get().getEmail());
+        return customerResponse;
+    }
+
+    @Override
+    public Boolean register(String username, String password) {
+        try {
+            // email khong ton tai trong db: checkEmailExist=true
+            userService.IsRoleUserExist(username);
+            userService.IsUserExist(username);
+            if (checkEmailExist(username)){
+                //create users in db
+                userService.createUsers(username, passwordEncoder.encode(password));
+                // create role_user in db
+                RoleUser roleUser = new RoleUser();
+                roleUser.setRole("CLIENT_ROLE");
+                roleUser.setUsername(username);
+                roleUser.setStatus(true);
+                userService.createRoleUser(roleUser);
+                // create customer in db
+                Customers customers = new Customers();
+                customers.setEmail(username);
+                customers.setPassword(passwordEncoder.encode(password));
+                customers.setStatus(true);
+                customersRepository.save(customers);
+                //send gmail to customer
+//                emailSenderService.sendEmail(username,
+//                        "SnackMan Register Account",
+//                        "you have been register on snackman.");
+                return true;
+            }
+        } catch (UserExistedException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean logout() {
+        return null;
+    }
 
 
 }

@@ -3,19 +3,14 @@ package com.snackman.datnud11.services.imp;
 import com.snackman.datnud11.entity.RoleUser;
 import com.snackman.datnud11.entity.Users;
 import com.snackman.datnud11.exceptions.RoleNotFoundException;
+import com.snackman.datnud11.exceptions.UserExistedException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.RoleUserRepo;
-import com.snackman.datnud11.repo.RoleRepo;
 import com.snackman.datnud11.repo.UserRepository;
 import com.snackman.datnud11.services.UserService;
 import com.snackman.datnud11.services.auth.UserAuth;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,13 +31,13 @@ public class UserServiceImp implements UserService {
         return usersOptional.get();
     }
     public List<String> getListRoleByUsername(String username) throws RoleNotFoundException {
-        Optional<List<RoleUser>> roleUserOptional = roleUserRepo.findRoleUserByUsername(username);
+        List<RoleUser> roleUserOptional = roleUserRepo.findRoleUserByUsername(username);
 
-        if (roleUserOptional.isEmpty()){
+        if (roleUserOptional.size() == 0){
             throw new RoleNotFoundException("Role is not defined...");
         }
         List<String> roles = new ArrayList<>();
-        roleUserOptional.get().forEach(roleUser -> roles.add(roleUser.getRole()));
+        roleUserOptional.forEach(roleUser -> roles.add(roleUser.getRole()));
         return roles;
     }
     @Override
@@ -74,5 +69,23 @@ public class UserServiceImp implements UserService {
             return roleUser1;
         }
         return null;
+    }
+
+    @Override
+    public Users IsUserExist(String username) throws UserExistedException {
+        Users usersOptional = userRepository.findUsersByUsername(username);
+        if (usersOptional != null){
+            throw new UserExistedException("User exist on database");
+        }
+        return usersOptional;
+    }
+
+    @Override
+    public List<RoleUser> IsRoleUserExist(String username) throws UserExistedException {
+        List<RoleUser> roleUserList = roleUserRepo.findRoleUserByUsername(username);
+        if (roleUserList.size() != 0){
+            throw new UserExistedException("role exist on database");
+        }
+        return roleUserList;
     }
 }

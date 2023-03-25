@@ -33,7 +33,7 @@ public class ValidateJwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
-        final String jwt = authHeader.substring(7);
+        final String jwt;
         final String username;
         log.info("-----start validate filter-------");
         // check header have token or not
@@ -43,6 +43,7 @@ public class ValidateJwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
+        jwt= authHeader.substring(7);
         // extract username by token of client sent up
         try {
             username = jwtService.extractUsername(jwt);
