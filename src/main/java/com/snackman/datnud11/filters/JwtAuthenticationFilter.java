@@ -22,34 +22,6 @@ import java.io.IOException;
 
 @Component
 @Slf4j
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-  @Autowired
-  private JwtService jwtService;
-  @Autowired
-  private UserDetailsService userDetailsService;
-  @Autowired
-  private TokenService tokenService;
-  @Override
-  protected void doFilterInternal(
-      @NonNull HttpServletRequest request,
-      @NonNull HttpServletResponse response,
-      @NonNull FilterChain filterChain
-  ) throws ServletException, IOException {
-    final String authHeader = request.getHeader("Authorization");
-    final String authToken;
-    final String username;
-    log.info("uri called: {}", request.getRequestURI());
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-      filterChain.doFilter(request, response);
-      return;
-    }
-      authToken = authHeader.substring(7);
-    try {
-      username = jwtService.extractUsername(authToken);
-    }catch (ExpiredJwtException e){
-      tokenService.hasExpiredTime();
-      log.error("Token has expired....");
-      throw e;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private UserDetailsService userDetailsService;
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService){
