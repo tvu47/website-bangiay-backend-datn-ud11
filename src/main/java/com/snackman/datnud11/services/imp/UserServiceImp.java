@@ -6,10 +6,12 @@ import com.snackman.datnud11.exceptions.RoleNotFoundException;
 import com.snackman.datnud11.exceptions.UserExistedException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.RoleUserRepo;
+import com.snackman.datnud11.repo.TokenJwtRepo;
 import com.snackman.datnud11.repo.UserRepository;
 import com.snackman.datnud11.services.UserService;
 import com.snackman.datnud11.services.auth.UserAuth;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class UserServiceImp implements UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleUserRepo roleUserRepo;
+    @Autowired
+    private TokenJwtRepo tokenJwtRepo;
     @Override
     public Users findUserByUsername(String user) throws UserNotfoundException {
         Optional<Users> usersOptional = userRepository.findByUsername(user);
@@ -87,5 +91,10 @@ public class UserServiceImp implements UserService {
             throw new UserExistedException("role exist on database");
         }
         return roleUserList;
+    }
+
+    public void refreshToken(String username){
+        tokenJwtRepo.setIsExpired(username);
+        SecurityContextHolder.getContext().setAuthentication(null);
     }
 }

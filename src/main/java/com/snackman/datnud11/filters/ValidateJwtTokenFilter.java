@@ -55,6 +55,9 @@ public class ValidateJwtTokenFilter extends OncePerRequestFilter {
         // username is define
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         TokenJwt tokenJwt = tokenService.getTokenByUsername(username);
+        if (tokenJwt == null){
+            throw new BadCredentialsException("Token has expired");
+        }
 
         log.info("token client : {}", jwt);
         log.info("token database : {}", tokenJwt);

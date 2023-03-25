@@ -2,11 +2,13 @@ package com.snackman.datnud11.config;
 
 import com.snackman.datnud11.filters.*;
 import com.snackman.datnud11.filters.JwtAuthenticationFilter;
+import com.snackman.datnud11.services.imp.UserServiceImp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -16,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -37,12 +40,10 @@ public class SecurityConfiguration {
   @Autowired
   private UserDetailsService userDetailsService;
   @Autowired
+  private UserServiceImp userServiceImp;
+  @Autowired
   private AuthenticationProvider authenticationProvider;
   private final AuthenticationConfiguration configuration;
-
-  @Autowired
-  private LogoutHandler logoutHandler;
-  private LogoutService logoutService;
 
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -71,9 +72,9 @@ public class SecurityConfiguration {
             .addFilterBefore(new JwtAuthenticationFilter(authenticationManager(configuration), userDetailsService), JwtAuthenticationFilter.class)
             .addFilterAfter(generateJwtTokenFilter, BasicAuthenticationFilter.class)
             .logout()
-            .logoutUrl("/api/v1/admin/users/logout")
-            .addLogoutHandler(logoutHandler)
-            .logoutSuccessHandler((request,response,authentication)-> SecurityContextHolder.clearContext());
+            .logoutUrl("/api/v1/users/logout")
+            .addLogoutHandler(new LogoutForAdminFilter(userServiceImp))
+            .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)).permitAll();
     return http.build();
   }
 
