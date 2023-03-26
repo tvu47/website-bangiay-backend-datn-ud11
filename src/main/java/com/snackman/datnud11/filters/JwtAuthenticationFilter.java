@@ -1,20 +1,21 @@
 package com.snackman.datnud11.filters;
 
-import com.snackman.datnud11.config.JwtService;
+import com.snackman.datnud11.services.auth.UserAuth;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,44 +23,59 @@ import java.io.IOException;
 
 @Component
 @Slf4j
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-  @Autowired
-  private JwtService jwtService;
-  @Autowired
-  private UserDetailsService userDetailsService;
-  @Override
-  protected void doFilterInternal(
-      @NonNull HttpServletRequest request,
-      @NonNull HttpServletResponse response,
-      @NonNull FilterChain filterChain
-  ) throws ServletException, IOException {
-    final String authHeader = request.getHeader("Authorization");
-    final String jwt;
-    final String username;
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-      log.error("auth header is require.. ");
-      filterChain.doFilter(request, response);
-      return;
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private UserDetailsService userDetailsService;
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService){
+        this.userDetailsService = userDetailsService;
+        super.setRequiresAuthenticationRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/api/v1/admin/login", "POST"),
+                new AntPathRequestMatcher("/api/v1/customers/login", "POST")));
+        this.setAuthenticationManager(authenticationManager);
     }
-    jwt = authHeader.substring(7);
-    username = jwtService.extractUsername(jwt);
-    log.info("username extract: {}", username);
-    if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      System.out.println("if username not null and context null....");
-      UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-      if (jwtService.isTokenValid(jwt, userDetails)) {
-        System.out.println("if token is valid(jwt, userDetail)...."+userDetails);
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                userDetails,
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request,
+                                                HttpServletResponse response) throws AuthenticationException {
+        log.info("-----start JwtAuthentication1Filter -----");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        UserAuth userAuth= (UserAuth) userDetailsService.loadUserByUsername(username);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        log.info("-----end JwtAuthentication1Filter -----");
+        return this.getAuthenticationManager().authenticate(authenticationToken);
+    }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authResult) throws IOException, ServletException {
+        log.info("authentication successfully !!!");
+        log.info("User_details is setting ....");
+        String username = request.getParameter("username");
+        UserAuth userAuth= (UserAuth) userDetailsService.loadUserByUsername(username);
+
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                userAuth,
                 null,
-                userDetails.getAuthorities()
+                userAuth.getAuthorities()
         );
-        authToken.setDetails(
+        usernamePasswordAuthenticationToken.setDetails(
                 new WebAuthenticationDetailsSource().buildDetails(request)
         );
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-      }
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        chain.doFilter(request,response);
     }
-    filterChain.doFilter(request, response);
-  }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              AuthenticationException failed) throws IOException, ServletException {
+        log.info("authentication false !!!");
+
+    }
+
+    @Override
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
+    }
 }

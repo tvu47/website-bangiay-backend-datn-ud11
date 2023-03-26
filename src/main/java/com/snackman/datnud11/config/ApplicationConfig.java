@@ -48,27 +48,9 @@ public class ApplicationConfig {
         return authProvider;
     }
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**")
-//                        .allowedOrigins("http://localhost:4200")
-//                        .allowedMethods("GET","POST","PATCH", "OPTIONS", "HEAD")
-//                        .maxAge(3600)
-//                        .allowCredentials(true);
-//            }
-//        };
-//    }
-
 
     @Bean
     public JavaMailSender getJavaMailSender() {

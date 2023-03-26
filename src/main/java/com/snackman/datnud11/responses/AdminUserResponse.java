@@ -13,6 +13,4 @@ import java.util.List;
 @NoArgsConstructor
 public class AdminUserResponse {
     private String token;
-    private String username;
-    private List<String> roles;
 }

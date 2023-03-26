@@ -20,4 +20,7 @@ public interface CustomerService {
     List<CustomerResponse> findAll();
 
     Customers findCustomerByEmail(String email) throws UserNotfoundException;
+    CustomerResponse login(String username) throws UserNotfoundException;
+    Boolean register(String username, String password);
+    Boolean logout();
 }

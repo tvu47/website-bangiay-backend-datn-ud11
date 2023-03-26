@@ -14,5 +14,5 @@ public class CustomerResponse {
     private String email;
     private String createTime;
     private Boolean active;
-
+    private String token;
 }
