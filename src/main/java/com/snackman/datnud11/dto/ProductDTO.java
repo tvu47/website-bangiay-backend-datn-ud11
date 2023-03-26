@@ -25,6 +25,8 @@ public class ProductDTO {
 
     private Long materialId;
 
+    private String images;
+
     public ProductDTO(Products products){
         this.id = products.getId();
         this.categoryId = products.getCategoryId();

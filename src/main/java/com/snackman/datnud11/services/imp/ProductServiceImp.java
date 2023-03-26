@@ -1,23 +1,19 @@
 package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.consts.SearchProducts;
+import com.snackman.datnud11.dto.ProductDTO;
+import com.snackman.datnud11.entity.Images;
 import com.snackman.datnud11.entity.Inventory;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.repo.ProductsRepository;
 import com.snackman.datnud11.responses.ProductManagerResponse;
-import com.snackman.datnud11.services.CategoryService;
-import com.snackman.datnud11.services.InventoryService;
-import com.snackman.datnud11.services.MaterialService;
-import com.snackman.datnud11.services.ProductService;
+import com.snackman.datnud11.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductServiceImp implements ProductService {
@@ -35,9 +31,26 @@ public class ProductServiceImp implements ProductService {
     @Autowired
     private InventoryService inventoryService;
 
+    @Autowired
+    private ImageService imageService;
+
     @Override
     public Products save(Products products) {
         return this.repo.save(products);
+    }
+
+    @Override
+    public Products save(ProductDTO productDTO) {
+        Products product = this.repo.save(new Products(productDTO));
+        String[] images = productDTO.getImages().split("\n");
+        for(String imageLink : images){
+            Images img = new Images();
+            img.setProductId(product.getId());
+            img.setImageUrl(imageLink);
+            img.setStatus(true);
+            this.imageService.save(img);
+        }
+        return null;
     }
 
     @Override

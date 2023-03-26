@@ -1,5 +1,6 @@
 package com.snackman.datnud11.services;
 
+import com.snackman.datnud11.dto.ProductDTO;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.entity.Size;
 import com.snackman.datnud11.responses.ProductManagerResponse;
@@ -11,6 +12,8 @@ import java.util.Map;
 public interface ProductService {
 
     Products save(Products products);
+
+    Products save(ProductDTO productDTO);
 
     void delete(Products products);
 
