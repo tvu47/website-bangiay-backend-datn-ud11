@@ -60,10 +60,16 @@ public class SecurityConfiguration {
         .csrf()
             .disable()
         .authorizeHttpRequests()
+<<<<<<< HEAD
             .requestMatchers("/api/v1/account/**", "/api/v1/admin/logout").hasAuthority("ADMIN_ROLE")
             .requestMatchers("/api/v1/admin/login","/api/v1/customers/login",
                     "/api/v1/customers/register","/api/v1/category","/api/v1/materials",
                     "/api/v1/products/**","/api/v1/inventory/**","/api/v1/payment/**")
+=======
+            .requestMatchers("/api/v1/account/**").hasAuthority("ADMIN_ROLE")
+            .requestMatchers("/api/v1/admin/login","/api/v1/products/**","/api/v1/inventory/**","/api/v1/payment/**",
+                    "/client/login")
+>>>>>>> e15575e705859550f1200e6123e3193889898856
             .permitAll()
             .requestMatchers("/api/v1/card").hasAuthority("CLIENT_ROLE")
             .anyRequest()

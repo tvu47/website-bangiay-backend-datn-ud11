@@ -25,6 +25,7 @@ public class ProductsController {
     @Autowired
     private ZProductService zProductService;
 
+
     @GetMapping
     @Cacheable("products")
     public ResponseEntity<List<ProductsResponse>> getAll(){
@@ -33,7 +34,7 @@ public class ProductsController {
     }
     @PostMapping
     public ResponseEntity<NoticeResponse> createProduct(@RequestBody ProductDTO productDTO){
-        return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Thêm mới sản phẩm thành công",this.productService.save(new Products(productDTO))), HttpStatus.CREATED);
+        return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Thêm mới sản phẩm thành công",this.productService.save(productDTO)), HttpStatus.CREATED);
     }
     @PutMapping
     public ResponseEntity<Products> updateProduct(@RequestBody Products product ) throws CustomNotFoundException {
