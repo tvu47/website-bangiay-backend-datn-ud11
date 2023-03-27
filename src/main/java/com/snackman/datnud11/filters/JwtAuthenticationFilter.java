@@ -27,7 +27,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private UserDetailsService userDetailsService;
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService){
         this.userDetailsService = userDetailsService;
-        super.setRequiresAuthenticationRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/api/v1/admin/login", "POST"),
+        super.setRequiresAuthenticationRequestMatcher(new OrRequestMatcher(
+                new AntPathRequestMatcher("/api/v1/admin/login", "POST"),
                 new AntPathRequestMatcher("/api/v1/customers/login", "POST")));
         this.setAuthenticationManager(authenticationManager);
     }
@@ -36,8 +37,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         log.info("-----start JwtAuthentication1Filter -----");
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        log.info("username: {}", username);
+        log.info("password: {}", password);
         UserAuth userAuth= (UserAuth) userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         log.info("-----end JwtAuthentication1Filter -----");
