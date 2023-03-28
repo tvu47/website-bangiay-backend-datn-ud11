@@ -99,6 +99,11 @@ public class CustomerServiceImp implements CustomerService {
         CustomerResponse customerResponse = new CustomerResponse();
         customerResponse.setEmail(customers.get().getEmail());
         customerResponse.setId(customers.get().getId());
+        customerResponse.setPhone(customers.get().getPhoneNumber());
+        customerResponse.setGender(customers.get().getGender()==1 ? "Nam" : "Nữ");
+        customerResponse.setAddress(customers.get().getAddress());
+        customerResponse.setFirstName(customers.get().getFirstName());
+        customerResponse.setLastName(customers.get().getLastName());
         return customerResponse;
     }
 
