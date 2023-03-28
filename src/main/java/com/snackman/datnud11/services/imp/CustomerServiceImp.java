@@ -98,6 +98,7 @@ public class CustomerServiceImp implements CustomerService {
         }
         CustomerResponse customerResponse = new CustomerResponse();
         customerResponse.setEmail(customers.get().getEmail());
+        customerResponse.setId(customers.get().getId());
         return customerResponse;
     }
 

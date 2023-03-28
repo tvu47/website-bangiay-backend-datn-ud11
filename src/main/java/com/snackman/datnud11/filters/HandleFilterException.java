@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,15 +33,19 @@ public class HandleFilterException extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request,response);
         }catch (BadCredentialsException e){
+            log.info("-----badcredentialsException  catch filter-----");
             Map<String, String> errorMap = new HashMap<>();
             errorMap.put("error_message", e.getMessage());
 
             response.getWriter().write(convertObjectToJson(errorMap));
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
             resolver.resolveException(request, response, errorMap, e);
         }catch (Exception e){
+            log.info("-----exception catch filter-----");
             Map<String, String> errorMap = new HashMap<>();
             errorMap.put("error_message", e.getMessage());
 
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.getWriter().write(convertObjectToJson(errorMap));
             resolver.resolveException(request, response, errorMap, e);
         }

@@ -62,7 +62,7 @@ public class SecurityConfiguration {
         .authorizeHttpRequests()
             .requestMatchers("/api/v1/account/**").hasAuthority("ADMIN_ROLE")
             .requestMatchers("/api/v1/admin/login","/api/v1/products/**","/api/v1/inventory/**","/api/v1/payment/**",
-                    "/client/login")
+                    "/client/login","/api/v1/category/**")
             .permitAll()
             .requestMatchers("/api/v1/card").hasAuthority("CLIENT_ROLE")
             .anyRequest()
