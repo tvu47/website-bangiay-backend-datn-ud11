@@ -27,7 +27,7 @@ public class BillController {
 	private BillService billService;
 
 	@GetMapping
-	public ResponseEntity<List<BillResponse>> getBills() {
+	public ResponseEntity<List<BillResponse>> getBills() throws Exception {
 		return new ResponseEntity<>(this.billService.getAllBill(), HttpStatus.OK);
 	}
 

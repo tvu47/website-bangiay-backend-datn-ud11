@@ -24,7 +24,7 @@ public class PaymentController {
     private BillService billService;
 
     @PostMapping()
-    public ResponseEntity<NoticeResponse> payment(@RequestBody PaymentDTO paymentDTO){
+    public ResponseEntity<NoticeResponse> payment(@RequestBody PaymentDTO paymentDTO) throws Exception {
         System.out.println(paymentDTO.toString());
         if(!this.inventoryService.validProductsOrder(paymentDTO.getProductsOrder())){
             return new ResponseEntity("",HttpStatus.OK);
