@@ -72,6 +72,8 @@ public class BillServiceImp implements BillService {
             billDetails.setSizeName(productOrder.getSize().getSizeName());
             billDetails.setQuantity(productOrder.getQuantity());
             billDetails.setCost(productOrder.getPrice());
+            billDetails.setColor(productOrder.getColor().getId());
+            billDetails.setSize(productOrder.getSize().getId());
             billDetails.setSaleprice(0d);
             billDetails.setValueDiscount(0d);
             billDetails.setStatus(true);
@@ -112,6 +114,15 @@ public class BillServiceImp implements BillService {
         Bill bill = this.findById(id);
         bill.setStatus(BillStatus.DA_HUY.status);
         this.save(bill);
+
+        List<BillDetails> billDetails = this.billDetailService.findByBillId(id);
+        for(BillDetails detail : billDetails){
+            String sku = "P" + detail.getProductId() + "C" + detail.getColor() + "S" + detail.getSize();
+            Inventory inventory = this.inventoryService.findBySku(sku);
+            inventory.setQuatity(inventory.getQuatity() + detail.getQuantity());
+            this.inventoryService.save(inventory);
+        }
+
         return bill;
     }
 
