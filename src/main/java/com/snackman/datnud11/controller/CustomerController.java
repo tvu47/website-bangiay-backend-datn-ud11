@@ -1,5 +1,6 @@
 package com.snackman.datnud11.controller;
 
+import com.snackman.datnud11.dto.request.CustomerRequest;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
@@ -34,10 +35,20 @@ public class CustomerController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Customers> updateCustomerById(@RequestBody Customers customers)
+	public ResponseEntity<Customers> updateCustomerById(@RequestBody CustomerRequest customers)
 			throws CustomNotFoundException {
+		System.out.println("----update customer begin----");
 		customerService.checkCustomerExist(customers.getId());
-		return new ResponseEntity<>(customersRepository.save(customers), HttpStatus.CREATED);
+		Customers customers1 = new Customers();
+		customers1.setEmail(customers.getEmail());
+		customers1.setFirstName(customers.getFirstName());
+		customers1.setLastName(customers.getLastName());
+		customers1.setId(customers1.getId());
+		customers1.setAddress(customers.getAddress());
+		customers1.setGender(Integer.parseInt(customers.getGender()));
+		customers1.setDateOfBirth(customers.getDateOfBirth());
+		customers1.setPhoneNumber(customers.getPhone());
+		return new ResponseEntity<>(customersRepository.save(customers1), HttpStatus.CREATED);
 	}
 
 	@DeleteMapping("/{id}")

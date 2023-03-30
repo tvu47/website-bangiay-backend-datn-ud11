@@ -36,6 +36,8 @@ public class ValidateJwtTokenFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
         log.info("-----start validate filter-------");
+        log.info("auth header:   {}", authHeader);
+        log.info("path:   {}", request.getRequestURI());
         // check header have token or not
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
             log.info("authen is require...");
