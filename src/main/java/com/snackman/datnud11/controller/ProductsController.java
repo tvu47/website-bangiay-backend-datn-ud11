@@ -13,6 +13,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,12 @@ public class ProductsController {
     @GetMapping("/all")
     public ResponseEntity<List<ProductManagerResponse>> findAllProductManager() throws Exception{
         return new ResponseEntity<>(this.productService.findAllProductsManager(), HttpStatus.OK);
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<String> importFileExcel(@RequestParam("file") MultipartFile file){
+        System.out.println(file.getOriginalFilename());
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 }
 
