@@ -65,7 +65,7 @@ public class SecurityConfiguration {
                     "/api/v1/customers/register","/api/v1/category","/api/v1/materials",
                     "/api/v1/products/**","/api/v1/inventory/**","/api/v1/payment/**")
             .permitAll()
-            .requestMatchers("/api/v1/card").hasAuthority("CLIENT_ROLE")
+            .requestMatchers("/api/v1/card","/api/v1/customers").hasAuthority("CLIENT_ROLE")
             .anyRequest()
             .authenticated()
             .and()
