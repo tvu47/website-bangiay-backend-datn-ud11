@@ -32,8 +32,6 @@ public class Customers {
     private Date createTime;
     @Column(name = "date_of_birth")
     private Date dateOfBirth;
-    @Column(name = "password")
-    private String password;
     @Column(name = "status")
     private Boolean status;
 

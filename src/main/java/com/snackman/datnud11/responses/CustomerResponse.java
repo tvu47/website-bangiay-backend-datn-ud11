@@ -17,5 +17,5 @@ public class CustomerResponse {
     private String createTime;
     private Boolean active;
     private String token;
-    private Date dateOfBirth;
+    private String dateOfBirth;
 }
