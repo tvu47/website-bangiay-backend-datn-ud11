@@ -12,7 +12,7 @@ public interface BillService{
 
     Bill save(Bill bill);
 
-    Bill payment(PaymentDTO paymentDTO);
+    Bill payment(PaymentDTO paymentDTO) throws Exception;
 
     Bill findById(Long id) throws Exception;
 
@@ -22,5 +22,5 @@ public interface BillService{
 
     Bill cancelBill(Long id) throws Exception;
 
-    List<BillResponse> getAllBill();
+    List<BillResponse> getAllBill() throws Exception;
 }

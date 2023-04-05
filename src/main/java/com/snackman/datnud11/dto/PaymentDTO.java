@@ -9,8 +9,17 @@ import java.util.List;
 @Data
 public class PaymentDTO {
 
+    private Voucherzz voucher;
     private Info info;
     private List<ProductOrder> productsOrder;
+
+    @Data
+    public static class Voucherzz{
+        private Long id;
+        private String code;
+        private Integer value;
+        private Integer quantity;
+    }
 
     @Data
     public static class Info{

@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
@@ -75,7 +74,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                               HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {
         log.info("authentication false !!!");
-
+        throw failed;
     }
 
     @Override

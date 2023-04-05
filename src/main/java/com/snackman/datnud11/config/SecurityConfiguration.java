@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -66,6 +67,7 @@ public class SecurityConfiguration {
                     "/api/v1/products/**","/api/v1/inventory/**","/api/v1/payment/**")
             .permitAll()
             .requestMatchers("/api/v1/card").hasAuthority("CLIENT_ROLE")
+            .requestMatchers(HttpMethod.PUT,"/api/v1/customers").hasAuthority("CLIENT_ROLE")
             .anyRequest()
             .authenticated()
             .and()

@@ -36,4 +36,9 @@ public class BillDetails {
     private Date createTime;
     @Column(name = "status")
     private Boolean status;
+
+    @Column(name="color")
+    private Long color;
+    @Column(name="size")
+    private Long size;
 }

@@ -9,21 +9,21 @@ import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.CustomerResponse;
 import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.services.EmailSenderService;
-import com.snackman.datnud11.services.RoleUserService;
 import com.snackman.datnud11.services.UserService;
-import com.snackman.datnud11.services.auth.UserAuth;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.message.ErrorMessage;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CustomerServiceImp implements CustomerService {
     @Autowired
     private CustomersRepository customersRepository;
@@ -53,6 +53,15 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public Customers createCustomer(Customers customers) {
+        Customers customersOptional = customersRepository.save(customers);
+        if (customersOptional !=null){
+            return customersOptional;
+        }
+        return null;
+    }
+
+    @Override
+    public Customers updateCustomer(Customers customers) {
         Customers customersOptional = customersRepository.save(customers);
         if (customersOptional !=null){
             return customersOptional;
@@ -98,6 +107,13 @@ public class CustomerServiceImp implements CustomerService {
         }
         CustomerResponse customerResponse = new CustomerResponse();
         customerResponse.setEmail(customers.get().getEmail());
+        customerResponse.setId(customers.get().getId());
+        customerResponse.setPhone(customers.get().getPhoneNumber());
+        customerResponse.setGender(String.valueOf(customers.get().getGender()));
+        customerResponse.setAddress(customers.get().getAddress());
+        customerResponse.setFirstName(customers.get().getFirstName());
+        customerResponse.setLastName(customers.get().getLastName());
+        customerResponse.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").format(customers.get().getDateOfBirth()));
         return customerResponse;
     }
 
@@ -119,7 +135,6 @@ public class CustomerServiceImp implements CustomerService {
                 // create customer in db
                 Customers customers = new Customers();
                 customers.setEmail(username);
-                customers.setPassword(passwordEncoder.encode(password));
                 customers.setStatus(true);
                 customersRepository.save(customers);
                 //send gmail to customer

@@ -1,6 +1,7 @@
 package com.snackman.datnud11.responses;
 
 import com.snackman.datnud11.entity.BillDetails;
+import com.snackman.datnud11.entity.Voucher;
 import lombok.Data;
 
 import java.util.Date;
@@ -16,6 +17,8 @@ public class BillResponse {
     private String phone;
     private String address;
     private String createTime;
+    private Integer discount;
+    private VoucherResponse voucher;
 
     private List<BillDetails> details;
 }

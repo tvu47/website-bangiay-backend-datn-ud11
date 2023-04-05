@@ -36,6 +36,12 @@ public class Bill {
 	@Column(name = "phone")
 	private String phone;
 
+	@Column(name = "voucher_id")
+	private Long voucherId;
+
+	@Column(name = "discount")
+	private Integer discount;
+
 	public String getCreateTimeFormat(){
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		return format.format(this.createTime);

@@ -1,12 +1,11 @@
-package com.snackman.datnud11.responses;
+package com.snackman.datnud11.dto.request;
 
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class CustomerResponse {
-
+public class CustomerRequest {
     private Long id;
     private String firstName;
     private String lastName;
@@ -16,6 +15,5 @@ public class CustomerResponse {
     private String email;
     private String createTime;
     private Boolean active;
-    private String token;
-    private String dateOfBirth;
+    private Date dateOfBirth;
 }
