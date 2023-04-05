@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -112,7 +113,7 @@ public class CustomerServiceImp implements CustomerService {
         customerResponse.setAddress(customers.get().getAddress());
         customerResponse.setFirstName(customers.get().getFirstName());
         customerResponse.setLastName(customers.get().getLastName());
-        customerResponse.setDateOfBirth(customers.get().getDateOfBirth());
+        customerResponse.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").format(customers.get().getDateOfBirth()));
         return customerResponse;
     }
 
