@@ -37,7 +37,7 @@ public class AdminAuthenticationController {
   public ResponseEntity<String> loginError(){
     return ResponseEntity.ok("error somewhere ...");
   }
-  @PostMapping("/logout")
+  @GetMapping("/logout")
   public ResponseEntity<String> logout() {
         return ResponseEntity.ok(service.toAdminLogout());
   }

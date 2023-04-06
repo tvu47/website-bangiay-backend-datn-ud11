@@ -17,6 +17,8 @@ public interface CustomerService {
 
     Customers createCustomer(Customers customers);
 
+    Customers updateCustomer(Customers customers);
+
     List<CustomerResponse> findAll();
 
     Customers findCustomerByEmail(String email) throws UserNotfoundException;

@@ -34,7 +34,6 @@ public class Customers {
     private Date dateOfBirth;
     @Column(name = "status")
     private Boolean status;
-
     public String getCreateTimeFormat(){
         SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return fm.format(this.createTime);
