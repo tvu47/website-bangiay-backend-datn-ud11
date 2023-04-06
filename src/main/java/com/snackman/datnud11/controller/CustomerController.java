@@ -74,7 +74,9 @@ public class CustomerController {
 	}
 	@PostMapping("/register")
 	public ResponseEntity<Boolean> register(@RequestParam(name = "username") String username,
-											@RequestParam(name = "password") String password) {
-		return new ResponseEntity<>(customerService.register(username, password), HttpStatus.CREATED);
+											@RequestParam(name = "password") String password,
+											@RequestParam(name = "phone") String phone,
+											@RequestParam(name = "date") String dateOfBirth) {
+		return new ResponseEntity<>(customerService.register(username, password, phone, dateOfBirth), HttpStatus.CREATED);
 	}
 }

@@ -118,7 +118,7 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public Boolean register(String username, String password) {
+    public Boolean register(String username, String password,String phone, String dateOfBirth) {
         try {
             // email khong ton tai trong db: checkEmailExist=true
             userService.IsRoleUserExist(username);
