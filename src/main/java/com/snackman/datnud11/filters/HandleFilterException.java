@@ -42,6 +42,7 @@ public class HandleFilterException extends OncePerRequestFilter {
             resolver.resolveException(request, response, errorMap, e);
         }catch (Exception e){
             log.info("-----exception catch filter-----");
+            e.printStackTrace();
             Map<String, String> errorMap = new HashMap<>();
             errorMap.put("error_message", e.getMessage());
 
