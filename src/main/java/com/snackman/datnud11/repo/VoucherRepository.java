@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface VoucherRepository extends JpaRepository<Voucher, Long> {
 
-    @Query(value = "select * from vouchers where (now() between start_time and end_time) and quantity > 0", nativeQuery = true)
+    @Query(value = "select * from vouchers where (now() between start_time and end_time) and quantity > 0 and status = 1", nativeQuery = true)
     List<Voucher> findAllAvailable();
 
     @Query(value = "select * from vouchers where code = :code", nativeQuery = true)

@@ -1,6 +1,8 @@
 package com.snackman.datnud11;
 
+import com.snackman.datnud11.entity.Count;
 import com.snackman.datnud11.entity.Customers;
+import com.snackman.datnud11.repo.BillDetailsRepository;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.utils.DateUtils;
@@ -12,10 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 
 @SpringBootTest
 @Slf4j
@@ -26,8 +25,15 @@ class DatnUd11ApplicationTests {
 
 	@Autowired
 	private CustomersRepository customersRepository;
+	@Autowired
+	private BillDetailsRepository billDetailsRepository;
 	@Test
 	void contextLoads() {
+	}
+	@Test
+	public void test_hihi(){
+		List<Count> list = billDetailsRepository.getIdProduct();
+		list.stream().forEach(count -> System.out.println("count is: "+ count.getCount()));
 	}
 
 	@Test

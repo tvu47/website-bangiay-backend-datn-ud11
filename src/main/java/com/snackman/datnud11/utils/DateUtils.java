@@ -27,7 +27,7 @@ public class DateUtils {
     }
 
     public Date stringToDate(String date){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return dateFormat.parse(date);
         } catch (ParseException e) {

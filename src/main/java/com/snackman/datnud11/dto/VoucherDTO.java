@@ -1,22 +1,22 @@
-package com.snackman.datnud11.responses;
+package com.snackman.datnud11.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VoucherResponse {
+@ToString
+public class VoucherDTO {
 
-    private Long id;
     private String code;
     private Integer value;
     private Integer quantity;
-    private String startTime;
-    private String endTime;
-    private Boolean status;
+    private Date startTime;
+    private Date endTime;
 
 }

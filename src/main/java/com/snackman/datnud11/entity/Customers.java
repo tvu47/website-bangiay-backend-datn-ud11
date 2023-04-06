@@ -20,7 +20,6 @@ public class Customers {
     @Column(name = "last_name")
     private String lastName;
     @Column(name = "email")
-    @Email(message = "email must not be invalid")
     private String email;
     @Column(name = "gender")
     private Integer gender;
