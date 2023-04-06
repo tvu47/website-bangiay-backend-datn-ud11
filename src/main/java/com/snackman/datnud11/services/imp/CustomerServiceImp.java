@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +49,14 @@ public class CustomerServiceImp implements CustomerService {
         Optional<Customers> customersOptional = customersRepository.findCustomersByEmail(email);
         if (customersOptional.isPresent()){
             throw new UserExistedException("Email have been registed..."+ email);
+        }
+        return true;
+    }
+    @Override
+    public boolean checkPhoneNumberExist(String phoneNumber) throws UserExistedException {
+        Optional<Customers> customersOptional = customersRepository.findCustomersByPhoneNumber(phoneNumber);
+        if (customersOptional.isPresent()){
+            throw new UserExistedException("phone number have been register..."+ phoneNumber);
         }
         return true;
     }
@@ -119,12 +128,12 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public Boolean register(String username, String password,String phone, String dateOfBirth) {
+    public Boolean register(String username, String password, String phoneNumber, Date birthday) {
         try {
             // email khong ton tai trong db: checkEmailExist=true
             userService.IsRoleUserExist(username);
             userService.IsUserExist(username);
-            if (checkEmailExist(username)){
+            if (checkEmailExist(username) && checkPhoneNumberExist(phoneNumber)){
                 //create users in db
                 userService.createUsers(username, passwordEncoder.encode(password));
                 // create role_user in db
@@ -139,6 +148,8 @@ public class CustomerServiceImp implements CustomerService {
                 customers.setPhoneNumber(phone);
                 customers.setDateOfBirth(TimeUtil.strToDate(dateOfBirth, "yyyy-MM-dd"));
                 customers.setStatus(true);
+                customers.setPhoneNumber(phoneNumber);
+                customers.setDateOfBirth(birthday);
                 customersRepository.save(customers);
                 //send gmail to customer
 //                emailSenderService.sendEmail(username,
