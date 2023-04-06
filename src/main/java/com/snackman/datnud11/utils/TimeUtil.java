@@ -14,4 +14,14 @@ public class TimeUtil {
         }
     }
 
+    public static Date strToDate(String time, String format){
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            return simpleDateFormat.parse(time);
+        }
+        catch (Exception e){
+            return null;
+        }
+    }
+
 }

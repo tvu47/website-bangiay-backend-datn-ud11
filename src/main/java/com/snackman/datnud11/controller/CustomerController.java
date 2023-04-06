@@ -77,6 +77,7 @@ public class CustomerController {
 											@RequestParam(name = "password") String password,
 											@RequestParam(name = "phone") String phone,
 											@RequestParam(name = "date") String dateOfBirth) {
+		System.out.println("date of birth: " + dateOfBirth);
 		return new ResponseEntity<>(customerService.register(username, password, phone, dateOfBirth), HttpStatus.CREATED);
 	}
 }

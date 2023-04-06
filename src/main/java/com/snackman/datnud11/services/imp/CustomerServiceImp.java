@@ -10,6 +10,7 @@ import com.snackman.datnud11.responses.CustomerResponse;
 import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.services.EmailSenderService;
 import com.snackman.datnud11.services.UserService;
+import com.snackman.datnud11.utils.TimeUtil;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.message.ErrorMessage;
 import jakarta.transaction.Transactional;
@@ -135,6 +136,8 @@ public class CustomerServiceImp implements CustomerService {
                 // create customer in db
                 Customers customers = new Customers();
                 customers.setEmail(username);
+                customers.setPhoneNumber(phone);
+                customers.setDateOfBirth(TimeUtil.strToDate(dateOfBirth, "yyyy-MM-dd"));
                 customers.setStatus(true);
                 customersRepository.save(customers);
                 //send gmail to customer
