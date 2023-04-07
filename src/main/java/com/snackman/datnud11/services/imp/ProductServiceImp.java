@@ -141,6 +141,9 @@ public class ProductServiceImp implements ProductService {
     public List<ProductManagerResponse> findAllProductsManager() throws Exception {
         List<ProductManagerResponse> list = new ArrayList<>();
         List<Products> products = this.findAll();
+        List<Category> categories = this.categoryService.findAll();
+        List<Materials> materials = this.materialService.findAll();
+        List<Inventory> inventoriesList = this.inventoryService.findAll();
         for(Products product : products){
             ProductManagerResponse response = new ProductManagerResponse();
             response.setId(product.getId());
@@ -148,10 +151,10 @@ public class ProductServiceImp implements ProductService {
             response.setContent(product.getContent());
             response.setStatus(product.getStatus());
             response.setManufactory(product.getManufactureAddress());
-            response.setCategory(this.categoryService.findById(product.getCategoryId()).getCategoryName());
-            response.setMaterial(this.materialService.findById(product.getMaterialId()).getMaterialName());
+            response.setCategory(this.categoryService.findById(categories, product.getCategoryId()).getCategoryName());
+            response.setMaterial(this.materialService.findById(materials, product.getMaterialId()).getMaterialName());
 
-            List<Inventory> inventories = this.inventoryService.findByProductId(product.getId());
+            List<Inventory> inventories = this.inventoryService.findByProductId(inventoriesList, product.getId());
             List<ProductManagerResponse.Inventory> listInventories = new ArrayList<>();
             response.setInventories(listInventories);
             for(Inventory inventory : inventories){

@@ -14,4 +14,7 @@ public interface ColorsRepository extends JpaRepository<Colors, Long> {
     @Query(value = "select * from colors where product_id = :productId", nativeQuery = true)
     List<Colors> findByProductId(@Param("productId") Long productId);
 
+    @Query(value = "select * from colors where name_color =:name", nativeQuery = true)
+    List<Colors> findByColorName(@Param("name") String name);
+
 }

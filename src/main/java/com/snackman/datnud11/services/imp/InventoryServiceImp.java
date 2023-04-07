@@ -1,5 +1,6 @@
 package com.snackman.datnud11.services.imp;
 
+import com.snackman.datnud11.dto.InventoryDTO;
 import com.snackman.datnud11.dto.PaymentDTO;
 import com.snackman.datnud11.entity.Colors;
 import com.snackman.datnud11.entity.Inventory;
@@ -10,6 +11,8 @@ import com.snackman.datnud11.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -43,6 +46,22 @@ public class InventoryServiceImp implements InventoryService {
     }
 
     @Override
+    public List<Inventory> findAll() {
+        return this.repo.findAll();
+    }
+
+    @Override
+    public List<Inventory> findByProductId(List<Inventory> inventoryList, Long id) {
+        List<Inventory> list = new ArrayList<>();
+        for(Inventory inventory : inventoryList){
+            if(inventory.getProductId() == id){
+                list.add(inventory);
+            }
+        }
+        return list;
+    }
+
+    @Override
     public InventoryResponse getProductById(Long id) throws Exception {
         List<Inventory> inventory = this.repo.findByProductId(id);
         return this.convertInventoryToInventoryResponse(inventory);
@@ -60,6 +79,47 @@ public class InventoryServiceImp implements InventoryService {
             }
         }
         return true;
+    }
+
+    @Override
+    public Inventory save(InventoryDTO inventoryDTO) throws Exception {
+        Colors colors = null;
+        Size size = null;
+        try {
+            colors = this.colorService.findByColorName(inventoryDTO.getColor());
+        } catch (Exception e){
+            colors = new Colors();
+            colors.setColorName(inventoryDTO.getColor());
+            colors.setStatus(true);
+            this.colorService.save(colors);
+        }
+        try {
+            size = this.sizeService.findBySizeName(inventoryDTO.getSize());
+        }catch (Exception e){
+            size = new Size();
+            size.setSizeName(inventoryDTO.getSize());
+            size.setActiveStatus(true);
+            this.sizeService.save(size);
+        }
+        String sku = "P" + inventoryDTO.getProductId() + "C" + colors.getId() + "S" + size.getId();
+        Inventory inventory = this.findBySku(sku);
+        if(inventory != null){
+            inventory.setQuatity(inventory.getQuatity() + inventoryDTO.getQuantity());
+        } else {
+            inventory = new Inventory();
+            inventory.setSku(sku);
+            inventory.setProductId(inventoryDTO.getProductId());
+            inventory.setColor(colors.getId());
+            inventory.setSize(size.getId());
+            inventory.setColorName(colors.getColorName());
+            inventory.setSizeName(size.getSizeName());
+            inventory.setQuatity(inventoryDTO.getQuantity());
+            inventory.setPrice(inventoryDTO.getPrice());
+            inventory.setImportTime(new Date());
+            inventory.setStatus(true);
+        }
+        this.save(inventory);
+        return inventory;
     }
 
     private InventoryResponse convertInventoryToInventoryResponse(List<Inventory> list) throws Exception {

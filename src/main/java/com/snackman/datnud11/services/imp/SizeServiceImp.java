@@ -55,4 +55,13 @@ public class SizeServiceImp implements SizeService {
     public List<Size> findAll() {
         return this.repo.findAll();
     }
+
+    @Override
+    public Size findBySizeName(String name) throws Exception {
+        List<Size> sizeList = this.repo.findBySizeName(name);
+        if(sizeList.isEmpty()){
+            throw new Exception("not found size " + name);
+        }
+        return sizeList.get(0);
+    }
 }
