@@ -4,6 +4,7 @@ import com.snackman.datnud11.dto.ProductDTO;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.entity.Size;
 import com.snackman.datnud11.responses.ProductManagerResponse;
+import com.snackman.datnud11.responses.ProductResponse;
 import com.snackman.datnud11.responses.ProductsResponse;
 
 import java.util.List;
@@ -36,4 +37,6 @@ public interface ProductService {
     List<Products> searchProducts(Map<String, List<String>> params) throws Exception;
 
     List<ProductManagerResponse> findAllProductsManager() throws Exception;
+
+    List<ProductResponse> listAllProductManager() throws Exception;
 }

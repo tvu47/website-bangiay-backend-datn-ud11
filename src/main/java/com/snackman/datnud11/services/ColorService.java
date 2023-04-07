@@ -14,6 +14,8 @@ public interface ColorService {
 
     Colors findById(Long id) throws Exception;
 
+    Colors findById(List<Colors> colorsList, Long id) throws Exception;
+
     List<Colors> findAll();
 
 }

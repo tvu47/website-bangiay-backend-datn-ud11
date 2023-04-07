@@ -1,7 +1,9 @@
 package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.dto.PaymentDTO;
+import com.snackman.datnud11.entity.Colors;
 import com.snackman.datnud11.entity.Inventory;
+import com.snackman.datnud11.entity.Size;
 import com.snackman.datnud11.repo.InventoryRepository;
 import com.snackman.datnud11.responses.InventoryResponse;
 import com.snackman.datnud11.services.*;
@@ -63,6 +65,8 @@ public class InventoryServiceImp implements InventoryService {
     private InventoryResponse convertInventoryToInventoryResponse(List<Inventory> list) throws Exception {
         InventoryResponse response = new InventoryResponse();
         response.setProducts(this.zProductService.findByProductId(list.get(0).getProductId()).get(0));
+        List<Colors> colorsList = this.colorService.findAll();
+        List<Size> sizeList = this.sizeService.findAll();
         for(Inventory inventory : list){
             InventoryResponse.ColorOption colorOptionTemp = null;
             for(InventoryResponse.ColorOption colorOption : response.getColorOptions()){
@@ -73,11 +77,11 @@ public class InventoryServiceImp implements InventoryService {
             }
             if(colorOptionTemp == null){
                 colorOptionTemp = new InventoryResponse.ColorOption();
-                colorOptionTemp.setColors(this.colorService.findById(inventory.getColor()));
+                colorOptionTemp.setColors(this.colorService.findById(colorsList, inventory.getColor()));
                 response.getColorOptions().add(colorOptionTemp);
             }
             InventoryResponse.SizeOption sizeOption = new InventoryResponse.SizeOption();
-            sizeOption.setSize(this.sizeService.findById(inventory.getSize()));
+            sizeOption.setSize(this.sizeService.findById( sizeList, inventory.getSize()));
             sizeOption.setPrice(inventory.getPrice());
             sizeOption.setQuantity(inventory.getQuatity());
             colorOptionTemp.getSizeOptions().add(sizeOption);

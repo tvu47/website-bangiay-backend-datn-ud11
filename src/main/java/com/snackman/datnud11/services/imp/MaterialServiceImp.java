@@ -6,6 +6,7 @@ import com.snackman.datnud11.services.MaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,5 +22,20 @@ public class MaterialServiceImp implements MaterialService {
             throw new Exception("not found");
         }
         return optional.get();
+    }
+
+    @Override
+    public List<Materials> findAll() {
+        return this.repo.findAll();
+    }
+
+    @Override
+    public Materials findById(List<Materials> materialsList, Long id) throws Exception {
+        for(Materials materials: materialsList){
+            if(materials.getId() == id){
+                return materials;
+            }
+        }
+        throw new Exception("not found material id " + id);
     }
 }

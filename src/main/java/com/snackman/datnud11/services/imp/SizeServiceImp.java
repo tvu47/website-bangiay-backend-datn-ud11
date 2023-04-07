@@ -42,6 +42,16 @@ public class SizeServiceImp implements SizeService {
     }
 
     @Override
+    public Size findById(List<Size> sizeList, Long id) throws Exception {
+        for(Size size: sizeList){
+            if(size.getId() == id){
+                return size;
+            }
+        }
+        throw new Exception("not found size " + id);
+    }
+
+    @Override
     public List<Size> findAll() {
         return this.repo.findAll();
     }

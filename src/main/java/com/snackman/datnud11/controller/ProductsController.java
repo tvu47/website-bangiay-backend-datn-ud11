@@ -4,6 +4,7 @@ import com.snackman.datnud11.dto.ProductDTO;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.responses.NoticeResponse;
 import com.snackman.datnud11.responses.ProductManagerResponse;
+import com.snackman.datnud11.responses.ProductResponse;
 import com.snackman.datnud11.responses.ProductsResponse;
 import com.snackman.datnud11.services.ProductService;
 import com.snackman.datnud11.services.ZProductService;
@@ -59,6 +60,11 @@ public class ProductsController {
     @GetMapping("/all")
     public ResponseEntity<List<ProductManagerResponse>> findAllProductManager() throws Exception{
         return new ResponseEntity<>(this.productService.findAllProductsManager(), HttpStatus.OK);
+    }
+
+    @GetMapping("/list-all-manager")
+    public ResponseEntity<List<ProductResponse>> listAllManager() throws Exception{
+        return new ResponseEntity<>(this.productService.listAllProductManager(), HttpStatus.OK);
     }
 
     @PostMapping("/import")

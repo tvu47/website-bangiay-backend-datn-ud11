@@ -2,11 +2,10 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.consts.SearchProducts;
 import com.snackman.datnud11.dto.ProductDTO;
-import com.snackman.datnud11.entity.Images;
-import com.snackman.datnud11.entity.Inventory;
-import com.snackman.datnud11.entity.Products;
+import com.snackman.datnud11.entity.*;
 import com.snackman.datnud11.repo.ProductsRepository;
 import com.snackman.datnud11.responses.ProductManagerResponse;
+import com.snackman.datnud11.responses.ProductResponse;
 import com.snackman.datnud11.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
@@ -165,6 +164,26 @@ public class ProductServiceImp implements ProductService {
                 i.setPrice(inventory.getPrice());
                 listInventories.add(i);
             }
+            list.add(response);
+        }
+        return list;
+    }
+
+    @Override
+    public List<ProductResponse> listAllProductManager() throws Exception {
+        List<ProductResponse> list = new ArrayList<>();
+        List<Products> products = this.findAll();
+        List<Category> categories = this.categoryService.findAll();
+        List<Materials> materials = this.materialService.findAll();
+        for(Products product : products){
+            ProductResponse response = new ProductResponse();
+            response.setId(product.getId());
+            response.setName(product.getProductName());
+            response.setContent(product.getContent());
+            response.setStatus(product.getStatus());
+            response.setManufactory(product.getManufactureAddress());
+            response.setCategory(this.categoryService.findById(categories, product.getCategoryId()).getCategoryName());
+            response.setMaterial(this.materialService.findById(materials, product.getMaterialId()).getMaterialName());
             list.add(response);
         }
         return list;
