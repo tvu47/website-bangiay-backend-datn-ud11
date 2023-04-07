@@ -1,11 +1,17 @@
 package com.snackman.datnud11.controller;
 
+import com.snackman.datnud11.dto.CustomerDTO;
 import com.snackman.datnud11.dto.request.CustomerRequest;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
+import com.snackman.datnud11.responses.BillDetailResponse;
 import com.snackman.datnud11.responses.CustomerResponse;
+import com.snackman.datnud11.responses.HistoryResponse;
 import com.snackman.datnud11.services.CustomerService;
+import com.snackman.datnud11.services.HistoryService;
+import com.snackman.datnud11.services.auth.UserAuth;
+import com.snackman.datnud11.utils.DateUtils;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -25,7 +34,10 @@ public class CustomerController {
 	CustomersRepository customersRepository;
 	@Autowired
 	private CustomerService customerService;
-
+	@Autowired
+	private DateUtils dateUtils;
+	@Autowired
+	private HistoryService historyService;
 	@GetMapping
 	public ResponseEntity<List<CustomerResponse>> getCustomers() {
 		return new ResponseEntity<>(this.customerService.findAll(), HttpStatus.OK);
@@ -75,9 +87,21 @@ public class CustomerController {
 	@PostMapping("/register")
 	public ResponseEntity<Boolean> register(@RequestParam(name = "username") String username,
 											@RequestParam(name = "password") String password,
-											@RequestParam(name = "phone") String phone,
-											@RequestParam(name = "date") String dateOfBirth) {
-		System.out.println("date of birth: " + dateOfBirth);
-		return new ResponseEntity<>(customerService.register(username, password, phone, dateOfBirth), HttpStatus.CREATED);
+											@RequestParam(name = "phone") String phoneNumber,
+											@RequestParam(name = "date") String birthday) {
+
+		return new ResponseEntity<>(customerService.register(username, password, phoneNumber,dateUtils.stringToDate(birthday)), HttpStatus.CREATED);
+	}
+
+	@PostMapping("/store")
+	public ResponseEntity<CustomerResponse> storeCustomer(@RequestBody CustomerDTO customerDTO){
+		System.out.println(customerDTO);
+		return null;
+	}
+
+	@GetMapping("/history")
+	public ResponseEntity<Map<Long, List<BillDetailResponse>>> getHistory() throws UserNotfoundException {
+		UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return new ResponseEntity<>(historyService.getHistoryPerchaseOfCustomer(userAuth.getUsername()), HttpStatus.CREATED);
 	}
 }
