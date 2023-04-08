@@ -33,4 +33,7 @@ public interface ProductsRepository extends JpaRepository<Products, Long> {
 
     @Query(value = "select * from products where product_id in (select product_id from bill_details)", nativeQuery = true)
     List<Products> getBestSellProducts();
+
+    @Query(value = "select * from products order by create_time desc limit 8", nativeQuery = true)
+    List<Products> getNewestProducts();
 }

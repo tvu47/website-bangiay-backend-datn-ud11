@@ -53,6 +53,11 @@ public class ZProductServiceImp implements ZProductService {
     }
 
     @Override
+    public List<ProductsResponse> getNewestProducts() {
+        return this.formatProductToProductResponse(productService.getNewestProducts());
+    }
+
+    @Override
     public List<ProductsResponse> findByProductId(Long id) throws Exception {
         List<Products> products = new ArrayList<>();
         products.add(this.productService.findById(id));

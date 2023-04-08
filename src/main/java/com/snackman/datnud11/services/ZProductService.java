@@ -10,6 +10,8 @@ public interface ZProductService {
 
     List<ProductsResponse> getBestSellProducts();
 
+    List<ProductsResponse> getNewestProducts();
+
     List<ProductsResponse> findByProductId(Long id) throws Exception;
 
     List<ProductsResponse> formatProductToProductResponse(List<Products> productsList);

@@ -77,5 +77,9 @@ public class ProductsController {
     public ResponseEntity<List<ProductsResponse>> getBestSellProducts(){
         return new ResponseEntity<>(this.zProductService.getBestSellProducts(), HttpStatus.OK);
     }
+    @GetMapping("/newest-products")
+    public ResponseEntity<List<ProductsResponse>> getNewestProduct(){
+        return new ResponseEntity<>(this.zProductService.getNewestProducts(), HttpStatus.OK);
+    }
 }
 
