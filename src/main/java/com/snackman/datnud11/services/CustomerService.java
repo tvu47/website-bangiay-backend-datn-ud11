@@ -28,5 +28,5 @@ public interface CustomerService {
     CustomerResponse login(String username) throws UserNotfoundException;
     Boolean register(String username, String password, String phoneNumber, Date birthday);
 
-    Boolean logout();
+    String logout();
 }

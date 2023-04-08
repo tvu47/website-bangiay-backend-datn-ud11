@@ -2,6 +2,7 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.request.CustomerRequest;
 import com.snackman.datnud11.entity.Customers;
+import com.snackman.datnud11.exceptions.CustomMessageException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.BillDetailResponse;
@@ -79,9 +80,9 @@ public class CustomerController {
 		customerResponse.setToken(token);
 		return new ResponseEntity<>(customerResponse, HttpStatus.CREATED);
 	}
-	@PostMapping("/logout")
-	public ResponseEntity<Boolean> logout() {
-		return new ResponseEntity<>(customerService.logout(), HttpStatus.CREATED);
+	@GetMapping("/logout")
+	public ResponseEntity<String> logout() {
+		return new ResponseEntity<>(customerService.logout(), HttpStatus.NO_CONTENT);
 	}
 	@PostMapping("/register")
 	public ResponseEntity<Boolean> register(@RequestParam(name = "username") String username,
@@ -93,7 +94,7 @@ public class CustomerController {
 	}
 
 	@GetMapping("/history")
-	public ResponseEntity<Map<Long, List<BillDetailResponse>>> getHistory() throws UserNotfoundException {
+	public ResponseEntity<Map<Long, List<BillDetailResponse>>> getHistory() throws UserNotfoundException, CustomMessageException {
 		UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return new ResponseEntity<>(historyService.getHistoryPerchaseOfCustomer(userAuth.getUsername()), HttpStatus.CREATED);
 	}

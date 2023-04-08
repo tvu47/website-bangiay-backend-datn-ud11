@@ -4,7 +4,6 @@ import com.snackman.datnud11.entity.Count;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.repo.BillDetailsRepository;
 import com.snackman.datnud11.repo.CustomersRepository;
-import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @SpringBootTest
@@ -32,8 +30,8 @@ class DatnUd11ApplicationTests {
 	}
 	@Test
 	public void test_hihi(){
-		List<Count> list = billDetailsRepository.getIdProduct();
-		list.stream().forEach(count -> System.out.println("count is: "+ count.getCount()));
+		List<Count> list = billDetailsRepository.getIdProduct(33L);
+		list.stream().forEach(count -> System.out.println("count is: "+ count.getCount() +". "+count.getProductId()));
 	}
 
 	@Test

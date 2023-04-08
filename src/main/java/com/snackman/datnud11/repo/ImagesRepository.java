@@ -14,4 +14,7 @@ public interface ImagesRepository extends JpaRepository<Images, Long> {
     @Query(value = "select * from image where product_id = :productId", nativeQuery = true)
     List<Images> findByProductId(@Param(value = "productId") Long productId);
 
+    @Query(value = "select * from image where product_id = :productId LIMIT 1", nativeQuery = true)
+    Images findByProductIdTop1(@Param(value = "productId") Long productId);
+
 }

@@ -2,7 +2,9 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.entity.BillDetails;
+import com.snackman.datnud11.entity.Count;
 import com.snackman.datnud11.entity.Images;
+import com.snackman.datnud11.exceptions.CustomMessageException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.BillDetailsRepository;
 import com.snackman.datnud11.repo.BillRepository;
@@ -34,68 +36,64 @@ public class HistoryServiceImp implements HistoryService {
     private static Map<Long, List<Images>> listImage;
 
     @Override
-    public Map<Long, List<BillDetailResponse>> getHistoryPerchaseOfCustomer(String username) throws UserNotfoundException {
-        Map<Long, List<BillDetailResponse>> historyResponseList = new HashMap<>();
-        getAllBillDetailOfCustomer(username).forEach((k,v) ->{
-            historyResponseList.put(k, swap(v));
-        });
-        return historyResponseList;
+    public Map<Long, List<BillDetailResponse>> getHistoryPerchaseOfCustomer(String username) throws UserNotfoundException, CustomMessageException {
+        return getAllBillDetailOfCustomer(username);
     }
 
-    public List<BillDetailResponse> swap(List<BillDetails> billDetails){
-        List<BillDetailResponse> longListMap = new ArrayList<>();
-        billDetails.stream().forEach(billDetails1 -> {
-            BillDetailResponse billDetailResponse = new BillDetailResponse(billDetails1);
-            billDetailResponse.setImgProducts(listImage.get(billDetails1.getProductId()));
-            longListMap.add(billDetailResponse);
-        });
-        return longListMap;
+    private BillDetailResponse swap(BillDetails billDetails, Images ima) {
+        BillDetailResponse billDetailResponse = new BillDetailResponse(billDetails);
+        billDetailResponse.setImgProducts(ima);
+        return billDetailResponse;
     }
 
-    public Map<Long,List<BillDetails>> getAllBillDetailOfCustomer(String username) throws UserNotfoundException {
+    private Map<Long, List<BillDetailResponse>> getAllBillDetailOfCustomer(String username) throws UserNotfoundException, CustomMessageException {
         Long idCustomer = getIdCustomerByCustomerName(username);
-        Map<Long,List<BillDetails>> longListMap = new HashMap<>();
+        Map<Long, List<BillDetailResponse>> BillDetailResponseMAp = new HashMap<>();
 
         List<Long> ids = getListIdBillByCustomerId(idCustomer);
 
-        ids.stream().forEach(id ->{
-            List<BillDetails> billDetailsList = getBillDetailByIdBill(id);
-            longListMap.put(id, billDetailsList);
+        ids.stream().forEach(id -> {
+            List<BillDetailResponse> billDetailsList = getBillDetailByIdBill(id);
+            BillDetailResponseMAp.put(id, billDetailsList);
         });
-        return longListMap;
+        return BillDetailResponseMAp;
     }
 
     public Long getIdCustomerByCustomerName(String username) throws UserNotfoundException {
         return customerService.findCustomerByEmail(username).getId();
     }
 
-    public List<Long> getListIdBillByCustomerId(Long idCustomer){
+    public List<Long> getListIdBillByCustomerId(Long idCustomer) throws CustomMessageException {
         List<Bill> bill = billRepository.findBillByCustomerId(idCustomer);
-        if (bill.size()==0){
-            throw new NullPointerException("Chưa mua hàng nên chưa có lịch sử");
+        if (bill.size() == 0) {
+            throw new CustomMessageException("Chưa mua hàng nên chưa có lịch sử");
         }
         List<Long> longList = new ArrayList<>();
         bill.stream().forEach(b -> longList.add(b.getId()));
         return longList;
     }
 
-    private List<BillDetails> getBillDetailByIdBill(Long longList){
-        List<BillDetails>billDetailsList = billDetailsRepository.getBillDetailsByListIdBill(longList);
-        this.getListImageByListIdProduct(billDetailsList);
-        return billDetailsList;
+    private List<BillDetailResponse> getBillDetailByIdBill(Long longList) {
+        List<BillDetailResponse> billDetailResponseList = new ArrayList<>();
+        Map<Long, Images> imagesMap = getMapImageWithBillDetailIdKeyByIdBill(longList);
+        billDetailsRepository.getBillDetailsByIdBill(longList).stream().forEach(billDetails -> {
+            BillDetailResponse billDetailResponse = this.swap(billDetails, imagesMap.get(billDetails.getBillDetailId()));
+            billDetailResponseList.add(billDetailResponse);
+        });
+        return billDetailResponseList;
     }
 
-    private void getListImageByListIdProduct(List<BillDetails>billDetailsList){
-        Map<Long, List<Images>> listImageWithId = new HashMap<>();
-        List<Long> idProduct = new ArrayList<>();
-        if (billDetailsList.isEmpty()){
-            throw new NullPointerException("billDetailsList is empty");
-        }
-        billDetailsList.stream().forEach(billDetails -> idProduct.add(billDetails.getProductId()));
-        idProduct.stream().forEach(id -> {
-            List<Images> imagesList = imagesRepository.findByProductId(id);
-            listImageWithId.put(id, imagesList);
+    private Map<Long, Images> getMapImageWithBillDetailIdKeyByIdBill(Long longList) {
+        // get id list product in database
+        List<Count> listIdProduct = billDetailsRepository.getIdProduct(longList);
+
+        Map<Long, Images> imageWithBillDetailId = new HashMap<>();
+        // array
+        listIdProduct.stream().forEach(ls -> {
+            Images ima = imagesRepository.findByProductIdTop1(ls.getProductId());
+            imageWithBillDetailId.put(ls.getBillDetailId(), ima);
         });
+        return imageWithBillDetailId;
     }
 
 }

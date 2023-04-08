@@ -14,6 +14,8 @@ import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.message.ErrorMessage;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -161,9 +163,17 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public Boolean logout() {
-
-        return null;
+    public String logout() {
+        String status = "false";
+        try {
+            SecurityContext context = SecurityContextHolder.getContext();
+            SecurityContextHolder.clearContext();
+            context.setAuthentication(null);
+            status = "true";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return status;
     }
 
 
