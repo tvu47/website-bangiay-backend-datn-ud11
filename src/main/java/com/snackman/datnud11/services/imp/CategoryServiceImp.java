@@ -45,4 +45,14 @@ public class CategoryServiceImp implements CategoryService {
         System.out.println("find all");
         return this.repo.findAll();
     }
+
+    @Override
+    public Category findById(List<Category> categoryList, Long id) throws Exception {
+        for(Category category : categoryList){
+            if(category.getId() == id){
+                return category;
+            }
+        }
+        throw new Exception("not found category " + id);
+    }
 }

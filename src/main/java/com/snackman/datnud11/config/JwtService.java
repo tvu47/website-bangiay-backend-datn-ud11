@@ -66,10 +66,8 @@ public class JwtService {
             .build()
             .parseClaimsJws(token)
             .getBody();
-//    String username = String.valueOf(claims.get("username"));
     Collection<GrantedAuthority> collectionRole = (Collection<GrantedAuthority>) claims.get("authorities");
-//    Authentication auth = new UsernamePasswordAuthenticationToken(username, null, collectionRole);
-//    SecurityContextHolder.getContext().setAuthentication(auth);
+
   }
 
   public boolean isTokenValid(String token, UserDetails userDetails) throws BadRequestException {

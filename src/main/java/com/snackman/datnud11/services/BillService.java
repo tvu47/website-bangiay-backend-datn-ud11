@@ -22,5 +22,7 @@ public interface BillService{
 
     Bill cancelBill(Long id) throws Exception;
 
+    Bill deliverBill(Long id) throws Exception;
+
     List<BillResponse> getAllBill() throws Exception;
 }

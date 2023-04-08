@@ -12,7 +12,8 @@ public class BillDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bill_detail_id", nullable = false)
-    private Long customerId;
+    private Long billDetailId;
+
     @Column(name = "product_id")
     private Long productId;
 

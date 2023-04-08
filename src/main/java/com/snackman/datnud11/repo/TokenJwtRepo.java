@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TokenJwtRepo extends JpaRepository<TokenJwt, Long> {
-    @Query(value = "select * from token_jwt where username=:user and is_expire=1", nativeQuery = true)
+    @Query(value = "select * from token_jwt where username=:user and is_expire=1 limit 1", nativeQuery = true)
     TokenJwt findTokenJwtByUsernameAndExpiress(@Param("user") String username);
     @Transactional
     @Modifying

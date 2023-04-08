@@ -1,10 +1,6 @@
 package com.snackman.datnud11.controller.errors;
 
-import com.snackman.datnud11.dto.error.LoginError;
-import com.snackman.datnud11.exceptions.BadLoginException;
-import com.snackman.datnud11.exceptions.BadRequestException;
-import com.snackman.datnud11.exceptions.UserExistedException;
-import com.snackman.datnud11.exceptions.UserNotfoundException;
+import com.snackman.datnud11.exceptions.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -15,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice(annotations = {RestController.class})
-public class LoginControllerException {
+public class HandleControllerException {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MethodArgumentNotValidException.class,
             HttpMessageNotReadableException.class})
@@ -56,6 +52,30 @@ public class LoginControllerException {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ExpiredJwtException.class})
     public Map<String, String> handleExpireToken_Errors(ExpiredJwtException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error_message", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ExceptionHandler({CustomMessageException.class})
+    public Map<String, String> handle_Errors(CustomMessageException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error_message", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ExceptionHandler({CommonErrorException.class})
+    public Map<String, String> handle_Common_Errors(CommonErrorException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error_message", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({Exception.class})
+    public Map<String, String> handle_All_Errors(Exception ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
         return errorMap;

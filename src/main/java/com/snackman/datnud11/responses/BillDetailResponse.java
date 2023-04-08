@@ -16,8 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class BillDetailResponse {
-    private List<Images> imgProducts;
+    private Images imgProducts;
     private String colorName;
+    private String productName;
     private String sizeName;
     private Long billId;
     private Integer quantity;
@@ -28,6 +29,7 @@ public class BillDetailResponse {
     private Boolean status;
 
     public BillDetailResponse(BillDetails billDetails){
+        this.productName = billDetails.getProductName();
         this.colorName = billDetails.getColorName();
         this.sizeName = billDetails.getSizeName();
         this.billId = billDetails.getBillId();

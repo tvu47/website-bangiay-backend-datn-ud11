@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface VoucherService {
 
-    List<VoucherResponse> findAllAvailable();
+    List<VoucherResponse> findAllAvailable(Long customerId);
 
     List<VoucherResponse> findAllVouchers();
 
