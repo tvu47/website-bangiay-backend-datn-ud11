@@ -77,6 +77,16 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
+    public List<Products> getBestSellProducts() {
+        return this.repo.getBestSellProducts();
+    }
+
+    @Override
+    public List<Products> getNewestProducts() {
+        return this.repo.getNewestProducts();
+    }
+
+    @Override
     public List<Products> findByName(String name) {
         return this.repo.findByName(name);
     }
