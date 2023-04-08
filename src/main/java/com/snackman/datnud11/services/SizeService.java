@@ -15,5 +15,8 @@ public interface SizeService {
 
     Size findById(Long id) throws Exception;
 
+    Size findById(List<Size> sizeList, Long id) throws Exception;
     List<Size> findAll();
+
+    Size findBySizeName(String name) throws Exception;
 }

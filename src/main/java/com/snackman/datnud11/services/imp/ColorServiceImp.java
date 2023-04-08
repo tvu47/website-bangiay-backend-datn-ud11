@@ -41,7 +41,26 @@ public class ColorServiceImp implements ColorService {
     }
 
     @Override
+    public Colors findById(List<Colors> colorsList, Long id) throws Exception {
+        for(Colors colors: colorsList){
+            if(colors.getId() == id){
+                return colors;
+            }
+        }
+        throw new Exception("not found color " + id);
+    }
+
+    @Override
     public List<Colors> findAll() {
         return this.repo.findAll();
+    }
+
+    @Override
+    public Colors findByColorName(String colorName) throws Exception {
+        List<Colors> colorsList = this.repo.findByColorName(colorName);
+        if(colorsList.isEmpty()){
+            throw new Exception("not found color " + colorName);
+        }
+        return colorsList.get(0);
     }
 }

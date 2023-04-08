@@ -119,7 +119,7 @@ public class BillServiceImp implements BillService {
     @Override
     public Bill acceptBill(Long id) throws Exception {
         Bill bill = this.findById(id);
-        bill.setStatus(BillStatus.DANG_GIAO.status);
+        bill.setStatus(BillStatus.DA_DUYET.status);
         this.save(bill);
         return bill;
     }
@@ -146,6 +146,14 @@ public class BillServiceImp implements BillService {
             this.inventoryService.save(inventory);
         }
 
+        return bill;
+    }
+
+    @Override
+    public Bill deliverBill(Long id) throws Exception {
+        Bill bill = this.findById(id);
+        bill.setStatus(BillStatus.DANG_GIAO.status);
+        this.save(bill);
         return bill;
     }
 

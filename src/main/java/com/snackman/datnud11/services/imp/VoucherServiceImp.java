@@ -20,8 +20,8 @@ public class VoucherServiceImp implements VoucherService {
     private VoucherRepository repo;
 
     @Override
-    public List<VoucherResponse> findAllAvailable() {
-        List<Voucher> list =  this.repo.findAllAvailable();
+    public List<VoucherResponse> findAllAvailable(Long customerId) {
+        List<Voucher> list =  this.repo.findAllAvailable(customerId);
         List<VoucherResponse> voucherResponses = new ArrayList<>();
         for(Voucher voucher : list){
             VoucherResponse response = new VoucherResponse();

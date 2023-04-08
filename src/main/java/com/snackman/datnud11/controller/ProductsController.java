@@ -4,6 +4,7 @@ import com.snackman.datnud11.dto.ProductDTO;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.responses.NoticeResponse;
 import com.snackman.datnud11.responses.ProductManagerResponse;
+import com.snackman.datnud11.responses.ProductResponse;
 import com.snackman.datnud11.responses.ProductsResponse;
 import com.snackman.datnud11.services.ProductService;
 import com.snackman.datnud11.services.ZProductService;
@@ -61,10 +62,24 @@ public class ProductsController {
         return new ResponseEntity<>(this.productService.findAllProductsManager(), HttpStatus.OK);
     }
 
+    @GetMapping("/list-all-manager")
+    public ResponseEntity<List<ProductResponse>> listAllManager() throws Exception{
+        return new ResponseEntity<>(this.productService.listAllProductManager(), HttpStatus.OK);
+    }
+
     @PostMapping("/import")
     public ResponseEntity<String> importFileExcel(@RequestParam("file") MultipartFile file){
         System.out.println(file.getOriginalFilename());
         return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+    @GetMapping("/best-sell-products")
+    public ResponseEntity<List<ProductsResponse>> getBestSellProducts(){
+        return new ResponseEntity<>(this.zProductService.getBestSellProducts(), HttpStatus.OK);
+    }
+    @GetMapping("/newest-products")
+    public ResponseEntity<List<ProductsResponse>> getNewestProduct(){
+        return new ResponseEntity<>(this.zProductService.getNewestProducts(), HttpStatus.OK);
     }
 }
 

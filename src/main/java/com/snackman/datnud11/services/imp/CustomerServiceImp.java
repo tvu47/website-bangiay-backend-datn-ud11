@@ -149,6 +149,8 @@ public class CustomerServiceImp implements CustomerService {
                 customers.setStatus(true);
                 customers.setPhoneNumber(phoneNumber);
                 customers.setDateOfBirth(birthday);
+                customers.setCreateTime(new Date());
+                customers.setGender(0);
                 customersRepository.save(customers);
                 //send gmail to customer
 //                emailSenderService.sendEmail(username,

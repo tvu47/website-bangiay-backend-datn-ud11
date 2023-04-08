@@ -14,4 +14,6 @@ public interface SizeRepository extends JpaRepository<Size, Long> {
     @Query(value = "select * from size where product_id = :productId",nativeQuery = true)
     List<Size> findByProductId(@Param("productId") Long id);
 
+    @Query(value = "select * from size where size_name = :name", nativeQuery = true)
+    List<Size> findBySizeName(@Param("name") String name);
 }

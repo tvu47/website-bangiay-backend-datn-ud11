@@ -1,8 +1,10 @@
 package com.snackman.datnud11.controller;
 
+import com.snackman.datnud11.dto.InventoryDTO;
 import com.snackman.datnud11.entity.Inventory;
 import com.snackman.datnud11.repo.InventoryRepository;
 import com.snackman.datnud11.responses.InventoryResponse;
+import com.snackman.datnud11.responses.NoticeResponse;
 import com.snackman.datnud11.services.InventoryService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +44,11 @@ public class InventoryController {
     @GetMapping("/{id}")
     public ResponseEntity<InventoryResponse> findByProductId(@PathVariable(name = "id") Long id) throws Exception {
         return new ResponseEntity<>(this.inventoryService.getProductById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/store")
+    public ResponseEntity<NoticeResponse> storeInventory(@RequestBody InventoryDTO inventoryDTO) throws Exception{
+        Inventory inventory = this.inventoryService.save(inventoryDTO);
+        return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(), "Thêm thành công!", inventory), HttpStatus.OK);
     }
 }

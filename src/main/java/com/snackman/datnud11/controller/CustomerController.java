@@ -1,5 +1,6 @@
 package com.snackman.datnud11.controller;
 
+import com.snackman.datnud11.dto.CustomerDTO;
 import com.snackman.datnud11.dto.request.CustomerRequest;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.CustomMessageException;
@@ -91,6 +92,12 @@ public class CustomerController {
 											@RequestParam(name = "date") String birthday) {
 
 		return new ResponseEntity<>(customerService.register(username, password, phoneNumber,dateUtils.stringToDate(birthday)), HttpStatus.CREATED);
+	}
+
+	@PostMapping("/store")
+	public ResponseEntity<CustomerResponse> storeCustomer(@RequestBody CustomerDTO customerDTO){
+		System.out.println(customerDTO);
+		return null;
 	}
 
 	@GetMapping("/history")
