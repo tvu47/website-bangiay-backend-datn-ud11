@@ -25,6 +25,8 @@ public class ProductsResponse {
 
     private String manufactureAddress;
 
+    private String price; //khoảng giá
+
     private Boolean status;
 
     private List<Images> images;

@@ -24,6 +24,8 @@ public interface ProductService {
 
     List<Products> findAll();
 
+    List<Products> getBestSellProducts();
+
     List<Products> findByName(String name);
 
     List<Products> findByCategoryId(Long categoryId);

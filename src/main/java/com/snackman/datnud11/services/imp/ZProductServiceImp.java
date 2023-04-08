@@ -1,16 +1,15 @@
 package com.snackman.datnud11.services.imp;
 
-import com.snackman.datnud11.entity.Category;
-import com.snackman.datnud11.entity.Discounts;
-import com.snackman.datnud11.entity.Materials;
-import com.snackman.datnud11.entity.Products;
+import com.snackman.datnud11.entity.*;
 import com.snackman.datnud11.repo.CategoryRepository;
 import com.snackman.datnud11.repo.DiscountsRepository;
 import com.snackman.datnud11.repo.MaterialsRepository;
 import com.snackman.datnud11.repo.ProductsRepository;
 import com.snackman.datnud11.responses.ProductsResponse;
 import com.snackman.datnud11.services.*;
+import com.snackman.datnud11.utils.NumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,6 +33,10 @@ public class ZProductServiceImp implements ZProductService {
     private SizeService sizeService;
 
     @Autowired
+    @Lazy
+    private InventoryService inventoryService;
+
+    @Autowired
     private ImageService imageService;
 
     @Autowired
@@ -45,6 +48,11 @@ public class ZProductServiceImp implements ZProductService {
     }
 
     @Override
+    public List<ProductsResponse> getBestSellProducts() {
+        return this.formatProductToProductResponse(productService.getBestSellProducts());
+    }
+
+    @Override
     public List<ProductsResponse> findByProductId(Long id) throws Exception {
         List<Products> products = new ArrayList<>();
         products.add(this.productService.findById(id));
@@ -52,10 +60,31 @@ public class ZProductServiceImp implements ZProductService {
         return productsResponses;
     }
 
+    public String getPriceProductString(List<Inventory> inventories, Long productId) throws Exception{
+        Double minPrice = Double.MAX_VALUE;
+        Double maxPrice = Double.MIN_VALUE;
+        boolean haveInventory = false;
+        for(Inventory inventory : inventories){
+            if(inventory.getProductId() == productId){
+                haveInventory = true;
+                if(inventory.getPrice() > maxPrice){
+                    maxPrice = inventory.getPrice();
+                } else if(inventory.getPrice() < minPrice){
+                    minPrice = inventory.getPrice();
+                }
+            }
+        }
+        if(!haveInventory){
+            throw new Exception();
+        }
+        return NumberUtil.formatNumberVN(minPrice) + "đ - " + NumberUtil.formatNumberVN(maxPrice) + "đ";
+    }
+
     public List<ProductsResponse> formatProductToProductResponse(List<Products> productsList){
         List<ProductsResponse> productsResponsesList = new ArrayList<>();
         // get id list
         Map<String, List<Long>> idList = getListIds(productsList);
+        List<Inventory> inventoryList = this.inventoryService.findAll();
 
         Map<Long, Materials> materialsMap = getMaterialByListId(idList.get("material"));
         Map<Long, Category> categoryMap= getCategoryByListId(idList.get("category"));
@@ -65,7 +94,11 @@ public class ZProductServiceImp implements ZProductService {
             productsResponse.setImages(this.imageService.getImagesByProductId(products.getId()));
             productsResponse.setCategory(categoryMap.get(products.getCategoryId()));
             productsResponse.setMaterials(materialsMap.get(products.getMaterialId()));
-            productsResponsesList.add(productsResponse);
+            try {
+                productsResponse.setPrice(this.getPriceProductString(inventoryList, products.getId()));
+                productsResponsesList.add(productsResponse);
+            } catch (Exception e) {
+            }
         });
         return productsResponsesList;
     }

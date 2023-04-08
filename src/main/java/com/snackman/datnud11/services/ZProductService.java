@@ -8,6 +8,8 @@ import java.util.List;
 public interface ZProductService {
     List<ProductsResponse> getAllProductResponses();
 
+    List<ProductsResponse> getBestSellProducts();
+
     List<ProductsResponse> findByProductId(Long id) throws Exception;
 
     List<ProductsResponse> formatProductToProductResponse(List<Products> productsList);

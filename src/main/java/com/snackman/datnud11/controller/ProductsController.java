@@ -72,5 +72,10 @@ public class ProductsController {
         System.out.println(file.getOriginalFilename());
         return new ResponseEntity<>("OK", HttpStatus.OK);
     }
+
+    @GetMapping("/best-sell-products")
+    public ResponseEntity<List<ProductsResponse>> getBestSellProducts(){
+        return new ResponseEntity<>(this.zProductService.getBestSellProducts(), HttpStatus.OK);
+    }
 }
 
