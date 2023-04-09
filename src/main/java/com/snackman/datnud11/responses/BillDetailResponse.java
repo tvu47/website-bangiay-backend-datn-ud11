@@ -17,6 +17,7 @@ import java.util.List;
 @Builder
 public class BillDetailResponse {
     private Images imgProducts;
+    private Long idProduct;
     private String colorName;
     private String productName;
     private String sizeName;
@@ -39,5 +40,6 @@ public class BillDetailResponse {
         this.valueDiscount = billDetails.getValueDiscount();
         this.createTime = billDetails.getCreateTime();
         this.status = billDetails.getStatus();
+        this.idProduct = billDetails.getProductId();
     }
 }
