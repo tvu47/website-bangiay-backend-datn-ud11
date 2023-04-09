@@ -10,14 +10,12 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 public class Count {
-    Long count;
     Long productId;
     Long billDetailId;
 
     //This constructor will be used by Spring Data JPA
     //for creating this class instances as per result set
-    public Count(Long count,Long productId, Long billDetailId){
-        this.count = count;
+    public Count(Long productId, Long billDetailId){
         this.productId = productId;
         this.billDetailId = billDetailId;
     }
