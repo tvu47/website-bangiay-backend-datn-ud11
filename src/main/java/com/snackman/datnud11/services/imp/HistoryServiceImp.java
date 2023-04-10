@@ -32,10 +32,7 @@ public class HistoryServiceImp implements HistoryService {
     private final CustomerService customerService;
     private final BillDetailsRepository billDetailsRepository;
     private final ImagesRepository imagesRepository;
-    private final ProductService productService;
-
     private final BillRepository billRepository;
-    private static Map<Long, List<Images>> listImage;
 
     @Override
     public Map<Long, List<BillDetailResponse>> getHistoryPerchaseOfCustomer(String username) throws UserNotfoundException, CustomMessageException {
