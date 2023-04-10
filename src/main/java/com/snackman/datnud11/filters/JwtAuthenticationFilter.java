@@ -8,8 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.jaas.AuthorityGranter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,6 +22,10 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static java.util.Arrays.stream;
 
 @Component
 @Slf4j
@@ -32,17 +39,28 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.setAuthenticationManager(authenticationManager);
     }
 
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
         log.info("-----start JwtAuthentication1Filter -----");
-
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        log.info("username: {}", username);
-        log.info("password: {}", password);
         UserAuth userAuth= (UserAuth) userDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        UsernamePasswordAuthenticationToken authenticationToken;
+        if (request.getServletPath().equals("/api/v1/admin/login")){
+            log.info("----role admin---"+userAuth.getAuthorities());
+
+            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("ADMIN_ROLE"));
+            authenticationToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
+        }else {
+            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("CLIENT_ROLE"));
+
+            authenticationToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
+        }
+
         log.info("-----end JwtAuthentication1Filter -----");
         return this.getAuthenticationManager().authenticate(authenticationToken);
     }
