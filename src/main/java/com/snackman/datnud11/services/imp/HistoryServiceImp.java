@@ -12,6 +12,7 @@ import com.snackman.datnud11.repo.ImagesRepository;
 import com.snackman.datnud11.responses.BillDetailResponse;
 import com.snackman.datnud11.responses.HistoryResponse;
 import com.snackman.datnud11.services.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class HistoryServiceImp implements HistoryService {
 
