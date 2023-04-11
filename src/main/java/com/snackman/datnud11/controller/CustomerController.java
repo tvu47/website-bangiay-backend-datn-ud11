@@ -100,9 +100,9 @@ public class CustomerController {
 		return null;
 	}
 
-	@GetMapping("/history")
-	public ResponseEntity<Map<Long, List<BillDetailResponse>>> getHistory() throws UserNotfoundException, CustomMessageException {
+	@PostMapping("/history")
+	public ResponseEntity<Map<Long, List<BillDetailResponse>>> getHistory(@RequestParam(name = "status", required = false) String status) throws UserNotfoundException, CustomMessageException {
 		UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return new ResponseEntity<>(historyService.getHistoryPerchaseOfCustomer(userAuth.getUsername()), HttpStatus.CREATED);
+		return new ResponseEntity<>(historyService.getHistoryPerchaseOfCustomer(userAuth.getUsername(), Integer.parseInt(status)), HttpStatus.CREATED);
 	}
 }
