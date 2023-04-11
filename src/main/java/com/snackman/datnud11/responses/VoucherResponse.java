@@ -18,5 +18,6 @@ public class VoucherResponse {
     private String startTime;
     private String endTime;
     private Boolean status;
+    private Boolean outOfDate;
 
 }

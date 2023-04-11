@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class VoucherServiceImp implements VoucherService {
             response.setStartTime(TimeUtil.formatTime(voucher.getStartTime(), "yyyy-MM-dd"));
             response.setEndTime(TimeUtil.formatTime(voucher.getEndTime(), "yyyy-MM-dd"));
             response.setStatus(voucher.getStatus());
+            response.setOutOfDate(voucher.getEndTime().getTime() > new Date().getTime());
             voucherResponses.add(response);
         }
         return voucherResponses;
@@ -50,6 +52,7 @@ public class VoucherServiceImp implements VoucherService {
             response.setStartTime(TimeUtil.formatTime(voucher.getStartTime(), "yyyy-MM-dd"));
             response.setEndTime(TimeUtil.formatTime(voucher.getEndTime(), "yyyy-MM-dd"));
             response.setStatus(voucher.getStatus());
+            response.setOutOfDate(voucher.getEndTime().getTime() > new Date().getTime());
             voucherResponses.add(response);
         }
         return voucherResponses;
@@ -114,6 +117,7 @@ public class VoucherServiceImp implements VoucherService {
         response.setStartTime(TimeUtil.formatTime(voucher.getStartTime(), "yyyy-MM-dd"));
         response.setEndTime(TimeUtil.formatTime(voucher.getEndTime(), "yyyy-MM-dd"));
         response.setStatus(voucher.getStatus());
+        response.setOutOfDate(voucher.getEndTime().getTime() > new Date().getTime());
 
         return response;
     }
