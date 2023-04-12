@@ -9,5 +9,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface HistoryService {
-    Map<Long, List<BillDetailResponse>> getHistoryPerchaseOfCustomer(String username) throws UserNotfoundException, CustomMessageException;
+    Map<Long, List<BillDetailResponse>> getHistoryPerchaseOfCustomer(String username, int status) throws UserNotfoundException, CustomMessageException;
 }

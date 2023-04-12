@@ -35,8 +35,8 @@ public class HistoryServiceImp implements HistoryService {
     private final BillRepository billRepository;
 
     @Override
-    public Map<Long, List<BillDetailResponse>> getHistoryPerchaseOfCustomer(String username) throws UserNotfoundException, CustomMessageException {
-        return getAllBillDetailOfCustomer(username);
+    public Map<Long, List<BillDetailResponse>> getHistoryPerchaseOfCustomer(String username, int status) throws UserNotfoundException, CustomMessageException {
+        return getAllBillDetailOfCustomer(username, status);
     }
 
     private BillDetailResponse swap(BillDetails billDetails, Images ima) {
@@ -45,11 +45,11 @@ public class HistoryServiceImp implements HistoryService {
         return billDetailResponse;
     }
 
-    private Map<Long, List<BillDetailResponse>> getAllBillDetailOfCustomer(String username) throws UserNotfoundException, CustomMessageException {
+    private Map<Long, List<BillDetailResponse>> getAllBillDetailOfCustomer(String username, int status) throws UserNotfoundException, CustomMessageException {
         Long idCustomer = getIdCustomerByCustomerName(username);
         Map<Long, List<BillDetailResponse>> BillDetailResponseMAp = new HashMap<>();
 
-        List<Long> ids = getListIdBillByCustomerId(idCustomer);
+        List<Long> ids = getListIdBillByCustomerId(idCustomer, status);
 
         ids.stream().forEach(id -> {
             List<BillDetailResponse> billDetailsList = getBillDetailByIdBill(id);
@@ -62,8 +62,13 @@ public class HistoryServiceImp implements HistoryService {
         return customerService.findCustomerByEmail(username).getId();
     }
 
-    public List<Long> getListIdBillByCustomerId(Long idCustomer) throws CustomMessageException {
-        List<Bill> bill = billRepository.findBillByCustomerId(idCustomer);
+    public List<Long> getListIdBillByCustomerId(Long idCustomer, int status) throws CustomMessageException {
+        List<Bill> bill;
+        if (status==-7){
+            bill= billRepository.findAllBillByCustomerId(idCustomer);
+        }else{
+            bill= billRepository.findBillByCustomerId(idCustomer, status);
+        }
         if (bill.size() == 0) {
             throw new CustomMessageException("Chưa mua hàng nên chưa có lịch sử");
         }
