@@ -161,7 +161,7 @@ public class BillServiceImp implements BillService {
     @Override
     public List<BillResponse> getAllBill() throws Exception {
         List<BillResponse> bills = new ArrayList<>();
-        List<Bill> list = this.billRepository.findAll();
+        List<Bill> list = this.billRepository.findAllOrderByStatus();
 
         for(Bill b : list){
             BillResponse billResponse = new BillResponse();

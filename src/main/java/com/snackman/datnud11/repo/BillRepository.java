@@ -14,4 +14,7 @@ import java.util.List;
 public interface BillRepository extends JpaRepository<Bill, Long> {
     @Query(value = "select * from bill where customer_id = :id", nativeQuery = true)
     List<Bill> findBillByCustomerId(@Param("id") Long id);
+
+    @Query(value = "select * from bill order by status asc", nativeQuery = true)
+    List<Bill> findAllOrderByStatus();
 }
