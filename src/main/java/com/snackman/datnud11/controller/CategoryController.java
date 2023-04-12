@@ -22,6 +22,11 @@ public class CategoryController {
     public ResponseEntity<List<Category>> getCategories(){
         return new ResponseEntity<>(this.categoryService.findAll(), HttpStatus.OK);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> findById(@PathVariable(name = "id") Long id) throws Exception{
+        return ResponseEntity.ok(this.categoryService.findById(id));
+    }
+
     @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody CategoryDTO categoryDTO){
         return new ResponseEntity<>(this.categoryService.save(new Category(categoryDTO)), HttpStatus.CREATED);
