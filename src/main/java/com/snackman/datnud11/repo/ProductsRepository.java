@@ -36,4 +36,7 @@ public interface ProductsRepository extends JpaRepository<Products, Long> {
 
     @Query(value = "select * from products order by create_time desc limit 8", nativeQuery = true)
     List<Products> getNewestProducts();
+
+    @Query(value = "select * from products where category_id = :categoryId and product_id != :productId", nativeQuery = true)
+    List<Products> findSameProductByCategory(@Param("categoryId") Long categoryId, @Param("productId") Long productId);
 }

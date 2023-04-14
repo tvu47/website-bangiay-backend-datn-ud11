@@ -2,6 +2,7 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.dto.InventoryDTO;
 import com.snackman.datnud11.dto.PaymentDTO;
+import com.snackman.datnud11.entity.Category;
 import com.snackman.datnud11.entity.Colors;
 import com.snackman.datnud11.entity.Inventory;
 import com.snackman.datnud11.entity.Size;
@@ -9,6 +10,7 @@ import com.snackman.datnud11.repo.InventoryRepository;
 import com.snackman.datnud11.responses.InventoryResponse;
 import com.snackman.datnud11.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

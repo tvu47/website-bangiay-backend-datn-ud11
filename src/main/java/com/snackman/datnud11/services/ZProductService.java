@@ -15,4 +15,6 @@ public interface ZProductService {
     List<ProductsResponse> findByProductId(Long id) throws Exception;
 
     List<ProductsResponse> formatProductToProductResponse(List<Products> productsList);
+
+    List<ProductsResponse> getSameProducts(Long categoryId, Long productId);
 }

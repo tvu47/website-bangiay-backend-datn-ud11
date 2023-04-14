@@ -1,6 +1,7 @@
 package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.ProductDTO;
+import com.snackman.datnud11.dto.ProductSame;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.responses.NoticeResponse;
 import com.snackman.datnud11.responses.ProductManagerResponse;
@@ -81,5 +82,11 @@ public class ProductsController {
     public ResponseEntity<List<ProductsResponse>> getNewestProduct(){
         return new ResponseEntity<>(this.zProductService.getNewestProducts(), HttpStatus.OK);
     }
+
+    @PostMapping("/same-product-category")
+    public ResponseEntity<List<ProductsResponse>> getSameProductCategory(@RequestBody ProductSame productSame){
+        return new ResponseEntity<>(this.zProductService.getSameProducts(productSame.getCategoryId(), productSame.getProductId()), HttpStatus.OK);
+    }
+
 }
 

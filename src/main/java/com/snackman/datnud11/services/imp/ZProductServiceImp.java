@@ -42,6 +42,10 @@ public class ZProductServiceImp implements ZProductService {
     @Autowired
     private ColorService colorService;
 
+    @Autowired
+    @Lazy
+    private CategoryService categoryService;
+
     @Override
     public List<ProductsResponse> getAllProductResponses() {
         return formatProductToProductResponse(productService.findAll());
@@ -56,6 +60,8 @@ public class ZProductServiceImp implements ZProductService {
     public List<ProductsResponse> getNewestProducts() {
         return this.formatProductToProductResponse(productService.getNewestProducts());
     }
+
+
 
     @Override
     public List<ProductsResponse> findByProductId(Long id) throws Exception {
@@ -93,12 +99,19 @@ public class ZProductServiceImp implements ZProductService {
 
         Map<Long, Materials> materialsMap = getMaterialByListId(idList.get("material"));
         Map<Long, Category> categoryMap= getCategoryByListId(idList.get("category"));
+        List<Category> categories = this.categoryService.findAll();
 
         productsList.stream().forEach(products -> {
             ProductsResponse productsResponse = new ProductsResponse(products);
             productsResponse.setImages(this.imageService.getImagesByProductId(products.getId()));
             productsResponse.setCategory(categoryMap.get(products.getCategoryId()));
             productsResponse.setMaterials(materialsMap.get(products.getMaterialId()));
+            if(productsResponse.getCategory() == null){
+                try {
+                    productsResponse.setCategory(this.categoryService.findById(categories, products.getCategoryId()));
+                } catch (Exception e) {
+                }
+            }
             try {
                 productsResponse.setPrice(this.getPriceProductString(inventoryList, products.getId()));
                 productsResponsesList.add(productsResponse);
@@ -106,6 +119,11 @@ public class ZProductServiceImp implements ZProductService {
             }
         });
         return productsResponsesList;
+    }
+
+    @Override
+    public List<ProductsResponse> getSameProducts(Long categoryId, Long productId) {
+        return this.formatProductToProductResponse(this.productService.findBySameCategory(categoryId, productId));
     }
 
     private Map<String, List<Long>> getListIds(List<Products> productsList){

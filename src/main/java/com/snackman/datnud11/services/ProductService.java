@@ -32,6 +32,8 @@ public interface ProductService {
 
     List<Products> findByCategoryId(Long categoryId);
 
+    List<Products> findBySameCategory(Long categoryId, Long productId);
+
     List<Products> findByPriceRange(Double min, Double max);
 
     List<Products> getAllOrderByPrice(String typeSort);

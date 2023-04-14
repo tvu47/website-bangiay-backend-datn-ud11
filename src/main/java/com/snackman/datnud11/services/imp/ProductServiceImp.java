@@ -97,6 +97,11 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
+    public List<Products> findBySameCategory(Long categoryId, Long productId) {
+        return this.repo.findSameProductByCategory(categoryId, productId);
+    }
+
+    @Override
     public List<Products> findByPriceRange(Double min, Double max) {
         return this.repo.findByPriceRange(min,max);
     }
