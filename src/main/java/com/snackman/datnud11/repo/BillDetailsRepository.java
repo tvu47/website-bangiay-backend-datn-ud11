@@ -21,4 +21,8 @@ public interface BillDetailsRepository extends JpaRepository<BillDetails, Long> 
 //    @Query(value = "SELECT new com.snackman.datnud11.entity.Count(COUNT(v) as count, v.productId, v.billDetailId) FROM BillDetails v where v.billId=:ids GROUP BY v.productId")
     @Query(value = "SELECT new com.snackman.datnud11.entity.Count(v.productId, v.billDetailId) FROM BillDetails v where v.billId=:ids")
     List<Count> getIdProduct(@Param("ids") Long id);
+
+    @Query(value = "select * from bill_details where bill_id = :bill and product_id = :product and color = :color and size = :size",nativeQuery = true)
+    BillDetails findByProductInfo(@Param("bill") Long billId,@Param("product") Long productId,@Param("color") Long colorId,@Param("size") Long sizeId);
+
 }

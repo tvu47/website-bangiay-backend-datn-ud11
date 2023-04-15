@@ -1,5 +1,6 @@
 package com.snackman.datnud11.controller;
 
+import com.snackman.datnud11.dto.request.DeleteProductInBillRequest;
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.repo.BillRepository;
 import com.snackman.datnud11.responses.BillResponse;
@@ -68,5 +69,9 @@ public class BillController {
 		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Giao hàng thành công!",this.billService.deliveredBill(id)), HttpStatus.OK);
 	}
 
+	@PostMapping("delete-product-in-bill")
+	public ResponseEntity<NoticeResponse> deleteProductInBill(@RequestBody DeleteProductInBillRequest request) throws Exception {
+		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Xóa thành công!",this.billService.deleteProductInBill(request)), HttpStatus.OK);
+	}
 
 }

@@ -2,6 +2,7 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.consts.BillStatus;
 import com.snackman.datnud11.dto.PaymentDTO;
+import com.snackman.datnud11.dto.request.DeleteProductInBillRequest;
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.entity.BillDetails;
 import com.snackman.datnud11.entity.Inventory;
@@ -17,6 +18,7 @@ import com.snackman.datnud11.services.VoucherService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.message.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,6 +40,10 @@ public class BillServiceImp implements BillService {
     @Autowired
     private VoucherService voucherService;
 
+    @Autowired
+    @Lazy
+    private BillService billService;
+    
     @Override
     public Bill checkBillExist(Long id) throws CustomNotFoundException {
         Optional<Bill> optionalBill = billRepository.findById(id);
@@ -64,6 +70,7 @@ public class BillServiceImp implements BillService {
         bill.setEmail(paymentDTO.getInfo().getEmail());
         bill.setPhone(paymentDTO.getInfo().getPhone());
         bill.setDiscount(0);
+        bill.setTotalPrice(0d);
         this.billRepository.save(bill);
 
         Double totalPrice = 0d;
@@ -97,10 +104,13 @@ public class BillServiceImp implements BillService {
             this.voucherService.save(voucher);
 
             bill.setVoucherId(paymentDTO.getVoucher().getId());
-            bill.setDiscount((int) (totalPrice * voucher.getValue() / 100));
+            Integer discount = (int) (totalPrice * voucher.getValue() / 100);
+            bill.setDiscount(discount);
+            bill.setTotalPrice(totalPrice - discount);
         } else {
             bill.setVoucherId(-1l);
             bill.setDiscount(0);
+            bill.setTotalPrice(totalPrice);
         }
 
         this.billRepository.save(bill);
@@ -191,6 +201,54 @@ public class BillServiceImp implements BillService {
         }
 
         return bills;
+    }
+
+    @Override
+    public BillResponse deleteProductInBill(DeleteProductInBillRequest request) throws Exception {
+        BillDetails billDetails = this.billDetailService.findByProductInfo(request.getBillId(), request.getProductId(), request.getColorId(), request.getSizeId());
+        Bill b = this.billService.findById(request.getBillId());
+        Inventory inventory = this.inventoryService.findBySku("P" + request.getProductId() + "C" + request.getColorId() + "S" + request.getSizeId());
+        inventory.setQuatity(inventory.getQuatity() + billDetails.getQuantity());
+        this.inventoryService.save(inventory);
+        this.billDetailService.delete(billDetails);
+        List<BillDetails> listBillDetails = this.billDetailService.findByBillId(request.getBillId());
+        Double price = 0d;
+        double discount = 0;
+        for(BillDetails detail : listBillDetails){
+            price += (detail.getCost() * detail.getQuantity());
+        }
+        if(b.getVoucherId() != -1) {
+            Voucher voucher = this.voucherService.findById(b.getVoucherId());
+            discount =(price * voucher.getValue() / 100);
+            price -= discount;
+        }
+        b.setDiscount((int)discount);
+        b.setTotalPrice(price);
+        this.billService.save(b);
+
+        BillResponse billResponse = new BillResponse();
+        billResponse.setId(b.getId());
+        billResponse.setCustomerName(b.getCustomerName());
+        billResponse.setStatus(b.getStatus());
+        billResponse.setEmail(b.getEmail());
+        billResponse.setPhone(b.getPhone());
+        billResponse.setAddress(b.getAddress());
+        billResponse.setCreateTime(b.getCreateTimeFormat());
+        billResponse.setDetails(this.billDetailService.findByBillId(b.getId()));
+
+        if(b.getVoucherId() != -1){
+            try {
+                Voucher voucher = this.voucherService.findById(b.getVoucherId());
+                VoucherResponse voucherResponse = new VoucherResponse();
+                voucherResponse.setId(voucher.getId());
+                voucherResponse.setCode(voucher.getCode());
+                voucherResponse.setValue(voucher.getValue());
+                billResponse.setVoucher(voucherResponse);
+            }catch (Exception e){
+            }
+            billResponse.setDiscount(b.getDiscount());
+        }
+        return billResponse;
     }
 
 

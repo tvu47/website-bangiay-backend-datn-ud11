@@ -36,4 +36,14 @@ public class BillDetailServiceImp implements BillDetailService {
         return this.repo.save(billDetails);
     }
 
+    @Override
+    public void delete(BillDetails billDetails) {
+         this.repo.delete(billDetails);
+    }
+
+    @Override
+    public BillDetails findByProductInfo(Long billId, Long productId, Long colorId, Long sizeId) {
+        return this.repo.findByProductInfo(billId, productId, colorId, sizeId);
+    }
+
 }

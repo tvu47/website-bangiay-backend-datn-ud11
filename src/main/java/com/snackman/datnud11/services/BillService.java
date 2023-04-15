@@ -1,6 +1,7 @@
 package com.snackman.datnud11.services;
 
 import com.snackman.datnud11.dto.PaymentDTO;
+import com.snackman.datnud11.dto.request.DeleteProductInBillRequest;
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.responses.BillResponse;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
@@ -25,4 +26,6 @@ public interface BillService{
     Bill deliverBill(Long id) throws Exception;
 
     List<BillResponse> getAllBill() throws Exception;
+
+    BillResponse deleteProductInBill(DeleteProductInBillRequest request) throws Exception;
 }

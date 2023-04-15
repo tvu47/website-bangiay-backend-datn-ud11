@@ -42,6 +42,9 @@ public class Bill {
 	@Column(name = "discount")
 	private Integer discount;
 
+	@Column(name = "total_price")
+	private Double totalPrice;
+
 	public String getCreateTimeFormat(){
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		return format.format(this.createTime);

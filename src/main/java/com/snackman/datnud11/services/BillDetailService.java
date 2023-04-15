@@ -11,4 +11,8 @@ public interface BillDetailService {
     List<BillDetails> findByBillId(Long id);
 
     BillDetails save(BillDetails billDetails);
+
+    void delete(BillDetails billDetails);
+
+    BillDetails findByProductInfo(Long billId, Long productId, Long colorId, Long sizeId);
 }
