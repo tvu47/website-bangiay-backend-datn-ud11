@@ -56,6 +56,9 @@ public class CustomerController {
 		log.info("update body: {}", customers);
 		customerService.checkCustomerExist(customers.getId());
 		Customers customers1 = new Customers();
+		if (customers.getCreateTime() == null){
+			customers1.setCreateTime(new Date());
+		}
 		customers1.setEmail(customers.getEmail());
 		customers1.setFirstName(customers.getFirstName());
 		customers1.setLastName(customers.getLastName());
@@ -64,6 +67,7 @@ public class CustomerController {
 		customers1.setGender(Integer.parseInt(customers.getGender()));
 		customers1.setDateOfBirth(customers.getDateOfBirth());
 		customers1.setPhoneNumber(customers.getPhone());
+		customers1.setStatus(customers.getActive());
 		return new ResponseEntity<>(customerService.updateCustomer(customers1), HttpStatus.CREATED);
 	}
 
