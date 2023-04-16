@@ -32,6 +32,11 @@ public class BillController {
 		return new ResponseEntity<>(this.billService.getAllBill(), HttpStatus.OK);
 	}
 
+	@GetMapping("/status/{status}")
+	public ResponseEntity<List<BillResponse>> getBillsByStatus(@PathVariable(name = "status") Integer status) throws Exception {
+		return new ResponseEntity<>(this.billService.getAllBillByStatus(status), HttpStatus.OK);
+	}
+
 	@PostMapping
 	public ResponseEntity<Bill> createBill(@RequestBody Bill bill) {
 		return new ResponseEntity<>(billRepository.save(bill), HttpStatus.CREATED);

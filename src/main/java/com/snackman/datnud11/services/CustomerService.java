@@ -24,6 +24,8 @@ public interface CustomerService {
 
     List<CustomerResponse> findAll();
 
+    Customers findById(Long id) throws Exception;
+
     Customers findCustomerByEmail(String email) throws UserNotfoundException;
     CustomerResponse login(String username) throws UserNotfoundException;
     Boolean register(String username, String password, String phoneNumber, Date birthday);

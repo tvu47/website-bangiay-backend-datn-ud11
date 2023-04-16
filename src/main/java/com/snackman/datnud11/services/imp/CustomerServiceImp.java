@@ -102,6 +102,15 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
+    public Customers findById(Long id) throws Exception {
+        Optional<Customers> optional = this.customersRepository.findById(id);
+        if(optional.isEmpty()){
+            throw new Exception("");
+        }
+        return optional.get();
+    }
+
+    @Override
     public Customers findCustomerByEmail(String email) throws UserNotfoundException {
         Optional<Customers> customersOptional = customersRepository.findCustomersByEmail(email);
         if (customersOptional.isEmpty()){

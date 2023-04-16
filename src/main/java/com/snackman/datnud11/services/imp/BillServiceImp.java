@@ -204,6 +204,41 @@ public class BillServiceImp implements BillService {
     }
 
     @Override
+    public List<BillResponse> getAllBillByStatus(Integer status) throws Exception {
+        List<BillResponse> bills = new ArrayList<>();
+        List<Bill> list = this.billRepository.findAllByStatus(status);
+
+        for(Bill b : list){
+            BillResponse billResponse = new BillResponse();
+            billResponse.setId(b.getId());
+            billResponse.setCustomerName(b.getCustomerName());
+            billResponse.setStatus(b.getStatus());
+            billResponse.setEmail(b.getEmail());
+            billResponse.setPhone(b.getPhone());
+            billResponse.setAddress(b.getAddress());
+            billResponse.setCreateTime(b.getCreateTimeFormat());
+            billResponse.setDetails(this.billDetailService.findByBillId(b.getId()));
+
+            if(b.getVoucherId() != -1){
+                try {
+                    Voucher voucher = this.voucherService.findById(b.getVoucherId());
+                    VoucherResponse voucherResponse = new VoucherResponse();
+                    voucherResponse.setId(voucher.getId());
+                    voucherResponse.setCode(voucher.getCode());
+                    voucherResponse.setValue(voucher.getValue());
+                    billResponse.setVoucher(voucherResponse);
+                }catch (Exception e){
+                }
+                billResponse.setDiscount(b.getDiscount());
+            }
+
+            bills.add(billResponse);
+        }
+
+        return bills;
+    }
+
+    @Override
     public BillResponse deleteProductInBill(DeleteProductInBillRequest request) throws Exception {
         BillDetails billDetails = this.billDetailService.findByProductInfo(request.getBillId(), request.getProductId(), request.getColorId(), request.getSizeId());
         Bill b = this.billService.findById(request.getBillId());
@@ -224,6 +259,9 @@ public class BillServiceImp implements BillService {
         }
         b.setDiscount((int)discount);
         b.setTotalPrice(price);
+        if(price == 0){
+            b.setStatus(BillStatus.DA_HUY.status);
+        }
         this.billService.save(b);
 
         BillResponse billResponse = new BillResponse();
