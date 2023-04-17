@@ -3,7 +3,9 @@ package com.snackman.datnud11.services;
 import com.snackman.datnud11.dto.InventoryDTO;
 import com.snackman.datnud11.dto.PaymentDTO;
 import com.snackman.datnud11.entity.Inventory;
+import com.snackman.datnud11.entity.InventoryImportExcelDTO;
 import com.snackman.datnud11.responses.InventoryResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,4 +26,8 @@ public interface InventoryService {
     boolean validProductsOrder(List<PaymentDTO.ProductOrder> productOrders);
 
     Inventory save(InventoryDTO inventoryDTO) throws Exception;
+
+    void saveInventoryToDatabase(MultipartFile multipartFile);
+
+    List<InventoryImportExcelDTO> getData();
 }
