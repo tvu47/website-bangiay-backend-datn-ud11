@@ -2,17 +2,16 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.dto.InventoryDTO;
 import com.snackman.datnud11.dto.PaymentDTO;
-import com.snackman.datnud11.entity.Category;
-import com.snackman.datnud11.entity.Colors;
-import com.snackman.datnud11.entity.Inventory;
-import com.snackman.datnud11.entity.Size;
+import com.snackman.datnud11.entity.*;
+import com.snackman.datnud11.repo.InventoryImportExcelRepo;
 import com.snackman.datnud11.repo.InventoryRepository;
 import com.snackman.datnud11.responses.InventoryResponse;
 import com.snackman.datnud11.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +30,8 @@ public class InventoryServiceImp implements InventoryService {
 
     @Autowired
     private SizeService sizeService;
+    @Autowired
+    private InventoryImportExcelRepo inventoryImportExcelRepo;
 
     @Override
     public Inventory save(Inventory inventory) {
@@ -149,5 +150,23 @@ public class InventoryServiceImp implements InventoryService {
             colorOptionTemp.getSizeOptions().add(sizeOption);
         }
         return response;
+    }
+
+    @Override
+    public void saveInventoryToDatabase(MultipartFile multipartFile){
+        if (ExcelUploadService.isValidExcelFile(multipartFile)){
+            try {
+                List<InventoryImportExcelDTO> list = ExcelUploadService.getDataFromExcel(multipartFile.getInputStream());
+                this.inventoryImportExcelRepo.saveAll(list);
+            } catch (IOException e) {
+                e.getStackTrace();
+                throw new IllegalArgumentException("the file is not valid excel");
+            }
+        }
+    }
+
+    @Override
+    public List<InventoryImportExcelDTO> getData(){
+        return this.inventoryImportExcelRepo.findAll();
     }
 }

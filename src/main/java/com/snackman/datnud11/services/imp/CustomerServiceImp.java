@@ -133,6 +133,7 @@ public class CustomerServiceImp implements CustomerService {
         customerResponse.setAddress(customers.get().getAddress());
         customerResponse.setFirstName(customers.get().getFirstName());
         customerResponse.setLastName(customers.get().getLastName());
+        customerResponse.setCreateTime(customers.get().getCreateTimeFormat());
         customerResponse.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").format(customers.get().getDateOfBirth()));
         return customerResponse;
     }

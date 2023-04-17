@@ -2,6 +2,7 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.InventoryDTO;
 import com.snackman.datnud11.entity.Inventory;
+import com.snackman.datnud11.entity.InventoryImportExcelDTO;
 import com.snackman.datnud11.repo.InventoryRepository;
 import com.snackman.datnud11.responses.InventoryResponse;
 import com.snackman.datnud11.responses.NoticeResponse;
@@ -9,10 +10,13 @@ import com.snackman.datnud11.services.InventoryService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/inventory")
@@ -50,5 +54,12 @@ public class InventoryController {
     public ResponseEntity<NoticeResponse> storeInventory(@RequestBody InventoryDTO inventoryDTO) throws Exception{
         Inventory inventory = this.inventoryService.save(inventoryDTO);
         return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(), "Thêm thành công!", inventory), HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/upload-data", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadFileExcel(@RequestParam(value = "file", required = false)MultipartFile file){
+        this.inventoryService.saveInventoryToDatabase(file);
+        return new ResponseEntity<>("Save OK ", HttpStatus.OK);
     }
 }
