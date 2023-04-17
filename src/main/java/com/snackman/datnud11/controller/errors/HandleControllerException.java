@@ -80,4 +80,11 @@ public class HandleControllerException {
         errorMap.put("error_message", ex.getMessage());
         return errorMap;
     }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({Exception.class})
+    public Map<String, String> user_All_Errors(Exception ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("error_message", ex.getMessage());
+        return errorMap;
+    }
 }

@@ -157,7 +157,7 @@ public class InventoryServiceImp implements InventoryService {
         if (ExcelUploadService.isValidExcelFile(multipartFile)){
             try {
                 List<InventoryImportExcelDTO> list = ExcelUploadService.getDataFromExcel(multipartFile.getInputStream());
-                this.inventoryImportExcelRepo.saveAll(list);
+//                this.inventoryImportExcelRepo.saveAll(list);
             } catch (IOException e) {
                 e.getStackTrace();
                 throw new IllegalArgumentException("the file is not valid excel");
