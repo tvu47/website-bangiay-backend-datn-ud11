@@ -7,6 +7,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,7 +78,14 @@ public class HandleControllerException {
     @ExceptionHandler({RuntimeException.class})
     public Map<String, String> handle_All_Errors(RuntimeException ex) {
         Map<String, String> errorMap = new HashMap<>();
-        System.out.println("runtime: "+ ex.getMessage());
+        errorMap.put("error_message", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({AuthenticationException.class})
+    public Map<String, String> handle_authentication_Errors(AuthenticationException ex) {
+        Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
         return errorMap;
     }

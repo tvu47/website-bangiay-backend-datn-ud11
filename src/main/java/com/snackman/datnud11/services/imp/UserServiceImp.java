@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,25 +28,25 @@ public class UserServiceImp implements UserService {
     @Autowired
     private TokenJwtRepo tokenJwtRepo;
     @Override
-    public Users findUserByUsername(String user) throws UserNotfoundException {
+    public Users findUserByUsername(String user) {
         Optional<Users> usersOptional = userRepository.findByUsername(user);
         if (usersOptional.isEmpty()){
-            throw new UserNotfoundException("username or password is incorrect");
+            throw new UserNotfoundException("username is not exists !");
         }
         return usersOptional.get();
     }
-    public List<String> getListRoleByUsername(String username) throws RoleNotFoundException {
+    public List<String> getListRoleByUsername(String username) {
         List<RoleUser> roleUserOptional = roleUserRepo.findRoleUserByUsername(username);
 
         if (roleUserOptional.size() == 0){
-            throw new RoleNotFoundException("Role is not defined...");
+            throw new RoleNotFoundException("account have not permission");
         }
         List<String> roles = new ArrayList<>();
         roleUserOptional.forEach(roleUser -> roles.add(roleUser.getRole()));
         return roles;
     }
     @Override
-    public UserDetails getUserDetailFromDB(String username) throws UserNotfoundException, RoleNotFoundException {
+    public UserDetails getUserDetailFromDB(String username) {
         System.out.println("loading userdetail ...");
         Users users = findUserByUsername(username);
         UserAuth userAuth = new UserAuth();
@@ -91,6 +92,11 @@ public class UserServiceImp implements UserService {
             throw new UserExistedException("role exist on database");
         }
         return roleUserList;
+    }
+
+    @Override
+    public Users updateUser(Users users) {
+        return userRepository.save(users);
     }
 
     public void refreshToken(String username){

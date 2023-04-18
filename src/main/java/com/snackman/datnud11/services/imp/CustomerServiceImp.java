@@ -1,8 +1,10 @@
 package com.snackman.datnud11.services.imp;
 
+import com.snackman.datnud11.consts.EmailConstant;
 import com.snackman.datnud11.consts.Gender;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.entity.RoleUser;
+import com.snackman.datnud11.entity.Users;
 import com.snackman.datnud11.exceptions.UserExistedException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
@@ -10,20 +12,23 @@ import com.snackman.datnud11.responses.CustomerResponse;
 import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.services.EmailSenderService;
 import com.snackman.datnud11.services.UserService;
+import com.snackman.datnud11.services.auth.UserAuth;
+import com.snackman.datnud11.utils.CommonUtils;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.message.ErrorMessage;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -36,6 +41,8 @@ public class CustomerServiceImp implements CustomerService {
     private UserService userService;
     @Autowired
     private EmailSenderService emailSenderService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
     @Override
     public Customers checkCustomerExist(Long id) throws CustomNotFoundException {
         Optional<Customers> customersOptional = customersRepository.findById(id);
@@ -139,6 +146,54 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
+    public boolean forgetPassword(String username){
+        String newRandomPassword = CommonUtils.getRandomPassword();
+
+        try {
+            userService.findUserByUsername(username);
+            if (checkEmailExist(username)){
+                emailSenderService.sendEmail(username, EmailConstant.EMAIL_FOGOTPASSWORD_SUBJECT, EmailConstant.EMAIL_FOGOTPASSWORD_BODY+"\n Your new password is "+newRandomPassword);
+                Users user = userService.findUserByUsername(username);
+                user.setPassword(passwordEncoder.encode(newRandomPassword));
+                userService.updateUser(user);
+                return true;
+            }
+        } catch (UserExistedException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean changePassword(String newPassword, String prePassword) {
+
+        UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users user = userService.findUserByUsername(userAuth.getUsername());
+        try {
+            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("CLIENT_ROLE"));
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userAuth,prePassword,authorities);
+            authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        }catch (Exception e){
+            throw new BadCredentialsException("present password is not correct");
+        }
+
+        if (!user.getPassword().equals(prePassword)){
+            throw new RuntimeException("Present password is not correct. Please try again..");
+        }
+        try {
+            if (checkEmailExist(user.getUsername())){
+                user.setPassword(passwordEncoder.encode(newPassword));
+                userService.updateUser(user);
+                return true;
+            }
+        } catch (UserExistedException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    @Override
     public Boolean register(String username, String password, String phoneNumber, Date birthday) {
         try {
             // email khong ton tai trong db: checkEmailExist=true
@@ -162,10 +217,10 @@ public class CustomerServiceImp implements CustomerService {
                 customers.setCreateTime(new Date());
                 customers.setGender(0);
                 customersRepository.save(customers);
-                //send gmail to customer
-//                emailSenderService.sendEmail(username,
-//                        "SnackMan Register Account",
-//                        "you have been register on snackman.");
+//                send gmail to customer
+                emailSenderService.sendEmail(username,
+                        EmailConstant.EMAIL_REGISTER_SUBJECT,
+                        EmailConstant.EMAIL_REGISTER_BODY);
                 return true;
             }
         } catch (UserExistedException e) {
