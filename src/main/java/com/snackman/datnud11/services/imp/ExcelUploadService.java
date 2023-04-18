@@ -19,6 +19,10 @@ public class ExcelUploadService {
         return Objects.equals(file.getContentType(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     }
 
+
+    /*
+    * lấy data từ excel
+    * */
     public static List<InventoryImportExcelDTO> getDataFromExcel(InputStream inputStream){
         List<InventoryImportExcelDTO> inventoryImportExcelDTOS = new ArrayList<>();
 
@@ -38,11 +42,15 @@ public class ExcelUploadService {
                 while (cellIterator.hasNext()){
                     Cell cell = cellIterator.next();
                     switch (cellIndex){
-                        case 0 -> inventoryImportExcelDTO.setId((int) cell.getNumericCellValue());
-                        case 1 -> inventoryImportExcelDTO.setFirstName(cell.getStringCellValue());
-                        case 2 -> inventoryImportExcelDTO.setLastName(cell.getStringCellValue());
-                        case 3 -> inventoryImportExcelDTO.setCountry(cell.getStringCellValue());
-                        case 4 -> inventoryImportExcelDTO.setPhoneNumber(String.valueOf(cell.getNumericCellValue()));
+                        case 0 -> inventoryImportExcelDTO.setNameProduct(cell.getStringCellValue());
+                        case 1 -> inventoryImportExcelDTO.setCategory(cell.getStringCellValue());
+                        case 2 -> inventoryImportExcelDTO.setMaterial(cell.getStringCellValue());
+                        case 3 -> inventoryImportExcelDTO.setContents(cell.getStringCellValue());
+                        case 4 -> inventoryImportExcelDTO.setManufacture(cell.getStringCellValue());
+                        case 5 -> inventoryImportExcelDTO.setColor(cell.getStringCellValue());
+                        case 6 -> inventoryImportExcelDTO.setSize(cell.getStringCellValue());
+                        case 7 -> inventoryImportExcelDTO.setQuantity((int) cell.getNumericCellValue());
+                        case 8 -> inventoryImportExcelDTO.setPrice(cell.getNumericCellValue());
                         default -> {}
                     }
                     cellIndex++;

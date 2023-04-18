@@ -29,5 +29,4 @@ public interface InventoryService {
 
     void saveInventoryToDatabase(MultipartFile multipartFile);
 
-    List<InventoryImportExcelDTO> getData();
 }

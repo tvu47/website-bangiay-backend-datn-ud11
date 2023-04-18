@@ -3,7 +3,6 @@ package com.snackman.datnud11.services.imp;
 import com.snackman.datnud11.dto.InventoryDTO;
 import com.snackman.datnud11.dto.PaymentDTO;
 import com.snackman.datnud11.entity.*;
-import com.snackman.datnud11.repo.InventoryImportExcelRepo;
 import com.snackman.datnud11.repo.InventoryRepository;
 import com.snackman.datnud11.responses.InventoryResponse;
 import com.snackman.datnud11.services.*;
@@ -30,8 +29,6 @@ public class InventoryServiceImp implements InventoryService {
 
     @Autowired
     private SizeService sizeService;
-    @Autowired
-    private InventoryImportExcelRepo inventoryImportExcelRepo;
 
     @Override
     public Inventory save(Inventory inventory) {
@@ -156,17 +153,14 @@ public class InventoryServiceImp implements InventoryService {
     public void saveInventoryToDatabase(MultipartFile multipartFile){
         if (ExcelUploadService.isValidExcelFile(multipartFile)){
             try {
+                // list data from excel file
                 List<InventoryImportExcelDTO> list = ExcelUploadService.getDataFromExcel(multipartFile.getInputStream());
-                this.inventoryImportExcelRepo.saveAll(list);
+                // to do ...
+//                this.inventoryImportExcelRepo.saveAll(list);
             } catch (IOException e) {
                 e.getStackTrace();
                 throw new IllegalArgumentException("the file is not valid excel");
             }
         }
-    }
-
-    @Override
-    public List<InventoryImportExcelDTO> getData(){
-        return this.inventoryImportExcelRepo.findAll();
     }
 }
