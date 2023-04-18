@@ -1,5 +1,6 @@
 package com.snackman.datnud11.filters;
 
+import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.services.auth.UserAuth;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -46,20 +47,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("-----start JwtAuthentication1Filter -----");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        UserAuth userAuth= (UserAuth) userDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken authenticationToken;
-        if (request.getServletPath().equals("/api/v1/admin/login")){
-            log.info("----role admin---"+userAuth.getAuthorities());
+            UserAuth userAuth= (UserAuth) userDetailsService.loadUserByUsername(username);
+            UsernamePasswordAuthenticationToken authenticationToken;
+            if (request.getServletPath().equals("/api/v1/admin/login")){
+                log.info("----role admin---"+userAuth.getAuthorities());
 
-            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ADMIN_ROLE"));
-            authenticationToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
-        }else {
-            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("CLIENT_ROLE"));
+                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new SimpleGrantedAuthority("ADMIN_ROLE"));
+                authenticationToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
+            }else {
+                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new SimpleGrantedAuthority("CLIENT_ROLE"));
 
-            authenticationToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
-        }
+                authenticationToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
+            }
 
         log.info("-----end JwtAuthentication1Filter -----");
         return this.getAuthenticationManager().authenticate(authenticationToken);

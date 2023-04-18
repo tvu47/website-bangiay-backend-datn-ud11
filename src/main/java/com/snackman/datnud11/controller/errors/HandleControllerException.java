@@ -74,9 +74,10 @@ public class HandleControllerException {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({Exception.class})
-    public Map<String, String> handle_All_Errors(Exception ex) {
+    @ExceptionHandler({RuntimeException.class})
+    public Map<String, String> handle_All_Errors(RuntimeException ex) {
         Map<String, String> errorMap = new HashMap<>();
+        System.out.println("runtime: "+ ex.getMessage());
         errorMap.put("error_message", ex.getMessage());
         return errorMap;
     }
