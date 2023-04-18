@@ -30,7 +30,7 @@ public class UserServiceImp implements UserService {
     public Users findUserByUsername(String user) throws UserNotfoundException {
         Optional<Users> usersOptional = userRepository.findByUsername(user);
         if (usersOptional.isEmpty()){
-            throw new UserNotfoundException("user is not found: "+user);
+            throw new UserNotfoundException("username or password is incorrect");
         }
         return usersOptional.get();
     }
