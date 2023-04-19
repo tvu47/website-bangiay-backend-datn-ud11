@@ -4,7 +4,6 @@ import com.snackman.datnud11.entity.*;
 import com.snackman.datnud11.repo.CategoryRepository;
 import com.snackman.datnud11.repo.DiscountsRepository;
 import com.snackman.datnud11.repo.MaterialsRepository;
-import com.snackman.datnud11.repo.ProductsRepository;
 import com.snackman.datnud11.responses.ProductsResponse;
 import com.snackman.datnud11.services.*;
 import com.snackman.datnud11.utils.NumberUtil;
@@ -34,7 +33,7 @@ public class ZProductServiceImp implements ZProductService {
 
     @Autowired
     @Lazy
-    private InventoryService inventoryService;
+    private ProductDetailService productDetailService;
 
     @Autowired
     private ImageService imageService;
@@ -71,17 +70,17 @@ public class ZProductServiceImp implements ZProductService {
         return productsResponses;
     }
 
-    public String getPriceProductString(List<Inventory> inventories, Long productId) throws Exception{
+    public String getPriceProductString(List<ProductDetail> inventories, Long productId) throws Exception{
         Double minPrice = Double.MAX_VALUE;
         Double maxPrice = Double.MIN_VALUE;
         boolean haveInventory = false;
-        for(Inventory inventory : inventories){
-            if(inventory.getProductId() == productId){
+        for(ProductDetail productDetail : inventories){
+            if(productDetail.getProductId() == productId){
                 haveInventory = true;
-                if(inventory.getPrice() > maxPrice){
-                    maxPrice = inventory.getPrice();
-                } else if(inventory.getPrice() < minPrice){
-                    minPrice = inventory.getPrice();
+                if(productDetail.getPrice() > maxPrice){
+                    maxPrice = productDetail.getPrice();
+                } else if(productDetail.getPrice() < minPrice){
+                    minPrice = productDetail.getPrice();
                 }
             }
         }
@@ -95,7 +94,7 @@ public class ZProductServiceImp implements ZProductService {
         List<ProductsResponse> productsResponsesList = new ArrayList<>();
         // get id list
         Map<String, List<Long>> idList = getListIds(productsList);
-        List<Inventory> inventoryList = this.inventoryService.findAll();
+        List<ProductDetail> productDetailList = this.productDetailService.findAll();
 
         Map<Long, Materials> materialsMap = getMaterialByListId(idList.get("material"));
         Map<Long, Category> categoryMap= getCategoryByListId(idList.get("category"));
@@ -113,7 +112,7 @@ public class ZProductServiceImp implements ZProductService {
                 }
             }
             try {
-                productsResponse.setPrice(this.getPriceProductString(inventoryList, products.getId()));
+                productsResponse.setPrice(this.getPriceProductString(productDetailList, products.getId()));
                 productsResponsesList.add(productsResponse);
             } catch (Exception e) {
             }

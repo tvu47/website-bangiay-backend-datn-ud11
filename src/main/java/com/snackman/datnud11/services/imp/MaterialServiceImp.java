@@ -30,6 +30,14 @@ public class MaterialServiceImp implements MaterialService {
     }
 
     @Override
+    public Materials findMaterialByName(String materialName) {
+        if (repo.findMaterialsByMaterialName(materialName).isEmpty()){
+            throw new RuntimeException("Material is not exists..");
+        }
+        return repo.findMaterialsByMaterialName(materialName).get();
+    }
+
+    @Override
     public Materials findById(List<Materials> materialsList, Long id) throws Exception {
         for(Materials materials: materialsList){
             if(materials.getId() == id){

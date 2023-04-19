@@ -41,6 +41,14 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
+    public Category findByName(String name) {
+        if (repo.findCategoryByCategoryName(name).isEmpty()){
+            throw new RuntimeException("Category is not exists");
+        }
+        return repo.findCategoryByCategoryName(name).get();
+    }
+
+    @Override
     public List<Category> findAll() {
         System.out.println("find all");
         return this.repo.findAll();

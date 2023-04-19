@@ -2,6 +2,7 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.ProductDTO;
 import com.snackman.datnud11.dto.ProductSame;
+import com.snackman.datnud11.dto.ProductUpdateRequest;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.responses.NoticeResponse;
 import com.snackman.datnud11.responses.ProductManagerResponse;
@@ -10,10 +11,12 @@ import com.snackman.datnud11.responses.ProductsResponse;
 import com.snackman.datnud11.services.ProductService;
 import com.snackman.datnud11.services.ZProductService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +25,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@Slf4j
 public class ProductsController {
     @Autowired
     private ProductService productService;
@@ -30,7 +34,6 @@ public class ProductsController {
 
 
     @GetMapping
-    @Cacheable("products")
     public ResponseEntity<List<ProductsResponse>> getAll(){
         System.out.println("product is getting data...");
         return new ResponseEntity<>(this.zProductService.getAllProductResponses(), HttpStatus.OK);
@@ -40,8 +43,10 @@ public class ProductsController {
         return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Thêm mới sản phẩm thành công",this.productService.save(productDTO)), HttpStatus.CREATED);
     }
     @PutMapping
-    public ResponseEntity<Products> updateProduct(@RequestBody Products product ) throws CustomNotFoundException {
-        return new ResponseEntity<>(this.productService.save(product), HttpStatus.CREATED);
+    @PreAuthorize("CLIENT_ROLE")
+    public ResponseEntity<Products> updateProduct(@RequestBody ProductUpdateRequest product ){
+        log.info("product update: {}", product);
+        return new ResponseEntity<>(this.productService.updateProduct(product), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProductById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{

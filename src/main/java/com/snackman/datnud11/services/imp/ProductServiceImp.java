@@ -2,19 +2,21 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.consts.SearchProducts;
 import com.snackman.datnud11.dto.ProductDTO;
+import com.snackman.datnud11.dto.ProductUpdateRequest;
 import com.snackman.datnud11.entity.*;
 import com.snackman.datnud11.repo.ProductsRepository;
 import com.snackman.datnud11.responses.ProductManagerResponse;
 import com.snackman.datnud11.responses.ProductResponse;
 import com.snackman.datnud11.services.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@Transactional
 public class ProductServiceImp implements ProductService {
 
     @Autowired
@@ -28,7 +30,7 @@ public class ProductServiceImp implements ProductService {
 
     @Lazy
     @Autowired
-    private InventoryService inventoryService;
+    private ProductDetailService productDetailService;
 
     @Autowired
     private ImageService imageService;
@@ -36,6 +38,22 @@ public class ProductServiceImp implements ProductService {
     @Override
     public Products save(Products products) {
         return this.repo.save(products);
+    }
+
+    @Override
+    public Products updateProduct(ProductUpdateRequest request) {
+//        imageService.getImagesByProductId()
+
+        Category category = categoryService.findByName(request.getCategory());
+        Materials materials = materialService.findMaterialByName(request.getMaterial());
+        Products products1 = new Products();
+        products1.setProductName(request.getName());
+        products1.setId(request.getId());
+        products1.setCategoryId(category.getId());
+        products1.setMaterialId(materials.getId());
+        products1.setContent(request.getContent());
+        products1.setManufactureAddress(request.getManufactory());
+        return repo.save(products1);
     }
 
     @Override
@@ -158,7 +176,7 @@ public class ProductServiceImp implements ProductService {
         List<Products> products = this.findAll();
         List<Category> categories = this.categoryService.findAll();
         List<Materials> materials = this.materialService.findAll();
-        List<Inventory> inventoriesList = this.inventoryService.findAll();
+        List<ProductDetail> inventoriesList = this.productDetailService.findAll();
         for(Products product : products){
             ProductManagerResponse response = new ProductManagerResponse();
             response.setId(product.getId());
@@ -169,17 +187,17 @@ public class ProductServiceImp implements ProductService {
             response.setCategory(this.categoryService.findById(categories, product.getCategoryId()).getCategoryName());
             response.setMaterial(this.materialService.findById(materials, product.getMaterialId()).getMaterialName());
 
-            List<Inventory> inventories = this.inventoryService.findByProductId(inventoriesList, product.getId());
+            List<ProductDetail> inventories = this.productDetailService.findByProductId(inventoriesList, product.getId());
             List<ProductManagerResponse.Inventory> listInventories = new ArrayList<>();
             response.setInventories(listInventories);
-            for(Inventory inventory : inventories){
+            for(ProductDetail productDetail : inventories){
                 ProductManagerResponse.Inventory i = new ProductManagerResponse.Inventory();
-                i.setId(inventory.getId());
-                i.setSku(inventory.getSku());
-                i.setColor(inventory.getColorName());
-                i.setSize(inventory.getSizeName());
-                i.setQuantity(inventory.getQuatity());
-                i.setPrice(inventory.getPrice());
+                i.setId(productDetail.getId());
+                i.setSku(productDetail.getSku());
+                i.setColor(productDetail.getColorName());
+                i.setSize(productDetail.getSizeName());
+                i.setQuantity(productDetail.getQuatity());
+                i.setPrice(productDetail.getPrice());
                 listInventories.add(i);
             }
             list.add(response);

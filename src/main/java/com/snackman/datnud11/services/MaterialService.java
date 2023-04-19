@@ -9,6 +9,7 @@ public interface MaterialService {
     Materials findById(Long id) throws Exception;
 
     List<Materials> findAll();
+    Materials findMaterialByName(String materialName);
 
     Materials findById(List<Materials> materialsList, Long id) throws Exception;
 

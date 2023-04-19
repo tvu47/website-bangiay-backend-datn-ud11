@@ -5,15 +5,14 @@ import com.snackman.datnud11.dto.PaymentDTO;
 import com.snackman.datnud11.dto.request.DeleteProductInBillRequest;
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.entity.BillDetails;
-import com.snackman.datnud11.entity.Inventory;
+import com.snackman.datnud11.entity.ProductDetail;
 import com.snackman.datnud11.entity.Voucher;
-import com.snackman.datnud11.repo.BillDetailsRepository;
 import com.snackman.datnud11.repo.BillRepository;
 import com.snackman.datnud11.responses.BillResponse;
 import com.snackman.datnud11.responses.VoucherResponse;
 import com.snackman.datnud11.services.BillDetailService;
 import com.snackman.datnud11.services.BillService;
-import com.snackman.datnud11.services.InventoryService;
+import com.snackman.datnud11.services.ProductDetailService;
 import com.snackman.datnud11.services.VoucherService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.message.ErrorMessage;
@@ -35,7 +34,7 @@ public class BillServiceImp implements BillService {
     private BillDetailService billDetailService;
 
     @Autowired
-    private InventoryService inventoryService;
+    private ProductDetailService productDetailService;
 
     @Autowired
     private VoucherService voucherService;
@@ -76,9 +75,9 @@ public class BillServiceImp implements BillService {
         Double totalPrice = 0d;
 
         for(PaymentDTO.ProductOrder productOrder : paymentDTO.getProductsOrder()){
-            Inventory inventory = this.inventoryService.findBySku(productOrder.getSku());
-            inventory.setQuatity(inventory.getQuatity() - productOrder.getQuantity());
-            this.inventoryService.save(inventory);
+            ProductDetail productDetail = this.productDetailService.findBySku(productOrder.getSku());
+            productDetail.setQuatity(productDetail.getQuatity() - productOrder.getQuantity());
+            this.productDetailService.save(productDetail);
 
             BillDetails billDetails = new BillDetails();
             billDetails.setBillId(bill.getId());
@@ -151,9 +150,9 @@ public class BillServiceImp implements BillService {
         List<BillDetails> billDetails = this.billDetailService.findByBillId(id);
         for(BillDetails detail : billDetails){
             String sku = "P" + detail.getProductId() + "C" + detail.getColor() + "S" + detail.getSize();
-            Inventory inventory = this.inventoryService.findBySku(sku);
-            inventory.setQuatity(inventory.getQuatity() + detail.getQuantity());
-            this.inventoryService.save(inventory);
+            ProductDetail productDetail = this.productDetailService.findBySku(sku);
+            productDetail.setQuatity(productDetail.getQuatity() + detail.getQuantity());
+            this.productDetailService.save(productDetail);
         }
 
         return bill;
@@ -242,9 +241,9 @@ public class BillServiceImp implements BillService {
     public BillResponse deleteProductInBill(DeleteProductInBillRequest request) throws Exception {
         BillDetails billDetails = this.billDetailService.findByProductInfo(request.getBillId(), request.getProductId(), request.getColorId(), request.getSizeId());
         Bill b = this.billService.findById(request.getBillId());
-        Inventory inventory = this.inventoryService.findBySku("P" + request.getProductId() + "C" + request.getColorId() + "S" + request.getSizeId());
-        inventory.setQuatity(inventory.getQuatity() + billDetails.getQuantity());
-        this.inventoryService.save(inventory);
+        ProductDetail productDetail = this.productDetailService.findBySku("P" + request.getProductId() + "C" + request.getColorId() + "S" + request.getSizeId());
+        productDetail.setQuatity(productDetail.getQuatity() + billDetails.getQuantity());
+        this.productDetailService.save(productDetail);
         this.billDetailService.delete(billDetails);
         List<BillDetails> listBillDetails = this.billDetailService.findByBillId(request.getBillId());
         Double price = 0d;

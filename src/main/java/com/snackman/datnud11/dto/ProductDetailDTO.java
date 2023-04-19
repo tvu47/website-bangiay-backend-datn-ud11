@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryDTO {
+public class ProductDetailDTO {
 
     private Long productId;
     private String color;
