@@ -16,4 +16,5 @@ public class CustomerRequest1 {
     private String createTime;
     private Boolean active;
     private Date dateOfBirth;
+    private String password;
 }
