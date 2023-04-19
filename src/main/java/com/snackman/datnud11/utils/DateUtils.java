@@ -26,7 +26,7 @@ public class DateUtils {
         return dateFormat.format(date);
     }
 
-    public Date stringToDate(String date){
+    public static Date stringToDate(String date){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return dateFormat.parse(date);

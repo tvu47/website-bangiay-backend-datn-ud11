@@ -1,5 +1,7 @@
 package com.snackman.datnud11.services;
 
+import com.snackman.datnud11.dto.request.CustomerRequest;
+import com.snackman.datnud11.dto.request.CustomerRequest1;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.UserExistedException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
@@ -19,7 +21,7 @@ public interface CustomerService {
     boolean checkPhoneNumberExist(String email) throws UserExistedException;
 
     Customers createCustomer(Customers customers);
-
+    Customers storeCustomer(CustomerRequest1 customers);
     Customers updateCustomer(Customers customers);
 
     List<CustomerResponse> findAll();

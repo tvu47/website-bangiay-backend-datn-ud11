@@ -2,6 +2,7 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.CustomerDTO;
 import com.snackman.datnud11.dto.request.CustomerRequest;
+import com.snackman.datnud11.dto.request.CustomerRequest1;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.CustomMessageException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
@@ -30,6 +31,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/customers")
 @Slf4j
+
 public class CustomerController {
 	@Autowired
 	CustomersRepository customersRepository;
@@ -106,9 +108,8 @@ public class CustomerController {
 		return new ResponseEntity<>(customerService.changePassword(newPassword, prePassword), HttpStatus.OK);
 	}
 	@PostMapping("/store")
-	public ResponseEntity<CustomerResponse> storeCustomer(@RequestBody CustomerDTO customerDTO){
-		System.out.println(customerDTO);
-		return null;
+	public ResponseEntity<Customers> storeCustomer(@RequestBody CustomerRequest1 customerRequest){
+		return new ResponseEntity<>(customerService.storeCustomer(customerRequest), HttpStatus.CREATED);
 	}
 
 	@PostMapping("/history")

@@ -2,6 +2,8 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.consts.EmailConstant;
 import com.snackman.datnud11.consts.Gender;
+import com.snackman.datnud11.dto.request.CustomerRequest;
+import com.snackman.datnud11.dto.request.CustomerRequest1;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.entity.RoleUser;
 import com.snackman.datnud11.entity.Users;
@@ -76,6 +78,12 @@ public class CustomerServiceImp implements CustomerService {
             return customersOptional;
         }
         return null;
+    }
+
+    @Override
+    public Customers storeCustomer(CustomerRequest1 customers) {
+        Customers customers1 = new Customers(customers);
+        return customersRepository.save(customers1);
     }
 
     @Override
