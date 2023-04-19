@@ -1,8 +1,14 @@
 package com.snackman.datnud11.entity;
 
+import com.snackman.datnud11.dto.request.CustomerRequest;
+import com.snackman.datnud11.dto.request.CustomerRequest1;
+import com.snackman.datnud11.utils.DateUtils;
+import com.snackman.datnud11.utils.TimeUtil;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +16,8 @@ import java.util.Date;
 @Entity
 @Table(name = "customers")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Customers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +44,17 @@ public class Customers {
     public String getCreateTimeFormat(){
         SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return fm.format(this.createTime);
+    }
+
+    public Customers(CustomerRequest1 customerRequest){
+        this.id = customerRequest.getId();
+        this.firstName = customerRequest.getFirstName();
+        this.lastName = customerRequest.getLastName();
+        this.phoneNumber = customerRequest.getPhone();
+        this.gender = customerRequest.getGender();
+        this.email = customerRequest.getEmail();
+        this.address = customerRequest.getAddress();
+        this.dateOfBirth = customerRequest.getDateOfBirth();
+        this.status = true;
     }
 }

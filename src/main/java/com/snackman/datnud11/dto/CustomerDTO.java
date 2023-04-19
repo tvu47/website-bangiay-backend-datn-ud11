@@ -19,5 +19,4 @@ public class CustomerDTO {
     private String repassword;
     private String role;
 
-
 }
