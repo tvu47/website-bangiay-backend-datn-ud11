@@ -102,9 +102,9 @@ public class CustomerServiceImp implements CustomerService {
                 customers1.setCreateTime(new Date());
                 Customers customers2 = customersRepository.save(customers1);
 //                send gmail to customer
-                emailSenderService.sendEmail(username,
-                        EmailConstant.EMAIL_REGISTER_SUBJECT,
-                        EmailConstant.EMAIL_REGISTER_BODY);
+//                emailSenderService.sendEmail(username,
+//                        EmailConstant.EMAIL_REGISTER_SUBJECT,
+//                        EmailConstant.EMAIL_REGISTER_BODY);
                 return customers2;
             }
         } catch (UserExistedException e) {
