@@ -165,6 +165,7 @@ public class InventoryServiceImp implements InventoryService {
             sizeOption.setSize(this.sizeService.findById( sizeList, inventory.getSize()));
             sizeOption.setPrice(inventory.getPrice());
             sizeOption.setQuantity(inventory.getQuatity());
+            sizeOption.setImageUrl(inventory.getImage());
             colorOptionTemp.getSizeOptions().add(sizeOption);
         }
         return response;
@@ -270,6 +271,7 @@ public class InventoryServiceImp implements InventoryService {
                         inventory.setSize(size.getId());
                         inventory.setColorName(color.getColorName());
                         inventory.setSizeName(size.getSizeName());
+                        inventory.setImage(data.getImage());
                     } else {
                         inventory.setQuatity(inventory.getQuatity() + data.getQuantity());
                         inventory.setImportTime(new Date());

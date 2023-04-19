@@ -51,6 +51,7 @@ public class ExcelUploadService {
                         case 6 -> inventoryImportExcelDTO.setSize(String.valueOf(cell.getNumericCellValue()));
                         case 7 -> inventoryImportExcelDTO.setQuantity((int) cell.getNumericCellValue());
                         case 8 -> inventoryImportExcelDTO.setPrice(cell.getNumericCellValue());
+                        case 9 -> inventoryImportExcelDTO.setImage(cell.getStringCellValue());
                         default -> {}
                     }
                     cellIndex++;

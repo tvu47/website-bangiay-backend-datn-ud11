@@ -21,4 +21,5 @@ public class InventoryImportExcelDTO {
     private String size;
     private Integer quantity;
     private double price;
+    private String image;
 }

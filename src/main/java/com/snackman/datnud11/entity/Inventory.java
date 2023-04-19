@@ -24,6 +24,9 @@ public class Inventory {
     @Column(name ="status")
     private boolean status;
 
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "sku")
     private String sku;
     @Column(name = "color")
