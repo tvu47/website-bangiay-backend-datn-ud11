@@ -15,6 +15,6 @@ public class CustomerRequest1 {
     private String email;
     private String createTime;
     private Boolean active;
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private String password;
 }
