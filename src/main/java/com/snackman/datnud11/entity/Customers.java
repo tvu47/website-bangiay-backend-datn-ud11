@@ -54,7 +54,7 @@ public class Customers {
         this.gender = customerRequest.getGender();
         this.email = customerRequest.getEmail();
         this.address = customerRequest.getAddress();
-        this.dateOfBirth = customerRequest.getDateOfBirth();
+        this.dateOfBirth = DateUtils.stringToDate( customerRequest.getDateOfBirth());
         this.status = true;
     }
 }
