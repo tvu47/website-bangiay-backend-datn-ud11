@@ -36,8 +36,6 @@ public class ValidateJwtTokenFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
         log.info("-----start validate filter-------");
-        log.info("auth header:   {}", authHeader);
-        log.info("path:   {}", request.getRequestURI());
         // check header have token or not
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
             log.info("authen is require...");
@@ -52,16 +50,12 @@ public class ValidateJwtTokenFilter extends OncePerRequestFilter {
         }catch (ExpiredJwtException e){
             throw new BadCredentialsException("Token has expried ...");
         }
-        log.error("username extract :{}", username);
         // username is define
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         TokenJwt tokenJwt = tokenService.getTokenByUsername(username);
         if (tokenJwt == null){
             throw new BadCredentialsException("Token has expired");
         }
-
-        log.info("token client : {}", jwt);
-        log.info("token database : {}", tokenJwt);
         // check 2 token is the same or not
         if (!tokenJwt.getToken().equals(jwt)){
             throw new BadCredentialsException("token is shit");

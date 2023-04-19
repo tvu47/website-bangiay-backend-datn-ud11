@@ -13,11 +13,12 @@ import java.util.List;
 
 public interface UserService {
     Users findUserByUsername(String user) throws UserNotfoundException;
-    UserDetails getUserDetailFromDB(String username) throws UserNotfoundException, RoleNotFoundException;
+    UserDetails getUserDetailFromDB(String username);
     Users createUsers(String username, String password);
     RoleUser createRoleUser(RoleUser roleUser);
 
     Users IsUserExist(String username) throws UserExistedException;
 
     List<RoleUser> IsRoleUserExist(String username) throws UserExistedException;
+    Users updateUser(Users users);
 }

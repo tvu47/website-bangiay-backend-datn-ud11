@@ -43,12 +43,19 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public Category findByName(List<Category> categoryList, String name) throws Exception {
-        for(Category category : categoryList){
-            if(category.getCategoryName().equals(name)){
+        for (Category category : categoryList) {
+            if (category.getCategoryName().equals(name)) {
                 return category;
             }
         }
         throw new Exception();
+    }
+    
+    public Category findByName(String name) {
+        if (repo.findCategoryByCategoryName(name).isEmpty()){
+            throw new RuntimeException("Category is not exists");
+        }
+        return repo.findCategoryByCategoryName(name).get();
     }
 
     @Override

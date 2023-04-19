@@ -94,10 +94,17 @@ public class CustomerController {
 											@RequestParam(name = "password") String password,
 											@RequestParam(name = "phone") String phoneNumber,
 											@RequestParam(name = "date") String birthday) {
-
 		return new ResponseEntity<>(customerService.register(username, password, phoneNumber,dateUtils.stringToDate(birthday)), HttpStatus.CREATED);
 	}
-
+	@PostMapping("/forgot-password")
+	public ResponseEntity<Boolean> forgotPassword(@RequestParam(name = "username") String username) {
+		return new ResponseEntity<>(customerService.forgetPassword(username), HttpStatus.CREATED);
+	}
+	@PostMapping("/change-password")
+	public ResponseEntity<Boolean> changePassword(@RequestParam(name = "newPassword") String newPassword,
+												  @RequestParam(name = "prePassword") String prePassword) {
+		return new ResponseEntity<>(customerService.changePassword(newPassword, prePassword), HttpStatus.OK);
+	}
 	@PostMapping("/store")
 	public ResponseEntity<CustomerResponse> storeCustomer(@RequestBody CustomerDTO customerDTO){
 		System.out.println(customerDTO);

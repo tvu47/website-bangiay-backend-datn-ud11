@@ -14,6 +14,7 @@ public interface CategoryService {
     void delete(Long id);
 
     Category findById(Long id) throws Exception;
+    Category findByName(String name);
 
     Category findByName(List<Category> categoryList, String name) throws Exception;
 

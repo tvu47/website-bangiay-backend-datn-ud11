@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.CorsWebFilter;
@@ -30,15 +31,7 @@ public class ApplicationConfig {
     UserService userService;
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> {
-            try {
-                return userService.getUserDetailFromDB(username);
-            } catch (UserNotfoundException e) {
-                throw new RuntimeException(e);
-            } catch (RoleNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        };
+        return username -> userService.getUserDetailFromDB(username);
     }
     @Bean
     public AuthenticationProvider authenticationProvider() {

@@ -28,6 +28,8 @@ public interface CustomerService {
 
     Customers findCustomerByEmail(String email) throws UserNotfoundException;
     CustomerResponse login(String username) throws UserNotfoundException;
+    boolean forgetPassword(String username);
+    boolean changePassword(String password, String prePassword);
     Boolean register(String username, String password, String phoneNumber, Date birthday);
 
     String logout();

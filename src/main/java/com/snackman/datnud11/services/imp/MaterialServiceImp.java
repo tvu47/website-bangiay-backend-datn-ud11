@@ -31,7 +31,13 @@ public class MaterialServiceImp implements MaterialService {
 
     @Override
     public Materials save(Materials materials) {
-        return this.repo.save(materials);
+        return this.repo.save(materials);}
+
+    public Materials findMaterialByName(String materialName) {
+        if (repo.findMaterialsByMaterialName(materialName).isEmpty()){
+            throw new RuntimeException("Material is not exists..");
+        }
+        return repo.findMaterialsByMaterialName(materialName).get();
     }
 
     @Override

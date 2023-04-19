@@ -6,10 +6,12 @@ import com.snackman.datnud11.repo.BillDetailsRepository;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,8 +32,6 @@ class DatnUd11ApplicationTests {
 	}
 	@Test
 	public void test_hihi(){
-		List<Count> list = billDetailsRepository.getIdProduct(33L);
-		list.stream().forEach(count -> System.out.println("count is: "+ count.getCount() +". "+count.getProductId()));
 	}
 
 	@Test
@@ -60,7 +60,9 @@ class DatnUd11ApplicationTests {
 
 	@Test
 	public void test_StringToDate(){
-
+		char[] possibleCharacters = (new String("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*")).toCharArray();
+		String randomStr = RandomStringUtils.random( 15, 0, possibleCharacters.length-1, false, false, possibleCharacters, new SecureRandom() );
+		System.out.println( randomStr );
 	}
 	@Test
 	public void test_dateToString(){

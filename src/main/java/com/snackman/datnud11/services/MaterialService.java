@@ -9,6 +9,7 @@ public interface MaterialService {
     Materials findById(Long id) throws Exception;
 
     List<Materials> findAll();
+    Materials findMaterialByName(String materialName);
 
     Materials save(Materials materials);
 
