@@ -6,6 +6,7 @@ import com.snackman.datnud11.entity.Size;
 import com.snackman.datnud11.responses.ProductManagerResponse;
 import com.snackman.datnud11.responses.ProductResponse;
 import com.snackman.datnud11.responses.ProductsResponse;
+import org.apache.commons.math3.stat.descriptive.summary.Product;
 
 import java.util.List;
 import java.util.Map;
@@ -45,4 +46,6 @@ public interface ProductService {
     List<ProductManagerResponse> findAllProductsManager() throws Exception;
 
     List<ProductResponse> listAllProductManager() throws Exception;
+
+    Products findByNameInList(List<Products> list, String name) throws Exception;
 }

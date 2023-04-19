@@ -1,6 +1,7 @@
 package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.entity.Category;
+import com.snackman.datnud11.entity.Materials;
 import com.snackman.datnud11.repo.CategoryRepository;
 import com.snackman.datnud11.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,16 @@ public class CategoryServiceImp implements CategoryService {
             throw new Exception("Not found category " + id);
         }
         return optional.get();
+    }
+
+    @Override
+    public Category findByName(List<Category> categoryList, String name) throws Exception {
+        for(Category category : categoryList){
+            if(category.getCategoryName().equals(name)){
+                return category;
+            }
+        }
+        throw new Exception();
     }
 
     @Override

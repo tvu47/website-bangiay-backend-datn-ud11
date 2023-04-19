@@ -7,6 +7,7 @@ import com.snackman.datnud11.repo.InventoryRepository;
 import com.snackman.datnud11.responses.InventoryResponse;
 import com.snackman.datnud11.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,10 +26,30 @@ public class InventoryServiceImp implements InventoryService {
     private ZProductService zProductService;
 
     @Autowired
+    @Lazy
     private ColorService colorService;
 
+
     @Autowired
+    @Lazy
     private SizeService sizeService;
+
+
+    @Autowired
+    @Lazy
+    private InventoryService inventoryService;
+
+    @Autowired
+    @Lazy
+    private CategoryService categoryService;
+
+    @Autowired
+    @Lazy
+    private MaterialService materialService;
+
+    @Autowired
+    @Lazy
+    private ProductService productService;
 
     @Override
     public Inventory save(Inventory inventory) {
@@ -155,6 +176,107 @@ public class InventoryServiceImp implements InventoryService {
             try {
                 // list data from excel file
                 List<InventoryImportExcelDTO> list = ExcelUploadService.getDataFromExcel(multipartFile.getInputStream());
+                List<Products> products = this.productService.findAll();
+                List<Category> categories = this.categoryService.findAll();
+                List<Materials> materials = this.materialService.findAll();
+                List<Colors> colors = this.colorService.findAll();
+                List<Size> sizes = this.sizeService.findAll();
+                List<Inventory> inventories = this.inventoryService.findAll();
+                for(InventoryImportExcelDTO data : list){
+                    Products prod = null;
+                    Category cate = null;
+                    Materials mate = null;
+                    Colors color = null;
+                    Size size = null;
+                    Inventory inventory = null;
+                    try {
+                        color = this.colorService.findByName(colors, data.getColor());
+                    } catch (Exception e){
+                    }
+                    try {
+                        size = this.sizeService.findByName(sizes, data.getSize());
+                    } catch (Exception e){
+                    }
+                    try {
+                        prod = this.productService.findByNameInList(products, data.getNameProduct());
+                    } catch (Exception e){
+                    }
+                    try {
+                        prod = this.productService.findByNameInList(products, data.getNameProduct());
+                    } catch (Exception e){
+                    }
+                    try {
+                        mate = this.materialService.findByName(materials, data.getMaterial());
+                    } catch (Exception e){
+                    }
+                    try {
+                        cate = this.categoryService.findByName(categories, data.getCategory());
+                    } catch (Exception e){
+                    }
+                    if(color == null){
+                        color = new Colors();
+                        color.setStatus(true);
+                        color.setColorName(data.getColor());
+                        this.colorService.save(color);
+                        colors.add(color);
+                    }
+                    if(size == null){
+                        size = new Size();
+                        size.setActiveStatus(true);
+                        size.setSizeName(data.getSize());
+                        this.sizeService.save(size);
+                        sizes.add(size);
+                    }
+                    if(mate == null){
+                        mate = new Materials();
+                        mate.setStatus(true);
+                        mate.setImportDate(new Date());
+                        mate.setMaterialName(data.getMaterial());
+                        mate.setMaterialLocation("");
+                        this.materialService.save(mate);
+                        materials.add(mate);
+                    }
+                    if(cate == null){
+                        cate = new Category();
+                        cate.setStatus(true);
+                        cate.setCategoryName(data.getCategory());
+                        this.categoryService.save(cate);
+                        categories.add(cate);
+                    }
+                    if(prod == null){
+                        prod = new Products();
+                        prod.setManufactureAddress(data.getManufacture());
+                        prod.setStatus(true);
+                        prod.setContent(data.getContents());
+                        prod.setMaterialId(mate.getId());
+                        prod.setCategoryId(cate.getId());
+                        prod.setProductName(data.getNameProduct());
+                        this.productService.save(prod);
+                        products.add(prod);
+                    }
+                    try {
+                        inventory = this.inventoryService.findBySku("P" + prod.getId() + "C" + color.getId() + "S" + size.getId());
+                    } catch (Exception e){
+                    }
+                    if(inventory == null){
+                        inventory = new Inventory();
+                        inventory.setSku("P" + prod.getId() + "C" + color.getId() + "S" + size.getId());
+                        inventory.setProductId(prod.getId());
+                        inventory.setQuatity(data.getQuantity());
+                        inventory.setPrice(data.getPrice());
+                        inventory.setImportTime(new Date());
+                        inventory.setStatus(true);
+                        inventory.setColor(color.getId());
+                        inventory.setSize(size.getId());
+                        inventory.setColorName(color.getColorName());
+                        inventory.setSizeName(size.getSizeName());
+                    } else {
+                        inventory.setQuatity(inventory.getQuatity() + data.getQuantity());
+                        inventory.setImportTime(new Date());
+                    }
+                    this.inventoryService.save(inventory);
+
+                }
                 // to do ...
 //                this.inventoryImportExcelRepo.saveAll(list);
             } catch (IOException e) {

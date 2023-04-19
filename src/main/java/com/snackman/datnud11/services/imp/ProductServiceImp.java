@@ -206,4 +206,14 @@ public class ProductServiceImp implements ProductService {
         }
         return list;
     }
+
+    @Override
+    public Products findByNameInList(List<Products> list, String name) throws Exception {
+        for(Products products : list){
+            if(products.getProductName().equals(name)){
+                return products;
+            }
+        }
+        throw new Exception();
+    }
 }

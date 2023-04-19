@@ -17,6 +17,8 @@ public interface ColorService {
 
     Colors findById(List<Colors> colorsList, Long id) throws Exception;
 
+    Colors findByName(List<Colors> colorsList, String name) throws Exception;
+
     List<Colors> findAll();
 
     Colors findByColorName(String colorName) throws Exception;

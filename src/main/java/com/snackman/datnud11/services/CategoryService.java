@@ -15,6 +15,8 @@ public interface CategoryService {
 
     Category findById(Long id) throws Exception;
 
+    Category findByName(List<Category> categoryList, String name) throws Exception;
+
     List<Category> findAll();
 
     Category findById(List<Category> categoryList, Long id) throws Exception;
