@@ -44,10 +44,6 @@ public class ProductDetailServiceImp implements ProductDetailService {
     @Autowired
     private ZProductService zProductService;
 
-
-    @Autowired
-    private ProductDetailService productDetailService;
-
     @Override
     public ProductDetail save(ProductDetail productDetail) {
         return this.repo.save(productDetail);
@@ -162,6 +158,7 @@ public class ProductDetailServiceImp implements ProductDetailService {
             sizeOption.setSize(this.sizeService.findById( sizeList, productDetail.getSize()));
             sizeOption.setPrice(productDetail.getPrice());
             sizeOption.setQuantity(productDetail.getQuatity());
+            sizeOption.setImageUrl(productDetail.getImage());
             colorOptionTemp.getSizeOptions().add(sizeOption);
         }
         return response;
@@ -252,7 +249,7 @@ public class ProductDetailServiceImp implements ProductDetailService {
                         products.add(prod);
                     }
                     try {
-                        productDetail = this.productDetailService.findBySku("P" + prod.getId() + "C" + color.getId() + "S" + size.getId());
+                        productDetail = this.findBySku("P" + prod.getId() + "C" + color.getId() + "S" + size.getId());
                     } catch (Exception e){
                     }
                     if(productDetail == null){
@@ -266,7 +263,7 @@ public class ProductDetailServiceImp implements ProductDetailService {
                         productDetail.setColor(color.getId());
                         productDetail.setSize(size.getId());
                         productDetail.setColorName(color.getColorName());
-                        productDetail.setSizeName(size.getSizeName());
+                        productDetail.setSizeName(data.getSize());
                         productDetail.setImage(data.getImage());
                     } else {
                         productDetail.setQuatity(productDetail.getQuatity() + data.getQuantity());
