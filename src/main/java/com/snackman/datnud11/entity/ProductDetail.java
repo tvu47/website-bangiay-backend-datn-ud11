@@ -2,12 +2,14 @@ package com.snackman.datnud11.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "product_detail")
 @Data
+@NoArgsConstructor
 public class ProductDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +39,17 @@ public class ProductDetail {
     private String colorName;
     @Column(name = "size_name")
     private String sizeName;
+
+    public ProductDetail(InventoryImportExcelDTO inventory) {
+        this.id = inventory.getProductDatailId();
+        this.productId = inventory.getProductId();
+        this.sku = inventory.getSku();
+        this.color = inventory.getColor();
+        this.size = inventory.getSize();
+        this.quatity = inventory.getQuantity();
+        this.price = inventory.getPrice();
+        this.image = inventory.getImage();
+        this.importTime = new Date();
+        this.status = true;
+    }
 }

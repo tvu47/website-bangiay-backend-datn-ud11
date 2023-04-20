@@ -28,7 +28,7 @@ public class ExcelUploadService {
 
         try {
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-            XSSFSheet sheet = workbook.getSheet("inventory");
+            XSSFSheet sheet = workbook.getSheet("ProductDetail");
 
             int rowIndex = 0;
             for (Row row: sheet){
@@ -42,16 +42,14 @@ public class ExcelUploadService {
                 while (cellIterator.hasNext()){
                     Cell cell = cellIterator.next();
                     switch (cellIndex){
-                        case 0 -> inventoryImportExcelDTO.setNameProduct(cell.getStringCellValue());
-                        case 1 -> inventoryImportExcelDTO.setCategory(cell.getStringCellValue());
-                        case 2 -> inventoryImportExcelDTO.setMaterial(cell.getStringCellValue());
-                        case 3 -> inventoryImportExcelDTO.setContents(cell.getStringCellValue());
-                        case 4 -> inventoryImportExcelDTO.setManufacture(cell.getStringCellValue());
-                        case 5 -> inventoryImportExcelDTO.setColor(cell.getStringCellValue());
-                        case 6 -> inventoryImportExcelDTO.setSize(String.valueOf(cell.getNumericCellValue()));
-                        case 7 -> inventoryImportExcelDTO.setQuantity((int) cell.getNumericCellValue());
-                        case 8 -> inventoryImportExcelDTO.setPrice(cell.getNumericCellValue());
-                        case 9 -> inventoryImportExcelDTO.setImage(cell.getStringCellValue());
+                        case 0 -> inventoryImportExcelDTO.setProductDatailId((long) cell.getNumericCellValue());
+                        case 1 -> inventoryImportExcelDTO.setSku(cell.getStringCellValue());
+                        case 2 -> inventoryImportExcelDTO.setProductId((long) cell.getNumericCellValue());
+                        case 3 -> inventoryImportExcelDTO.setColor((long) cell.getNumericCellValue());
+                        case 4 -> inventoryImportExcelDTO.setSize((long) cell.getNumericCellValue());
+                        case 5 -> inventoryImportExcelDTO.setQuantity((int) cell.getNumericCellValue());
+                        case 6 -> inventoryImportExcelDTO.setPrice(cell.getNumericCellValue());
+                        case 7 -> inventoryImportExcelDTO.setImage(cell.getStringCellValue());
                         default -> {}
                     }
                     cellIndex++;

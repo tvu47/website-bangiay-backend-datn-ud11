@@ -33,10 +33,10 @@ public class SizeServiceImp implements SizeService {
     }
 
     @Override
-    public Size findById(Long id) throws Exception{
+    public Size findById(Long id) {
         Optional<Size> optional = this.repo.findById(id);
         if(optional.isEmpty()){
-            throw new Exception("Not found size id " + id);
+            throw new RuntimeException("Not found size id " + id);
         }
         return optional.get();
     }
