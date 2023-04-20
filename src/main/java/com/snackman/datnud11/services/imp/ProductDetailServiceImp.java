@@ -26,7 +26,8 @@ public class ProductDetailServiceImp implements ProductDetailService {
     @Autowired
     @Lazy
     private SizeService sizeService;
-	
+
+    @Autowired
     private ProductDetailRepository repo;
 
     @Autowired
