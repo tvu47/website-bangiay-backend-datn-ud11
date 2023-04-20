@@ -52,7 +52,7 @@ public class VoucherServiceImp implements VoucherService {
             response.setStartTime(TimeUtil.formatTime(voucher.getStartTime(), "yyyy-MM-dd"));
             response.setEndTime(TimeUtil.formatTime(voucher.getEndTime(), "yyyy-MM-dd"));
             response.setStatus(voucher.getStatus());
-            response.setOutOfDate(voucher.getEndTime().getTime() > new Date().getTime());
+            response.setOutOfDate(voucher.getEndTime().getTime() < new Date().getTime());
             voucherResponses.add(response);
         }
         return voucherResponses;
