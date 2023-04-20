@@ -187,6 +187,7 @@ public class ProductDetailServiceImp implements ProductDetailService {
             ProductDetail p = new ProductDetail(inventoryImportExcelDTO);
             p.setSizeName(sizeService.findById(inventoryImportExcelDTO.getSize()).getSizeName());
             p.setColorName(colorService.findById(inventoryImportExcelDTO.getColor()).getColorName());
+            p.setQuatity(repo.findById(inventoryImportExcelDTO.getProductDatailId()).get().getQuatity() + inventoryImportExcelDTO.getQuantity());
             productDetailList.add(p);
         });
         return productDetailList;
