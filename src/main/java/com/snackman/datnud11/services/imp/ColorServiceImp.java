@@ -32,10 +32,10 @@ public class ColorServiceImp implements ColorService {
     }
 
     @Override
-    public Colors findById(Long id) throws Exception {
+    public Colors findById(Long id) {
         Optional<Colors> optional = this.repo.findById(id);
         if(optional.isEmpty()){
-            throw new Exception("Not found color id " + id);
+            throw new RuntimeException("Not found color id " + id);
         }
         return optional.get();
     }

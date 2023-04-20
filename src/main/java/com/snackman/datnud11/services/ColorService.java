@@ -13,7 +13,7 @@ public interface ColorService {
 
     void delete(Long id);
 
-    Colors findById(Long id) throws Exception;
+    Colors findById(Long id);
 
     Colors findById(List<Colors> colorsList, Long id) throws Exception;
 

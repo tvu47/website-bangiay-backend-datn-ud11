@@ -12,13 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InventoryImportExcelDTO {
-    private String nameProduct;
-    private String category;
-    private String material;
-    private String contents;
-    private String manufacture;
-    private String color;
-    private String size;
+    private Long productDatailId;
+    private String sku;
+    private Long productId;
+    private Long color;
+    private Long size;
     private Integer quantity;
     private double price;
+    private String image;
 }

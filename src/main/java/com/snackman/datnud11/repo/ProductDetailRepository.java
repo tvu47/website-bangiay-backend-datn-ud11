@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface InventoryRepository extends JpaRepository<ProductDetail, Long> {
+public interface ProductDetailRepository extends JpaRepository<ProductDetail, Long> {
 
-    @Query(value = "select * from inventory where product_id = :id", nativeQuery = true)
+    @Query(value = "select * from product_detail where product_id = :id", nativeQuery = true)
     List<ProductDetail> findByProductId(@Param("id") Long id);
 
-    @Query(value = "select * from inventory where sku = :sku", nativeQuery = true)
+    @Query(value = "select * from product_detail where sku = :sku", nativeQuery = true)
     ProductDetail findBySku(@Param("sku") String sku);
 
 }
