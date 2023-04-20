@@ -132,6 +132,7 @@ public class ProductDetailServiceImp implements ProductDetailService {
             productDetail.setPrice(productDetailDTO.getPrice());
             productDetail.setImportTime(new Date());
             productDetail.setStatus(true);
+            productDetail.setImage(productDetailDTO.getImage());
         }
         this.save(productDetail);
         return productDetail;

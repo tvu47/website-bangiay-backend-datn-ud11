@@ -59,15 +59,7 @@ public class ProductServiceImp implements ProductService {
     @Override
     public Products save(ProductDTO productDTO) {
         Products product = this.repo.save(new Products(productDTO));
-        String[] images = productDTO.getImages().split("\n");
-        for(String imageLink : images){
-            Images img = new Images();
-            img.setProductId(product.getId());
-            img.setImageUrl(imageLink);
-            img.setStatus(true);
-            this.imageService.save(img);
-        }
-        return null;
+        return product;
     }
 
     @Override

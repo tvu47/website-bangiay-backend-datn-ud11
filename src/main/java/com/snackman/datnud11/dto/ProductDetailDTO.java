@@ -14,5 +14,6 @@ public class ProductDetailDTO {
     private String size;
     private Integer quantity;
     private Integer price;
+    private String image;
 
 }
