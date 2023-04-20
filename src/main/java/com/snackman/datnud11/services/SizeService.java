@@ -13,7 +13,7 @@ public interface SizeService {
 
     void delete(Long id);
 
-    Size findById(Long id) throws Exception;
+    Size findById(Long id);
 
     Size findById(List<Size> sizeList, Long id) throws Exception;
     List<Size> findAll();

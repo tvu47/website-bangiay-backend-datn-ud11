@@ -3,7 +3,7 @@ package com.snackman.datnud11.services.imp;
 import com.snackman.datnud11.dto.ProductDetailDTO;
 import com.snackman.datnud11.dto.PaymentDTO;
 import com.snackman.datnud11.entity.*;
-import com.snackman.datnud11.repo.InventoryRepository;
+import com.snackman.datnud11.repo.ProductDetailRepository;
 import com.snackman.datnud11.responses.ProductDetailResponse;
 import com.snackman.datnud11.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.List;
 public class ProductDetailServiceImp implements ProductDetailService {
 
     @Autowired
-    private InventoryRepository repo;
+    private ProductDetailRepository repo;
 
     @Autowired
     private ZProductService zProductService;
@@ -156,11 +156,23 @@ public class ProductDetailServiceImp implements ProductDetailService {
                 // list data from excel file
                 List<InventoryImportExcelDTO> list = ExcelUploadService.getDataFromExcel(multipartFile.getInputStream());
                 // to do ...
-//                this.inventoryImportExcelRepo.saveAll(list);
+                this.repo.saveAll(swap(list));
+            // this.inventoryImportExcelRepo.saveAll(list);
             } catch (IOException e) {
                 e.getStackTrace();
                 throw new IllegalArgumentException("the file is not valid excel");
             }
         }
+    }
+
+    private List<ProductDetail> swap(List<InventoryImportExcelDTO> list){
+        List<ProductDetail> productDetailList = new ArrayList<>();
+        list.stream().forEach(inventoryImportExcelDTO -> {
+            ProductDetail p = new ProductDetail(inventoryImportExcelDTO);
+            p.setSizeName(sizeService.findById(inventoryImportExcelDTO.getSize()).getSizeName());
+            p.setColorName(colorService.findById(inventoryImportExcelDTO.getColor()).getColorName());
+            productDetailList.add(p);
+        });
+        return productDetailList;
     }
 }
