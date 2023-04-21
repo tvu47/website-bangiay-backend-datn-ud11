@@ -19,7 +19,12 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public Category save(Category category) {
-        return this.repo.save(category);
+        try {
+            Category c = this.findByName(category.getCategoryName());
+        } catch (Exception e){
+            this.repo.save(category);
+        }
+        return category;
     }
 
     @Override
