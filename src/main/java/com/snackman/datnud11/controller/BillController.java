@@ -4,8 +4,11 @@ import com.snackman.datnud11.dto.request.DeleteProductInBillRequest;
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.repo.BillRepository;
 import com.snackman.datnud11.responses.BillResponse;
+import com.snackman.datnud11.responses.BillResponseHistory;
+import com.snackman.datnud11.responses.Count;
 import com.snackman.datnud11.responses.NoticeResponse;
 import com.snackman.datnud11.services.BillService;
+import com.snackman.datnud11.utils.TimeUtil;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import com.snackman.datnud11.utils.generic.GenericObjFindById;
 import lombok.extern.slf4j.Slf4j;
@@ -79,8 +82,15 @@ public class BillController {
 		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Xóa thành công!",this.billService.deleteProductInBill(request)), HttpStatus.OK);
 	}
 
-	@PostMapping("statistical")
-	public ResponseEntity<String> thongkeHoaDon(@RequestParam(value = "type") String type) throws Exception {
-		return new ResponseEntity<>("abc", HttpStatus.OK);
+	@PostMapping("/thong-ke-theo-khoang-ngay")
+	public ResponseEntity<Count> thongkeHoaDon(@RequestParam(value = "beginDate") String beginDate,
+													 @RequestParam(value = "endDate") String endDate) {
+		return new ResponseEntity<>(billService.findBillFromBeginDateToEndDate(
+				TimeUtil.strToDate(beginDate, "yyyy-MM-dd"),
+				TimeUtil.strToDate(endDate, "yyyy-MM-dd")), HttpStatus.OK);
+	}
+	@PostMapping("/thong-ke-all")
+	public ResponseEntity<Count> thongkeAll() {
+		return new ResponseEntity<>(billService.findAllBillAmount(), HttpStatus.OK);
 	}
 }

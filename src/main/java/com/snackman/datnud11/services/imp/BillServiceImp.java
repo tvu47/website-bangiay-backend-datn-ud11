@@ -8,7 +8,10 @@ import com.snackman.datnud11.entity.BillDetails;
 import com.snackman.datnud11.entity.ProductDetail;
 import com.snackman.datnud11.entity.Voucher;
 import com.snackman.datnud11.repo.BillRepository;
+import com.snackman.datnud11.repo.VoucherRepository;
 import com.snackman.datnud11.responses.BillResponse;
+import com.snackman.datnud11.responses.BillResponseHistory;
+import com.snackman.datnud11.responses.Count;
 import com.snackman.datnud11.responses.VoucherResponse;
 import com.snackman.datnud11.services.BillDetailService;
 import com.snackman.datnud11.services.BillService;
@@ -20,10 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BillServiceImp implements BillService {
@@ -38,6 +38,8 @@ public class BillServiceImp implements BillService {
 
     @Autowired
     private VoucherService voucherService;
+    @Autowired
+    private VoucherRepository voucherRepository;
 
     @Autowired
     @Lazy
@@ -288,5 +290,40 @@ public class BillServiceImp implements BillService {
         return billResponse;
     }
 
+    @Override
+    public Count findBillFromBeginDateToEndDate(Date start, Date end) {
+        if (end.before(start)){
+            throw new RuntimeException("Start date must before end date.");
+        }
+        Calendar c = Calendar.getInstance();
+        c.setTime(end);
+        c.add(Calendar.DATE, 1);
+        end = c.getTime();
+        Count count = billRepository.tinhTong(start,end);
+        count.setBillResponseHistories(getListBillResposne(billRepository.thongKeHoaDon(start, end)));
+        return count;
+    }
+
+    @Override
+    public Count findAllBillAmount() {
+        Count count = billRepository.tinhTongAll();
+        count.setBillResponseHistories(getListBillResposne(billRepository.findAll()));
+        return count;
+    }
+
+
+    private List<BillResponseHistory> getListBillResposne(List<Bill> bills){
+        List<BillResponseHistory> billResponseHistories = new ArrayList<>();
+        bills.stream().forEach(bill -> {
+
+            BillResponseHistory billResponseHistory = new BillResponseHistory(bill);
+            if (bill.getVoucherId() != -1){
+                billResponseHistory.setVoucher(voucherRepository.findById(bill.getVoucherId()).get());
+            }
+            billResponseHistories.add(billResponseHistory);
+        });
+
+        return billResponseHistories;
+    }
 
 }
