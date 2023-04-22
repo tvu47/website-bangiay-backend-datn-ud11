@@ -4,6 +4,7 @@ import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.exceptions.CustomMessageException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.responses.BillDetailResponse;
+import com.snackman.datnud11.responses.BillResponseHistory;
 import com.snackman.datnud11.responses.HistoryBillResponse;
 import com.snackman.datnud11.responses.HistoryResponse;
 
@@ -12,6 +13,6 @@ import java.util.Map;
 
 public interface HistoryService {
     List<BillDetailResponse> getBillDetailByBill(Long idBill);
-    List<Bill> getBillByIdCustomer(Long idCustomer, int status);
+    List<BillResponseHistory> getBillByIdCustomer(Long idCustomer, int status);
 
 }

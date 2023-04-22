@@ -8,10 +8,7 @@ import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.CustomMessageException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
-import com.snackman.datnud11.responses.BillDetailResponse;
-import com.snackman.datnud11.responses.CustomerResponse;
-import com.snackman.datnud11.responses.HistoryBillResponse;
-import com.snackman.datnud11.responses.HistoryResponse;
+import com.snackman.datnud11.responses.*;
 import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.services.HistoryService;
 import com.snackman.datnud11.services.auth.UserAuth;
@@ -114,7 +111,7 @@ public class CustomerController {
 		return new ResponseEntity<>(customerService.storeCustomer(customerRequest), HttpStatus.CREATED);
 	}
 	@PostMapping("/history-bills")
-	public ResponseEntity<List<Bill>> getBillHistoryByStatus(@RequestParam(name = "status", required = false) String status) {
+	public ResponseEntity<List<BillResponseHistory>> getBillHistoryByStatus(@RequestParam(name = "status", required = false) String status) {
 		UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Long id = customerService.findCustomerByEmail(userAuth.getUsername()).getId();
 		return new ResponseEntity<>(historyService.getBillByIdCustomer(id, Integer.parseInt(status)), HttpStatus.CREATED);
