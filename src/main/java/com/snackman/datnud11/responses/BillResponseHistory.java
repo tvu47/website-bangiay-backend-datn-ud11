@@ -2,6 +2,7 @@ package com.snackman.datnud11.responses;
 
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.entity.Voucher;
+import com.snackman.datnud11.utils.TimeUtil;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class BillResponseHistory {
 
     private String customerName;
 
-    private Date createTime;
+    private String createTime;
 
     private Integer status;
 
@@ -39,7 +40,7 @@ public class BillResponseHistory {
         this.address = bill.getAddress();
         this.email = bill.getAddress();
         this.phone = bill.getPhone();
-        this.createTime = bill.getCreateTime();
+        this.createTime = TimeUtil.formatTime(bill.getCreateTime(), "yyyy-MM-dd");
         this.status = bill.getStatus();
         this.discount = bill.getDiscount();
         this.totalPrice = bill.getTotalPrice();
