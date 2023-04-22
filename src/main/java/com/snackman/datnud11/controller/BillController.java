@@ -79,4 +79,8 @@ public class BillController {
 		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Xóa thành công!",this.billService.deleteProductInBill(request)), HttpStatus.OK);
 	}
 
+	@PostMapping("statistical")
+	public ResponseEntity<Product> thongkeHoaDon(@RequestBody DeleteProductInBillRequest request) throws Exception {
+		return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(),"Xóa thành công!",this.billService.deleteProductInBill(request)), HttpStatus.OK);
+	}
 }
