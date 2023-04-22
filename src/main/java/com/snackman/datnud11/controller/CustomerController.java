@@ -7,6 +7,7 @@ import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.CustomMessageException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
+import com.snackman.datnud11.repo.BillRepository;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.*;
 import com.snackman.datnud11.services.CustomerService;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -40,6 +42,9 @@ public class CustomerController {
 	private DateUtils dateUtils;
 	@Autowired
 	private HistoryService historyService;
+	@Autowired
+	private BillRepository billRepository;
+
 	@GetMapping
 	public ResponseEntity<List<CustomerResponse>> getCustomers() {
 		return new ResponseEntity<>(this.customerService.findAll(), HttpStatus.OK);
@@ -119,5 +124,18 @@ public class CustomerController {
 	@PostMapping("/history-bill-details")
 	public ResponseEntity<List<BillDetailResponse>> getBillDetailByBill(@RequestParam(name = "id", required = false) String idBill) {
 		return new ResponseEntity<>(historyService.getBillDetailByBill(Long.valueOf(idBill)), HttpStatus.CREATED);
+	}
+	@PostMapping("/cancel-bill")
+	public ResponseEntity<String> cancelBill(@RequestParam(name = "id", required = false) String idBill) {
+		Optional<Bill> bill = billRepository.findById(Long.valueOf(idBill));
+		if (bill.isEmpty()){
+			throw new RuntimeException("Something wrong happened. Please try again");
+		}
+		if (bill.get().getStatus()!=0){
+			throw new RuntimeException("Hóa đơn không được phép hủy do đã được xác nhận.");
+		}
+		bill.get().setStatus(2);
+		billRepository.save(bill.get());
+		return new ResponseEntity<>("Hủy đơn hàng thành công", HttpStatus.NO_CONTENT);
 	}
 }
