@@ -19,6 +19,6 @@ public interface UserService {
 
     Users IsUserExist(String username) throws UserExistedException;
 
-    List<RoleUser> IsRoleUserExist(String username) throws UserExistedException;
+    List<RoleUser> IsRoleUserExist(String username);
     Users updateUser(Users users);
 }

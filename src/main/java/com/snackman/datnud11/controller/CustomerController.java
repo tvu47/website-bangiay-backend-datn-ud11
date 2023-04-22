@@ -9,6 +9,7 @@ import com.snackman.datnud11.exceptions.UserNotfoundException;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.BillDetailResponse;
 import com.snackman.datnud11.responses.CustomerResponse;
+import com.snackman.datnud11.responses.HistoryBillResponse;
 import com.snackman.datnud11.responses.HistoryResponse;
 import com.snackman.datnud11.services.CustomerService;
 import com.snackman.datnud11.services.HistoryService;
@@ -113,7 +114,7 @@ public class CustomerController {
 	}
 
 	@PostMapping("/history")
-	public ResponseEntity<Map<Long, List<BillDetailResponse>>> getHistory(@RequestParam(name = "status", required = false) String status) throws UserNotfoundException, CustomMessageException {
+	public ResponseEntity<List<HistoryBillResponse>> getHistory(@RequestParam(name = "status", required = false) String status) throws UserNotfoundException, CustomMessageException {
 		UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return new ResponseEntity<>(historyService.getHistoryPerchaseOfCustomer(userAuth.getUsername(), Integer.parseInt(status)), HttpStatus.CREATED);
 	}
