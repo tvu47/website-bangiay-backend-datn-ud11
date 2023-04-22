@@ -11,6 +11,10 @@ public interface MaterialService {
     List<Materials> findAll();
     Materials findMaterialByName(String materialName);
 
+    Materials save(Materials materials);
+
     Materials findById(List<Materials> materialsList, Long id) throws Exception;
+
+    Materials findByName(List<Materials> materials, String name) throws Exception;
 
 }

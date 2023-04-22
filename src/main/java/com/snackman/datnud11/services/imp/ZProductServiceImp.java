@@ -101,8 +101,9 @@ public class ZProductServiceImp implements ZProductService {
         List<Category> categories = this.categoryService.findAll();
 
         productsList.stream().forEach(products -> {
+            ProductDetail inv = this.productDetailService.findByProductId(productDetailList, products.getId()).get(0);
             ProductsResponse productsResponse = new ProductsResponse(products);
-            productsResponse.setImages(this.imageService.getImagesByProductId(products.getId()));
+            productsResponse.setImages(inv.getImage());
             productsResponse.setCategory(categoryMap.get(products.getCategoryId()));
             productsResponse.setMaterials(materialsMap.get(products.getMaterialId()));
             if(productsResponse.getCategory() == null){

@@ -17,4 +17,6 @@ public class CustomerDTO {
     private String address;
     private String password;
     private String repassword;
+    private String role;
+
 }

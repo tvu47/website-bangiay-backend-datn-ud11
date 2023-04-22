@@ -52,6 +52,16 @@ public class SizeServiceImp implements SizeService {
     }
 
     @Override
+    public Size findByName(List<Size> sizeList, String name) throws Exception {
+        for(Size size : sizeList){
+            if(size.getSizeName().equals(name)){
+                return size;
+            }
+        }
+        throw new Exception();
+    }
+
+    @Override
     public List<Size> findAll() {
         return this.repo.findAll();
     }

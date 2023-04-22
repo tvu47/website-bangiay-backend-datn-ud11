@@ -30,6 +30,9 @@ public class MaterialServiceImp implements MaterialService {
     }
 
     @Override
+    public Materials save(Materials materials) {
+        return this.repo.save(materials);}
+
     public Materials findMaterialByName(String materialName) {
         if (repo.findMaterialsByMaterialName(materialName).isEmpty()){
             throw new RuntimeException("Material is not exists..");
@@ -45,5 +48,15 @@ public class MaterialServiceImp implements MaterialService {
             }
         }
         throw new Exception("not found material id " + id);
+    }
+
+    @Override
+    public Materials findByName(List<Materials> materials, String name) throws Exception {
+        for(Materials mate: materials){
+            if(mate.getMaterialName().equals(name)){
+                return mate;
+            }
+        }
+        throw new Exception("not found material name " + name);
     }
 }

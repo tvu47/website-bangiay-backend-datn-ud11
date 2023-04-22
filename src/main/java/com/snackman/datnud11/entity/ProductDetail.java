@@ -25,6 +25,10 @@ public class ProductDetail {
     private Date importTime;
     @Column(name ="status")
     private boolean status;
+
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "sku")
     private String sku;
     @Column(name = "color")
@@ -35,8 +39,6 @@ public class ProductDetail {
     private String colorName;
     @Column(name = "size_name")
     private String sizeName;
-    @Column(name = "image")
-    private String image;
 
     public ProductDetail(InventoryImportExcelDTO inventory) {
         this.id = inventory.getProductDatailId();

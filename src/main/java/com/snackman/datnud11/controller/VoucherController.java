@@ -1,6 +1,7 @@
 package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.VoucherDTO;
+import com.snackman.datnud11.dto.VoucherUpdateDTO;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.entity.Voucher;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
@@ -34,6 +35,11 @@ public class VoucherController {
         return new ResponseEntity<>(this.service.findAllAvailable(customers.getId()), HttpStatus.OK);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<VoucherResponse> updateVoucher(@RequestBody VoucherUpdateDTO voucherDTO) throws Exception {
+        return new ResponseEntity<>(this.service.update(voucherDTO), HttpStatus.OK);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<VoucherResponse>> getAllVouchers(){
         return new ResponseEntity<>(this.service.findAllVouchers(), HttpStatus.OK);
@@ -43,6 +49,12 @@ public class VoucherController {
     public ResponseEntity<NoticeResponse> addNewVoucher(@RequestBody VoucherDTO voucherDTO) throws Exception {
         VoucherResponse voucher = this.service.save(voucherDTO);
         return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(), "Thêm mới thành công!", voucher), HttpStatus.OK);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<NoticeResponse> deleteVoucher(@PathVariable(name = "id") Long id) throws Exception{
+        this.service.deleteById(id);
+        return ResponseEntity.ok(new NoticeResponse(200,"Xóa thành công!", ""));
     }
 
 }

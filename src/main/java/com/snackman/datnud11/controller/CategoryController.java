@@ -2,6 +2,7 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.CategoryDTO;
 import com.snackman.datnud11.entity.Category;
+import com.snackman.datnud11.responses.NoticeResponse;
 import com.snackman.datnud11.services.CategoryService;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,14 @@ public class CategoryController {
     public ResponseEntity<Category> updateCategory(@RequestBody CategoryDTO categoryDTO) throws CustomNotFoundException {
         return new ResponseEntity<>(this.categoryService.save(new Category(categoryDTO)), HttpStatus.CREATED);
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCatrgoryById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{
+    @PostMapping("/{id}")
+    public ResponseEntity<NoticeResponse> deleteCatrgoryById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{
         this.categoryService.delete(id);
-        return ResponseEntity.ok("Delete successfully!");
+        return ResponseEntity.ok(new NoticeResponse(200, "Xóa thành công!", ""));
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<NoticeResponse> updateCategory2(@RequestBody CategoryDTO categoryDTO) throws Exception{
+        return ResponseEntity.ok(new NoticeResponse(200, "sửa thành công!",this.categoryService.save(new Category(categoryDTO) )));
     }
 }

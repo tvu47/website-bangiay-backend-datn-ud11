@@ -24,6 +24,7 @@ public class ProductDetailResponse {
         private Size size;
         private Integer quantity;
         private Double price;
+        private String imageUrl;
     }
 
 }

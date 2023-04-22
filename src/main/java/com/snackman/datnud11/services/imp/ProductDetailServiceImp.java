@@ -7,6 +7,7 @@ import com.snackman.datnud11.repo.ProductDetailRepository;
 import com.snackman.datnud11.responses.ProductDetailResponse;
 import com.snackman.datnud11.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,18 +18,32 @@ import java.util.List;
 
 @Service
 public class ProductDetailServiceImp implements ProductDetailService {
+    @Autowired
+    @Lazy
+    private ColorService colorService;
+
+
+    @Autowired
+    @Lazy
+    private SizeService sizeService;
 
     @Autowired
     private ProductDetailRepository repo;
 
     @Autowired
+    @Lazy
+    private CategoryService categoryService;
+
+    @Autowired
+    @Lazy
+    private MaterialService materialService;
+
+    @Autowired
+    @Lazy
+    private ProductService productService;
+
+    @Autowired
     private ZProductService zProductService;
-
-    @Autowired
-    private ColorService colorService;
-
-    @Autowired
-    private SizeService sizeService;
 
     @Override
     public ProductDetail save(ProductDetail productDetail) {
@@ -117,6 +132,7 @@ public class ProductDetailServiceImp implements ProductDetailService {
             productDetail.setPrice(productDetailDTO.getPrice());
             productDetail.setImportTime(new Date());
             productDetail.setStatus(true);
+            productDetail.setImage(productDetailDTO.getImage());
         }
         this.save(productDetail);
         return productDetail;
@@ -144,6 +160,7 @@ public class ProductDetailServiceImp implements ProductDetailService {
             sizeOption.setSize(this.sizeService.findById( sizeList, productDetail.getSize()));
             sizeOption.setPrice(productDetail.getPrice());
             sizeOption.setQuantity(productDetail.getQuatity());
+            sizeOption.setImageUrl(productDetail.getImage());
             colorOptionTemp.getSizeOptions().add(sizeOption);
         }
         return response;

@@ -1,6 +1,7 @@
 package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.entity.Category;
+import com.snackman.datnud11.entity.Materials;
 import com.snackman.datnud11.repo.CategoryRepository;
 import com.snackman.datnud11.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,12 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public Category save(Category category) {
-        return this.repo.save(category);
+        try {
+            Category c = this.findByName(category.getCategoryName());
+        } catch (Exception e){
+            this.repo.save(category);
+        }
+        return category;
     }
 
     @Override
@@ -41,6 +47,15 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
+    public Category findByName(List<Category> categoryList, String name) throws Exception {
+        for (Category category : categoryList) {
+            if (category.getCategoryName().equals(name)) {
+                return category;
+            }
+        }
+        throw new Exception();
+    }
+    
     public Category findByName(String name) {
         if (repo.findCategoryByCategoryName(name).isEmpty()){
             throw new RuntimeException("Category is not exists");

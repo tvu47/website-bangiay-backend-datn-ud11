@@ -29,7 +29,7 @@ public class ProductsResponse {
 
     private Boolean status;
 
-    private List<Images> images;
+    private String images;
 
     private List<Size> sizes;
 
