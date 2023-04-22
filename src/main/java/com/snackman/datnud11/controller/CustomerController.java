@@ -119,4 +119,8 @@ public class CustomerController {
 		Long id = customerService.findCustomerByEmail(userAuth.getUsername()).getId();
 		return new ResponseEntity<>(historyService.getBillByIdCustomer(id, Integer.parseInt(status)), HttpStatus.CREATED);
 	}
+	@PostMapping("/history-bill-details")
+	public ResponseEntity<List<BillDetailResponse>> getBillDetailByBill(@RequestParam(name = "id", required = false) String idBill) {
+		return new ResponseEntity<>(historyService.getBillDetailByBill(Long.valueOf(idBill)), HttpStatus.CREATED);
+	}
 }
