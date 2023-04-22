@@ -3,6 +3,7 @@ package com.snackman.datnud11.responses;
 import com.snackman.datnud11.entity.BillDetails;
 import com.snackman.datnud11.entity.Images;
 import com.snackman.datnud11.entity.ProductDetail;
+import com.snackman.datnud11.utils.TimeUtil;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +27,7 @@ public class BillDetailResponse {
     private Double cost;
     private Double saleprice;
     private Double valueDiscount;
-    private Date createTime;
+    private String createTime;
     private Boolean status;
 
     private ProductDetail productDetail;
@@ -40,7 +41,7 @@ public class BillDetailResponse {
         this.cost = billDetails.getCost();
         this.saleprice = billDetails.getSaleprice();
         this.valueDiscount = billDetails.getValueDiscount();
-        this.createTime = billDetails.getCreateTime();
+        this.createTime = TimeUtil.formatTime(billDetails.getCreateTime(), "yyyy-MM-dd");
         this.status = billDetails.getStatus();
         this.idProduct = billDetails.getProductId();
     }
