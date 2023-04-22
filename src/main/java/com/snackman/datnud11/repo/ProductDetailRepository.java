@@ -1,5 +1,6 @@
 package com.snackman.datnud11.repo;
 
+import com.snackman.datnud11.entity.Images;
 import com.snackman.datnud11.entity.ProductDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,9 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetail, Lo
 
     @Query(value = "select * from product_detail where sku = :sku", nativeQuery = true)
     ProductDetail findBySku(@Param("sku") String sku);
+
+    @Query(value = "select * from product_detail where product_id = :productId and color =:colorId LIMIT 1", nativeQuery = true)
+    ProductDetail findProductDetailByProductIdTop1(@Param(value = "productId") Long productId,
+                                               @Param(value = "colorId") Long colorId);
 
 }
