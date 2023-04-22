@@ -19,6 +19,7 @@ public class HandleControllerException {
     public Map<String, String> handleLoginValidErrors(MethodArgumentNotValidException ex) {
         Map<String, String> errorMap = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(fieldError -> {errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());});
+        ex.printStackTrace();
         return errorMap;
     }
 
@@ -27,6 +28,7 @@ public class HandleControllerException {
     public Map<String, String> handleRegisterErrors(UserExistedException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
+        ex.printStackTrace();
         return errorMap;
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -34,6 +36,7 @@ public class HandleControllerException {
     public Map<String, String> handleLoginForAdmin_Errors(UserNotfoundException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
+        ex.printStackTrace();
         return errorMap;
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -41,6 +44,7 @@ public class HandleControllerException {
     public Map<String, String> handleBadLogin_Errors(BadLoginException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
+        ex.printStackTrace();
         return errorMap;
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -48,6 +52,7 @@ public class HandleControllerException {
     public Map<String, String> handleBadRequest_Errors(BadRequestException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
+        ex.printStackTrace();
         return errorMap;
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -55,6 +60,7 @@ public class HandleControllerException {
     public Map<String, String> handleExpireToken_Errors(ExpiredJwtException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
+        ex.printStackTrace();
         return errorMap;
     }
 
@@ -63,6 +69,7 @@ public class HandleControllerException {
     public Map<String, String> handle_Errors(CustomMessageException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
+        ex.printStackTrace();
         return errorMap;
     }
 
@@ -71,6 +78,7 @@ public class HandleControllerException {
     public Map<String, String> handle_Common_Errors(CommonErrorException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
+        ex.printStackTrace();
         return errorMap;
     }
 
@@ -79,6 +87,7 @@ public class HandleControllerException {
     public Map<String, String> handle_All_Errors(RuntimeException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
+        ex.printStackTrace();
         return errorMap;
     }
 
@@ -87,6 +96,7 @@ public class HandleControllerException {
     public Map<String, String> handle_authentication_Errors(AuthenticationException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("error_message", ex.getMessage());
+        ex.printStackTrace();
         return errorMap;
     }
 //    @ResponseStatus(HttpStatus.NOT_FOUND)

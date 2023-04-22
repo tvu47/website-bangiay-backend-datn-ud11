@@ -2,6 +2,7 @@ package com.snackman.datnud11.responses;
 
 import com.snackman.datnud11.entity.BillDetails;
 import com.snackman.datnud11.entity.Images;
+import com.snackman.datnud11.entity.ProductDetail;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class BillDetailResponse {
-    private Images imgProducts;
     private Long idProduct;
     private String colorName;
     private String productName;
@@ -28,6 +28,8 @@ public class BillDetailResponse {
     private Double valueDiscount;
     private Date createTime;
     private Boolean status;
+
+    private ProductDetail productDetail;
 
     public BillDetailResponse(BillDetails billDetails){
         this.productName = billDetails.getProductName();

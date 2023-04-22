@@ -86,10 +86,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public List<RoleUser> IsRoleUserExist(String username) throws UserExistedException {
+    public List<RoleUser> IsRoleUserExist(String username) {
         List<RoleUser> roleUserList = roleUserRepo.findRoleUserByUsername(username);
         if (roleUserList.size() != 0){
-            throw new UserExistedException("role exist on database");
+            throw new RuntimeException("role exist on database");
         }
         return roleUserList;
     }
