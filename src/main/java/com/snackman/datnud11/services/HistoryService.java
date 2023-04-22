@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface HistoryService {
-    List<BillDetailResponse> getBillDetailByBill(Long idBill, int status);
+    List<BillDetailResponse> getBillDetailByBill(Long idBill);
     List<Bill> getBillByIdCustomer(Long idCustomer, int status);
 
 }

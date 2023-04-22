@@ -35,8 +35,8 @@ public class HistoryServiceImp implements HistoryService {
     private final BillRepository billRepository;
 
     @Override
-    public List<BillDetailResponse> getBillDetailByBill(Long idBill, int status) {
-        return getAllBillDetailOfCustomer(idBill, status);
+    public List<BillDetailResponse> getBillDetailByBill(Long idBill) {
+        return getAllBillDetailOfCustomer(idBill);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class HistoryServiceImp implements HistoryService {
         return billDetailResponse;
     }
 
-    private List<BillDetailResponse> getAllBillDetailOfCustomer(Long id, int status) {
+    private List<BillDetailResponse> getAllBillDetailOfCustomer(Long id) {
             List<BillDetailResponse> billDetailsList = getBillDetailByIdBill(id);
             if (billDetailsList.size() != 0){
                 HistoryBillResponse historyBillResponse = new HistoryBillResponse();
