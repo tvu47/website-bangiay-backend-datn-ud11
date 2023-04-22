@@ -3,11 +3,9 @@ package com.snackman.datnud11.services.imp;
 import com.snackman.datnud11.entity.*;
 import com.snackman.datnud11.exceptions.CustomMessageException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
-import com.snackman.datnud11.repo.BillDetailsRepository;
-import com.snackman.datnud11.repo.BillRepository;
-import com.snackman.datnud11.repo.ImagesRepository;
-import com.snackman.datnud11.repo.ProductDetailRepository;
+import com.snackman.datnud11.repo.*;
 import com.snackman.datnud11.responses.BillDetailResponse;
+import com.snackman.datnud11.responses.BillResponseHistory;
 import com.snackman.datnud11.responses.HistoryBillResponse;
 import com.snackman.datnud11.responses.HistoryResponse;
 import com.snackman.datnud11.services.*;
@@ -33,6 +31,7 @@ public class HistoryServiceImp implements HistoryService {
     private final BillDetailsRepository billDetailsRepository;
     private final ProductDetailRepository productDetailRepository;
     private final BillRepository billRepository;
+    private final VoucherRepository voucherRepository;
 
     @Override
     public List<BillDetailResponse> getBillDetailByBill(Long idBill) {
@@ -40,8 +39,17 @@ public class HistoryServiceImp implements HistoryService {
     }
 
     @Override
-    public List<Bill> getBillByIdCustomer(Long idCustomer, int status) {
-        return billRepository.findBillByCustomerId(idCustomer, status);
+    public List<BillResponseHistory> getBillByIdCustomer(Long idCustomer, int status) {
+        List<BillResponseHistory> billResponseHistories = new ArrayList<>();
+        billRepository.findBillByCustomerId(idCustomer, status).stream().forEach(bill -> {
+
+            BillResponseHistory billResponseHistory = new BillResponseHistory(bill);
+            if (bill.getVoucherId() != -1){
+                billResponseHistory.setVoucher(voucherRepository.findById(bill.getVoucherId()).get());
+            }
+            billResponseHistories.add(billResponseHistory);
+        });
+        return billResponseHistories;
     }
 
     private BillDetailResponse swap(BillDetails billDetails, ProductDetail productDetail) {

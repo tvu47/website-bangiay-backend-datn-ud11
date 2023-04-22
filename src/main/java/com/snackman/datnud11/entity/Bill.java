@@ -1,5 +1,6 @@
 package com.snackman.datnud11.entity;
 
+import com.snackman.datnud11.responses.BillResponseHistory;
 import jakarta.persistence.*;
 import lombok.Data;
 
