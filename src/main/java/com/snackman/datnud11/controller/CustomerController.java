@@ -3,6 +3,7 @@ package com.snackman.datnud11.controller;
 import com.snackman.datnud11.dto.CustomerDTO;
 import com.snackman.datnud11.dto.request.CustomerRequest;
 import com.snackman.datnud11.dto.request.CustomerRequest1;
+import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.CustomMessageException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
@@ -112,10 +113,15 @@ public class CustomerController {
 	public ResponseEntity<Customers> storeCustomer(@RequestBody CustomerRequest1 customerRequest){
 		return new ResponseEntity<>(customerService.storeCustomer(customerRequest), HttpStatus.CREATED);
 	}
-
-	@PostMapping("/history")
-	public ResponseEntity<List<HistoryBillResponse>> getHistory(@RequestParam(name = "status", required = false) String status) throws UserNotfoundException, CustomMessageException {
+	@PostMapping("/history-bills")
+	public ResponseEntity<List<Bill>> getBillHistoryByStatus(@RequestParam(name = "status", required = false) String status) {
 		UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return new ResponseEntity<>(historyService.getHistoryPerchaseOfCustomer(userAuth.getUsername(), Integer.parseInt(status)), HttpStatus.CREATED);
+		Long id = customerService.findCustomerByEmail(userAuth.getUsername()).getId();
+		return new ResponseEntity<>(historyService.getBillByIdCustomer(id, Integer.parseInt(status)), HttpStatus.CREATED);
+	}
+	@PostMapping("/history-bill-details")
+	public ResponseEntity<List<BillDetailResponse>> getBillDetailByBill(@RequestParam(name = "status", required = false) String status,
+														  @RequestParam(name = "id", required = false) String idBill) {
+		return new ResponseEntity<>(historyService.getBillDetailByBill(Long.valueOf(idBill), Integer.parseInt(status)), HttpStatus.CREATED);
 	}
 }
