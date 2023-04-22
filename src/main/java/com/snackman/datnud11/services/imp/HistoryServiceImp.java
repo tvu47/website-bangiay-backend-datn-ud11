@@ -35,8 +35,13 @@ public class HistoryServiceImp implements HistoryService {
     private final BillRepository billRepository;
 
     @Override
-    public List<HistoryBillResponse> getHistoryPerchaseOfCustomer(String username, int status) throws UserNotfoundException, CustomMessageException {
-        return getAllBillDetailOfCustomer(username, status);
+    public List<BillDetailResponse> getBillDetailByBill(Long idBill, int status) {
+        return getAllBillDetailOfCustomer(idBill, status);
+    }
+
+    @Override
+    public List<Bill> getBillByIdCustomer(Long idCustomer, int status) {
+        return billRepository.findBillByCustomerId(idCustomer, status);
     }
 
     private BillDetailResponse swap(BillDetails billDetails, ProductDetail productDetail) {
@@ -45,25 +50,13 @@ public class HistoryServiceImp implements HistoryService {
         return billDetailResponse;
     }
 
-    private List<HistoryBillResponse> getAllBillDetailOfCustomer(String username, int status) throws UserNotfoundException, CustomMessageException {
-        Long idCustomer = getIdCustomerByCustomerName(username);
-        List<HistoryBillResponse> historyBillResponses = new ArrayList<>();
-
-        List<Bill> ids = getListIdBillByCustomerId(idCustomer, status);
-
-        ids.stream().forEach(bill -> {
-            List<BillDetailResponse> billDetailsList = getBillDetailByIdBill(bill.getId());
+    private List<BillDetailResponse> getAllBillDetailOfCustomer(Long id, int status) {
+            List<BillDetailResponse> billDetailsList = getBillDetailByIdBill(id);
             if (billDetailsList.size() != 0){
                 HistoryBillResponse historyBillResponse = new HistoryBillResponse();
-                historyBillResponse.setBillId(bill.getId());
-                historyBillResponse.setStatus(bill.getStatus());
                 historyBillResponse.setBillDetail(billDetailsList);
-                historyBillResponse.setCreateTime(bill.getCreateTime());
-                historyBillResponse.setTotalPrice(bill.getTotalPrice());
-                historyBillResponses.add(historyBillResponse);
             }
-        });
-        return historyBillResponses;
+        return billDetailsList;
     }
 
     public Long getIdCustomerByCustomerName(String username) throws UserNotfoundException {
@@ -77,9 +70,6 @@ public class HistoryServiceImp implements HistoryService {
         }else{
             bill= billRepository.findBillByCustomerId(idCustomer, status);
         }
-        if (bill.size() == 0) {
-            throw new CustomMessageException("Chưa mua hàng nên chưa có lịch sử");
-        }
         return bill;
     }
 
@@ -92,7 +82,4 @@ public class HistoryServiceImp implements HistoryService {
         });
         return billDetailResponseList;
     }
-
-
-
 }

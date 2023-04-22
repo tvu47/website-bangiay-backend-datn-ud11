@@ -13,9 +13,5 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class HistoryBillResponse {
-    private Long billId;
-    private int status;
-    private Date createTime;
-    private Double totalPrice;
     List<BillDetailResponse> billDetail;
 }
