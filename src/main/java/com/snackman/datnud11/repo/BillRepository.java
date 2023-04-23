@@ -27,9 +27,12 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     List<Bill> findAllBillByCustomerId(@Param("id") Long id);
 
-    @Query(value = "select * from bill where create_time between :begin and :to", nativeQuery = true)
+    @Query(value = "select * from bill where customer_id = :id and status=:statuss order by create_time desc", nativeQuery = true)
+    List<Bill> findBillByStatus(@Param("statuss") int status);
+    @Query(value = "select * from bill where status=:statuss and create_time between :begin and :to", nativeQuery = true)
     List<Bill> thongKeHoaDon(@Param("begin") @Temporal(TemporalType.TIMESTAMP) Date startDate,
-                             @Param("to") @Temporal(TemporalType.TIMESTAMP) Date endDate);
+                             @Param("to") @Temporal(TemporalType.TIMESTAMP) Date endDate,
+                             @Param("statuss") int status);
 
     @Query(value = "SELECT new com.snackman.datnud11.responses.Count(COUNT(b.id), SUM(b.totalPrice)) FROM Bill b where b.createTime between :begin and :to")
     Count tinhTong(@Param("begin") @Temporal(TemporalType.TIMESTAMP) Date startDate,

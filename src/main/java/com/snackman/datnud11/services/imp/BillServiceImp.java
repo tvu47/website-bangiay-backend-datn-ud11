@@ -51,6 +51,7 @@ public class BillServiceImp implements BillService {
         if (optionalBill.isEmpty()){
             throw new CustomNotFoundException(ErrorMessage.ERROR_MESSAGE_NOT_FOUND.toString());
         }
+
         return optionalBill.get();
     }
 
@@ -300,14 +301,14 @@ public class BillServiceImp implements BillService {
         c.add(Calendar.DATE, 1);
         end = c.getTime();
         Count count = billRepository.tinhTong(start,end);
-        count.setBillResponseHistories(getListBillResposne(billRepository.thongKeHoaDon(start, end)));
+        count.setBillResponseHistories(getListBillResposne(billRepository.thongKeHoaDon(start, end, 3)));
         return count;
     }
 
     @Override
     public Count findAllBillAmount() {
         Count count = billRepository.tinhTongAll();
-        count.setBillResponseHistories(getListBillResposne(billRepository.findAll()));
+        count.setBillResponseHistories(getListBillResposne(billRepository.findBillByStatus(3)));
         return count;
     }
 
