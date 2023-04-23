@@ -3,11 +3,15 @@ package com.snackman.datnud11.repo;
 
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.entity.BillDetails;
+import com.snackman.datnud11.responses.Count;
+import jakarta.persistence.TemporalType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -22,4 +26,15 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     List<Bill> findAllByStatus(@Param("statuss") int status);
 
     List<Bill> findAllBillByCustomerId(@Param("id") Long id);
+
+    @Query(value = "select * from bill where create_time between :begin and :to", nativeQuery = true)
+    List<Bill> thongKeHoaDon(@Param("begin") @Temporal(TemporalType.TIMESTAMP) Date startDate,
+                             @Param("to") @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
+    @Query(value = "SELECT new com.snackman.datnud11.responses.Count(COUNT(b.id), SUM(b.totalPrice)) FROM Bill b where b.createTime between :begin and :to")
+    Count tinhTong(@Param("begin") @Temporal(TemporalType.TIMESTAMP) Date startDate,
+                   @Param("to") @Temporal(TemporalType.TIMESTAMP) Date endDate);
+
+    @Query(value = "SELECT new com.snackman.datnud11.responses.Count(COUNT(b.id), SUM(b.totalPrice)) FROM Bill b")
+    Count tinhTongAll();
 }

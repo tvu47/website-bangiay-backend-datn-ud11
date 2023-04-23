@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 		"com.snackman.datnud11.filters",
 		"com.snackman.datnud11.services.imp",
 		"com.snackman.datnud11.services",
+		"com.snackman.datnud11.responses",
 		"com.snackman.datnud11.utils",
 		"com.snackman.datnud11.config"})
 @EnableJpaRepositories
