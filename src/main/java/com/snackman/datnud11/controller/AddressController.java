@@ -31,7 +31,7 @@ public class AddressController {
         return new ResponseEntity<>(repository.findAddressByCustomerId(customers.getId()).get(), HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<Address> createAddressWithIdCustomer(@RequestBody String address) {
+    public ResponseEntity<Address> createAddressWithIdCustomer(@RequestParam(value = "address", required = false) String address) {
         UserAuth user = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Customers customers = customerService.findCustomerByEmail(user.getUsername());
         Address address1 = new Address();
