@@ -45,8 +45,8 @@ public class AddressController {
         return new ResponseEntity<>(repository.save(address), HttpStatus.CREATED);
     }
     @DeleteMapping
-    public ResponseEntity<?> deleteAddress(@RequestBody Address address) {
-        repository.deleteById(address.getId());
-        return new ResponseEntity<>("Delete success.", HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> deleteAddress(@RequestParam(value = "id") Long id) {
+        repository.deleteById(id);
+        return new ResponseEntity<>("address deleted.", HttpStatus.NO_CONTENT);
     }
 }
