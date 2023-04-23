@@ -300,18 +300,17 @@ public class BillServiceImp implements BillService {
         c.setTime(end);
         c.add(Calendar.DATE, 1);
         end = c.getTime();
-        Count count = billRepository.tinhTong(start,end);
+        Count count = billRepository.tinhTong(start,end, 3);
         count.setBillResponseHistories(getListBillResposne(billRepository.thongKeHoaDon(start, end, 3)));
         return count;
     }
 
     @Override
     public Count findAllBillAmount() {
-        Count count = billRepository.tinhTongAll();
+        Count count = billRepository.tinhTongAll(3);
         count.setBillResponseHistories(getListBillResposne(billRepository.findBillByStatus(3)));
         return count;
     }
-
 
     private List<BillResponseHistory> getListBillResposne(List<Bill> bills){
         List<BillResponseHistory> billResponseHistories = new ArrayList<>();
