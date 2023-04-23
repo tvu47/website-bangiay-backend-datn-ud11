@@ -2,6 +2,7 @@ package com.snackman.datnud11.entity;
 
 import com.snackman.datnud11.dto.request.CustomerRequest;
 import com.snackman.datnud11.dto.request.CustomerRequest1;
+import com.snackman.datnud11.dto.request.CustomerRequest2;
 import com.snackman.datnud11.utils.DateUtils;
 import com.snackman.datnud11.utils.TimeUtil;
 import jakarta.persistence.*;
@@ -41,6 +42,7 @@ public class Customers {
     private Date dateOfBirth;
     @Column(name = "status")
     private Boolean status;
+
     public String getCreateTimeFormat(){
         SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return fm.format(this.createTime);
@@ -54,6 +56,16 @@ public class Customers {
         this.gender = customerRequest.getGender();
         this.email = customerRequest.getEmail();
         this.address = customerRequest.getAddress();
+        this.dateOfBirth = DateUtils.stringToDate( customerRequest.getDateOfBirth());
+        this.status = true;
+    }
+    public Customers(CustomerRequest2 customerRequest){
+        this.id = customerRequest.getId();
+        this.firstName = customerRequest.getFirstName();
+        this.lastName = customerRequest.getLastName();
+        this.phoneNumber = customerRequest.getPhone();
+        this.gender = customerRequest.getGender();
+        this.email = customerRequest.getEmail();
         this.dateOfBirth = DateUtils.stringToDate( customerRequest.getDateOfBirth());
         this.status = true;
     }

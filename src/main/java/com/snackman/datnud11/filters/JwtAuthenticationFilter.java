@@ -92,7 +92,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                               HttpServletResponse response,
                                               AuthenticationException failed) throws IOException, ServletException {
         log.info("authentication false !!!");
-        throw failed;
+        throw new RuntimeException("username or password is wrong.");
     }
 
     @Override
