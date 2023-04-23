@@ -6,6 +6,7 @@ import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.responses.BillResponse;
 import com.snackman.datnud11.responses.BillResponseHistory;
 import com.snackman.datnud11.responses.Count;
+import com.snackman.datnud11.responses.ProductDetailThongKeResponse;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
 import org.apache.xmlbeans.impl.store.Locale;
 
@@ -37,4 +38,7 @@ public interface BillService{
     Count findBillFromBeginDateToEndDate(Date start, Date end);
 
     Count findAllBillAmount();
+
+    ProductDetailThongKeResponse getProductThongKe();
+    ProductDetailThongKeResponse getProductThongKeTheoKhoangNgay(Date start, Date end);
 }
