@@ -68,7 +68,7 @@ public class SecurityConfiguration {
                     "/api/v1/products/**","/api/v1/inventory/**","/api/v1/payment/**","/api/v1/category/**")
             .permitAll()
             .requestMatchers("/api/v1/card","api/v1/customers/history","api/v1/customers/history-bills","api/v1/customers/history-bill-details",
-                    "api/v1/customers/logout","/api/v1/customers/login","/api/v1/customers/change-password").hasAuthority("CLIENT_ROLE")
+                    "api/v1/customers/logout","/api/v1/customers/login","/api/v1/customers/change-password","/api/v1/address/**").hasAuthority("CLIENT_ROLE")
             .requestMatchers(HttpMethod.PUT,"/api/v1/customers").hasAuthority("CLIENT_ROLE")
             .anyRequest()
             .authenticated()

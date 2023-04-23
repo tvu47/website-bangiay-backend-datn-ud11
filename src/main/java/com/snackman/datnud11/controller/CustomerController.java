@@ -3,10 +3,14 @@ package com.snackman.datnud11.controller;
 import com.snackman.datnud11.dto.CustomerDTO;
 import com.snackman.datnud11.dto.request.CustomerRequest;
 import com.snackman.datnud11.dto.request.CustomerRequest1;
+import com.snackman.datnud11.dto.request.CustomerRequest2;
+import com.snackman.datnud11.dto.request.CustomerRequestAdvand;
+import com.snackman.datnud11.entity.Address;
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.entity.Customers;
 import com.snackman.datnud11.exceptions.CustomMessageException;
 import com.snackman.datnud11.exceptions.UserNotfoundException;
+import com.snackman.datnud11.repo.AddressRepository;
 import com.snackman.datnud11.repo.BillRepository;
 import com.snackman.datnud11.repo.CustomersRepository;
 import com.snackman.datnud11.responses.*;
@@ -44,6 +48,8 @@ public class CustomerController {
 	private HistoryService historyService;
 	@Autowired
 	private BillRepository billRepository;
+	@Autowired
+	private AddressRepository addressRepository;
 
 	@GetMapping
 	public ResponseEntity<List<CustomerResponse>> getCustomers() {
@@ -115,6 +121,10 @@ public class CustomerController {
 	public ResponseEntity<Customers> storeCustomer(@RequestBody CustomerRequest1 customerRequest){
 		return new ResponseEntity<>(customerService.storeCustomer(customerRequest), HttpStatus.CREATED);
 	}
+	@PostMapping("/store-advand")
+	public ResponseEntity<Customers> storeAdvandCustomer(@RequestBody CustomerRequest2 customerRequest){
+		return new ResponseEntity<>(customerService.storeCustomerAdvand(customerRequest), HttpStatus.CREATED);
+	}
 	@PostMapping("/history-bills")
 	public ResponseEntity<List<BillResponseHistory>> getBillHistoryByStatus(@RequestParam(name = "status", required = false) String status) {
 		UserAuth userAuth = (UserAuth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -138,4 +148,29 @@ public class CustomerController {
 		billRepository.save(bill.get());
 		return new ResponseEntity<>("Hủy đơn hàng thành công", HttpStatus.NO_CONTENT);
 	}
+
+	@PutMapping("/test")
+	public ResponseEntity<Customers> updateCustomerByIdAdvand(@RequestBody CustomerRequestAdvand customers)
+			throws CustomNotFoundException {
+		System.out.println("----update customer begin----");
+		log.info("update body: {}", customers);
+		customerService.checkCustomerExist(customers.getId());
+		Customers customers1 = new Customers();
+		if (customers.getCreateTime() == null){
+			customers1.setCreateTime(new Date());
+		}
+		customers1.setEmail(customers.getEmail());
+		customers1.setFirstName(customers.getFirstName());
+		customers1.setLastName(customers.getLastName());
+		customers1.setId(customers.getId());
+		customers1.setGender(Integer.parseInt(customers.getGender()));
+		customers1.setDateOfBirth(customers.getDateOfBirth());
+		customers1.setPhoneNumber(customers.getPhone());
+		customers1.setStatus(customers.getActive());
+
+
+
+		return new ResponseEntity<>(customerService.updateCustomer(customers1), HttpStatus.CREATED);
+	}
+
 }
