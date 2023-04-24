@@ -309,9 +309,30 @@ public class BillServiceImp implements BillService {
     }
 
     @Override
+    public Count findBillFromBeginDateToEndDateHuy(Date start, Date end) {
+        if (end.before(start)){
+            throw new RuntimeException("Start date must before end date.");
+        }
+        Calendar c = Calendar.getInstance();
+        c.setTime(end);
+        c.add(Calendar.DATE, 1);
+        end = c.getTime();
+        Count count = billRepository.tinhTong(start, end,2);
+        count.setBillResponseHistories(getListBillResposne(billRepository.thongKeHoaDon(start, end,2)));
+        return count;
+    }
+
+    @Override
     public Count findAllBillAmount() {
         Count count = billRepository.tinhTongAll(3);
         count.setBillResponseHistories(getListBillResposne(billRepository.findBillByStatus(3)));
+        return count;
+    }
+
+    @Override
+    public Count findAllBillAmountHuy() {
+        Count count = billRepository.tinhTongAll(2);
+        count.setBillResponseHistories(getListBillResposne(billRepository.findBillByStatus(2)));
         return count;
     }
 

@@ -36,8 +36,9 @@ public interface BillService{
     BillResponse deleteProductInBill(DeleteProductInBillRequest request) throws Exception;
 
     Count findBillFromBeginDateToEndDate(Date start, Date end);
-
+    Count findBillFromBeginDateToEndDateHuy(Date start, Date end);
     Count findAllBillAmount();
+    Count findAllBillAmountHuy();
 
     ProductDetailThongKeResponse getProductThongKe();
     ProductDetailThongKeResponse getProductThongKeTheoKhoangNgay(Date start, Date end);

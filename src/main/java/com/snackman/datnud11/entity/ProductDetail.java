@@ -46,7 +46,6 @@ public class ProductDetail {
         this.sku = inventory.getSku();
         this.color = inventory.getColor();
         this.size = inventory.getSize();
-        this.quatity = inventory.getQuantity();
         this.price = inventory.getPrice();
         this.image = inventory.getImage();
         this.importTime = new Date();

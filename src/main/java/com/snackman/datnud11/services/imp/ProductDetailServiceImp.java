@@ -6,6 +6,7 @@ import com.snackman.datnud11.entity.*;
 import com.snackman.datnud11.repo.ProductDetailRepository;
 import com.snackman.datnud11.responses.ProductDetailResponse;
 import com.snackman.datnud11.services.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductDetailServiceImp implements ProductDetailService {
     @Autowired
     @Lazy
@@ -186,9 +188,16 @@ public class ProductDetailServiceImp implements ProductDetailService {
         List<ProductDetail> productDetailList = new ArrayList<>();
         list.stream().forEach(inventoryImportExcelDTO -> {
             ProductDetail p = new ProductDetail(inventoryImportExcelDTO);
-            p.setSizeName(sizeService.findById(inventoryImportExcelDTO.getSize()).getSizeName());
-            p.setColorName(colorService.findById(inventoryImportExcelDTO.getColor()).getColorName());
-            p.setQuatity(repo.findById(inventoryImportExcelDTO.getProductDatailId()).get().getQuatity() + inventoryImportExcelDTO.getQuantity());
+            try {
+                String sizeName = sizeService.findById(inventoryImportExcelDTO.getSize()).getSizeName();
+                p.setSizeName(sizeName);
+                String colorName = colorService.findById(inventoryImportExcelDTO.getColor()).getColorName();
+                p.setColorName(colorName);
+                int quatity = repo.findById(inventoryImportExcelDTO.getProductDatailId()).get().getQuatity() + inventoryImportExcelDTO.getQuantity();
+                p.setQuatity(quatity);
+            }catch (Exception e){
+                throw new RuntimeException("Something wrong in excel file template.");
+            }
             productDetailList.add(p);
         });
         return productDetailList;

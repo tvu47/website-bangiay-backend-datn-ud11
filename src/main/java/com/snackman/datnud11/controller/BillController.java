@@ -91,6 +91,18 @@ public class BillController {
 		return new ResponseEntity<>(billService.findAllBillAmount(), HttpStatus.OK);
 	}
 
+	@PostMapping("/thong-ke-theo-khoang-ngay-huy")
+	public ResponseEntity<Count> thongkeHoaDonHuy(@RequestParam(value = "beginDate") String beginDate,
+											   @RequestParam(value = "endDate") String endDate) {
+		return new ResponseEntity<>(billService.findBillFromBeginDateToEndDateHuy(
+				TimeUtil.strToDate(beginDate, "yyyy-MM-dd"),
+				TimeUtil.strToDate(endDate, "yyyy-MM-dd")), HttpStatus.OK);
+	}
+	@PostMapping("/thong-ke-all-huy")
+	public ResponseEntity<Count> thongkeAllHuy() {
+		return new ResponseEntity<>(billService.findAllBillAmountHuy(), HttpStatus.OK);
+	}
+
 	@PostMapping("/thong-ke-product")
 	public ResponseEntity<ProductDetailThongKeResponse> thongkeProductAll() {
 		return new ResponseEntity<>(billService.getProductThongKe(), HttpStatus.OK);
