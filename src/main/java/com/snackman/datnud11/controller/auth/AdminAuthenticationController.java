@@ -26,6 +26,7 @@ public class AdminAuthenticationController {
   private final UserAuthenticationService service;
   @PostMapping("/login")
   public ResponseEntity<AdminUserResponse> login(@RequestAttribute(name = "token") String token) throws UserNotfoundException, RoleNotFoundException, BadLoginException, JwtTokenException {
+    System.out.println("---login---");
     AdminUserResponse adminUserResponse = service.getAdminLogin(token);
     return new ResponseEntity<>(adminUserResponse, HttpStatus.OK);
   }

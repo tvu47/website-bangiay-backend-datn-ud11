@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class UserAuthenticationService {
-  public AdminUserResponse getAdminLogin(String token) throws UserNotfoundException, RoleNotFoundException, BadLoginException, JwtTokenException {
+  public AdminUserResponse getAdminLogin(String token) throws UserNotfoundException, RoleNotFoundException {
     return AdminUserResponse.builder()
             .token(token)
             .build();

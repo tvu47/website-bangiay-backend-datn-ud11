@@ -77,10 +77,10 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public Users IsUserExist(String username) throws UserExistedException {
+    public Users IsUserExist(String username) {
         Users usersOptional = userRepository.findUsersByUsername(username);
         if (usersOptional != null){
-            throw new UserExistedException("User exist on database");
+            throw new RuntimeException("User exist on database");
         }
         return usersOptional;
     }

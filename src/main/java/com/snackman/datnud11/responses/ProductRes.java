@@ -14,12 +14,13 @@ public class ProductRes {
     private String productName;
     private String colorName;
     private String sizeName;
+    private Long totalQuantity;
     private int quantity;
     private double cost;
     private double salePrice;
     private Date createTime;
 
-    public ProductRes(BillDetails billDetails) {
+    public ProductRes(BillDetailThongKeResponse billDetails) {
         this.productName = billDetails.getProductName();
         this.colorName = billDetails.getColorName();
         this.sizeName = billDetails.getSizeName();
@@ -27,5 +28,6 @@ public class ProductRes {
         this.createTime = billDetails.getCreateTime();
         this.quantity = billDetails.getQuantity();
         this.cost = billDetails.getCost();
+        this.totalQuantity = billDetails.getTotalQuantity();
     }
 }

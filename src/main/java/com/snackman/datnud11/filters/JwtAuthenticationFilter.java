@@ -51,10 +51,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             if (request.getServletPath().equals("/api/v1/admin/login")){
                 log.info("----role admin---"+userAuth.getAuthorities());
 
-                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority("ADMIN_ROLE"));
-                authenticationToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
-            }else {
+//                Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//                authorities.add(new SimpleGrantedAuthority("ADMIN_ROLE"));
+                authenticationToken = new UsernamePasswordAuthenticationToken(username, password, userAuth.getAuthorities());
+            } else {
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("CLIENT_ROLE"));
 
