@@ -14,6 +14,7 @@ public class ProductRes {
     private String productName;
     private String colorName;
     private String sizeName;
+//    private Long totalQuantity;
     private int quantity;
     private double cost;
     private double salePrice;
