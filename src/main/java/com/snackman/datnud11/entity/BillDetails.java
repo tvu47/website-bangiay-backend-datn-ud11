@@ -2,11 +2,13 @@ package com.snackman.datnud11.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "bill_details")
+@NoArgsConstructor
 @Data
 public class BillDetails {
     @Id
