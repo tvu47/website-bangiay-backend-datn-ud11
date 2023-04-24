@@ -22,6 +22,9 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
     @Query(value = "select * from bill order by status asc, create_time desc", nativeQuery = true)
     List<Bill> findAllOrderByStatus();
 
+    @Query(value = "select * from bill where customer_name = :find or phone = :find", nativeQuery = true)
+    List<Bill> findByNameOrPhone(@Param("find") String find);
+
     @Query(value = "select * from bill where status = :statuss order by create_time desc", nativeQuery = true)
     List<Bill> findAllByStatus(@Param("statuss") int status);
 

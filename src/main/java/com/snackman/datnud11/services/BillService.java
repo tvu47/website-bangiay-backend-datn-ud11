@@ -31,6 +31,8 @@ public interface BillService{
     Bill deliverBill(Long id) throws Exception;
 
     List<BillResponse> getAllBill() throws Exception;
+
+    List<BillResponse> findByNameOrPhone(String find) throws Exception;
     List<BillResponse> getAllBillByStatus(Integer status) throws Exception;
 
     BillResponse deleteProductInBill(DeleteProductInBillRequest request) throws Exception;

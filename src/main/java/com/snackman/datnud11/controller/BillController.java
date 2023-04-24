@@ -115,4 +115,9 @@ public class BillController {
 				TimeUtil.strToDate(beginDate, "yyyy-MM-dd"),
 				TimeUtil.strToDate(endDate, "yyyy-MM-dd")), HttpStatus.OK);
 	}
+
+	@PostMapping("/find-by-name-or-phone")
+	public ResponseEntity<List<BillResponse>> findByNameOrPhone(@RequestParam(value = "find", required = true)String find) throws Exception {
+		return new ResponseEntity<>(this.billService.findByNameOrPhone(find), HttpStatus.OK);
+	}
 }

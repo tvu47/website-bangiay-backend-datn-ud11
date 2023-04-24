@@ -174,6 +174,40 @@ public class BillServiceImp implements BillService {
 
 
     @Override
+    public List<BillResponse> findByNameOrPhone(String find) throws Exception{
+        List<BillResponse> bills = new ArrayList<>();
+        List<Bill> list = this.billRepository.findByNameOrPhone(find);
+
+        for(Bill b : list){
+            BillResponse billResponse = new BillResponse();
+            billResponse.setId(b.getId());
+            billResponse.setCustomerName(b.getCustomerName());
+            billResponse.setStatus(b.getStatus());
+            billResponse.setEmail(b.getEmail());
+            billResponse.setPhone(b.getPhone());
+            billResponse.setAddress(b.getAddress());
+            billResponse.setCreateTime(b.getCreateTimeFormat());
+            billResponse.setDetails(this.billDetailService.findByBillId(b.getId()));
+
+            if(b.getVoucherId() != -1){
+                try {
+                    Voucher voucher = this.voucherService.findById(b.getVoucherId());
+                    VoucherResponse voucherResponse = new VoucherResponse();
+                    voucherResponse.setId(voucher.getId());
+                    voucherResponse.setCode(voucher.getCode());
+                    voucherResponse.setValue(voucher.getValue());
+                    billResponse.setVoucher(voucherResponse);
+                }catch (Exception e){
+                }
+                billResponse.setDiscount(b.getDiscount());
+            }
+
+            bills.add(billResponse);
+        }
+
+        return bills;
+    }
+    @Override
     public List<BillResponse> getAllBill() throws Exception {
         List<BillResponse> bills = new ArrayList<>();
         List<Bill> list = this.billRepository.findAllOrderByStatus();
