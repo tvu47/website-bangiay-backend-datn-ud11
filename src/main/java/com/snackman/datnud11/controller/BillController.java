@@ -3,10 +3,7 @@ package com.snackman.datnud11.controller;
 import com.snackman.datnud11.dto.request.DeleteProductInBillRequest;
 import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.repo.BillRepository;
-import com.snackman.datnud11.responses.BillResponse;
-import com.snackman.datnud11.responses.BillResponseHistory;
-import com.snackman.datnud11.responses.Count;
-import com.snackman.datnud11.responses.NoticeResponse;
+import com.snackman.datnud11.responses.*;
 import com.snackman.datnud11.services.BillService;
 import com.snackman.datnud11.utils.TimeUtil;
 import com.snackman.datnud11.utils.customException.CustomNotFoundException;
@@ -92,5 +89,18 @@ public class BillController {
 	@PostMapping("/thong-ke-all")
 	public ResponseEntity<Count> thongkeAll() {
 		return new ResponseEntity<>(billService.findAllBillAmount(), HttpStatus.OK);
+	}
+
+	@PostMapping("/thong-ke-product")
+	public ResponseEntity<ProductDetailThongKeResponse> thongkeProductAll() {
+		return new ResponseEntity<>(billService.getProductThongKe(), HttpStatus.OK);
+	}
+
+	@PostMapping("/thong-ke-product-theo-khoang-ngay")
+	public ResponseEntity<ProductDetailThongKeResponse> thongkeProductTheoKhoangNgay(@RequestParam(value = "beginDate") String beginDate,
+																					 @RequestParam(value = "endDate") String endDate) {
+		return new ResponseEntity<>(billService.getProductThongKeTheoKhoangNgay(
+				TimeUtil.strToDate(beginDate, "yyyy-MM-dd"),
+				TimeUtil.strToDate(endDate, "yyyy-MM-dd")), HttpStatus.OK);
 	}
 }

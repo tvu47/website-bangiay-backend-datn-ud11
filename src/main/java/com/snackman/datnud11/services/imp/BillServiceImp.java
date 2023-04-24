@@ -7,12 +7,8 @@ import com.snackman.datnud11.entity.Bill;
 import com.snackman.datnud11.entity.BillDetails;
 import com.snackman.datnud11.entity.ProductDetail;
 import com.snackman.datnud11.entity.Voucher;
-import com.snackman.datnud11.repo.BillRepository;
-import com.snackman.datnud11.repo.VoucherRepository;
-import com.snackman.datnud11.responses.BillResponse;
-import com.snackman.datnud11.responses.BillResponseHistory;
-import com.snackman.datnud11.responses.Count;
-import com.snackman.datnud11.responses.VoucherResponse;
+import com.snackman.datnud11.repo.*;
+import com.snackman.datnud11.responses.*;
 import com.snackman.datnud11.services.BillDetailService;
 import com.snackman.datnud11.services.BillService;
 import com.snackman.datnud11.services.ProductDetailService;
@@ -37,9 +33,16 @@ public class BillServiceImp implements BillService {
     private ProductDetailService productDetailService;
 
     @Autowired
+    private ProductsRepository productsRepository;
+
+    @Autowired
+    private ProductDetailRepository productDetailRepository;
+    @Autowired
     private VoucherService voucherService;
     @Autowired
     private VoucherRepository voucherRepository;
+    @Autowired
+    private BillDetailsRepository billDetailsRepository;
 
     @Autowired
     @Lazy
@@ -326,4 +329,52 @@ public class BillServiceImp implements BillService {
         return billResponseHistories;
     }
 
+    @Override
+    public ProductDetailThongKeResponse getProductThongKe(){
+        List<Long> listIdBill = getListIdBill();
+        ProductDetailThongKeResponse response = billDetailsRepository.getSumPriceProduct(listIdBill);
+
+        response.setProducts(getProductResList(listIdBill));
+        return response;
+    }
+
+    @Override
+    public ProductDetailThongKeResponse getProductThongKeTheoKhoangNgay(Date start, Date end) {
+        List<Long> listIdBill = getListIdBillTheoNgay(start, end);
+        ProductDetailThongKeResponse response = billDetailsRepository.getSumPriceProduct(listIdBill);
+
+        response.setProducts(getProductResList(listIdBill));
+        return response;
+    }
+
+    private List<ProductRes> getProductResList(List<Long> listLong){
+        List<ProductRes> list = new ArrayList<>();
+        billDetailsRepository.getBillDetailsByListIDBill(listLong).stream().forEach(billDetails -> {
+            ProductRes productRes = new ProductRes(billDetails);
+            list.add(productRes);
+        });
+        return list;
+    }
+    private List<Long> getListIdBill(){
+
+        List<Long> longList = new ArrayList<>();
+        billRepository.findBillByStatus(3).stream().forEach(bill -> {
+            longList.add(bill.getId());
+        });
+        return longList;
+    }
+    private List<Long> getListIdBillTheoNgay(Date start, Date end){
+        List<Long> longList = new ArrayList<>();
+        if (end.before(start)){
+            throw new RuntimeException("Start date must before end date.");
+        }
+        Calendar c = Calendar.getInstance();
+        c.setTime(end);
+        c.add(Calendar.DATE, 1);
+        end = c.getTime();
+        billRepository.thongKeHoaDon(start,end, 3).stream().forEach(bill -> {
+            longList.add(bill.getId());
+        });
+        return longList;
+    }
 }
