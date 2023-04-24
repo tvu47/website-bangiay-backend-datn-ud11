@@ -39,7 +39,7 @@ public class BillDetailController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> DeleteBillDetailById(@PathVariable(name = "id") Long id)
+	public ResponseEntity<String> deleteBillDetailById(@PathVariable(name = "id") Long id)
 			throws CustomNotFoundException {
 		BillDetails bill = billDetailService.checkBillDetailsExist(id);
 		billDetailsRepository.delete(bill);
