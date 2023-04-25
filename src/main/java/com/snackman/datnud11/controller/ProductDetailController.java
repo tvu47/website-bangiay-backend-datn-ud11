@@ -20,7 +20,7 @@ import java.util.List;
 public class ProductDetailController {
     @Autowired
     private ProductDetailService productDetailService;
-    
+
     @GetMapping
     public ResponseEntity<List<ProductDetail>> getRolesEmployee(){
 //        return new ResponseEntity<>(inventoryService.findAll(), HttpStatus.OK);
@@ -33,12 +33,12 @@ public class ProductDetailController {
     }
     @PutMapping
     public ResponseEntity<ProductDetail> updateRolesEmployeeById(@RequestBody ProductDetail productDetail) throws CustomNotFoundException {
-        
+
 //        return new ResponseEntity<>(inventoryRepository.save(inventory), HttpStatus.CREATED);
         return null;
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteinventoryById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{       
+    public ResponseEntity<String> deleteinventoryById(@PathVariable(name = "id") Long id) throws CustomNotFoundException{
         return new ResponseEntity<>("Delete Successfully!",HttpStatus.NO_CONTENT);
     }
 
@@ -52,11 +52,13 @@ public class ProductDetailController {
         ProductDetail productDetail = this.productDetailService.save(productDetailDTO);
         return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(), "Thêm thành công!", productDetail), HttpStatus.OK);
     }
-
-
     @PostMapping(value = "/upload-data", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadFileExcel(@RequestParam(value = "file", required = false)MultipartFile file){
+    public ResponseEntity<?> uploadFileExcel(@RequestParam(value = "file")MultipartFile file){
+      if (file.isEmpty()){
+        return new ResponseEntity<>("Import data fail! ", HttpStatus.OK);
+      }else{
         this.productDetailService.saveInventoryToDatabase(file);
-        return new ResponseEntity<>("Save OK ", HttpStatus.OK);
+        return new ResponseEntity<>("Import successfully!", HttpStatus.OK);
+      }
     }
 }

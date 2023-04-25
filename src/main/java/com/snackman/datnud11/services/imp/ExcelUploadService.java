@@ -2,6 +2,7 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.entity.InventoryImportExcelDTO;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -36,6 +37,9 @@ public class ExcelUploadService {
                     rowIndex++;
                     continue;
                 }
+                if (isRowEmpty(row)){
+                    break;
+                }
                 Iterator<Cell> cellIterator = row.cellIterator();
                 int cellIndex = 0;
                 InventoryImportExcelDTO inventoryImportExcelDTO = new InventoryImportExcelDTO();
@@ -61,4 +65,12 @@ public class ExcelUploadService {
         }
         return inventoryImportExcelDTOS;
     }
+  public static boolean isRowEmpty(Row row) {
+    for (int c = row.getFirstCellNum(); c < row.getLastCellNum(); c++) {
+      Cell cell = row.getCell(c);
+      if (cell != null && cell.getCellType() != CellType.BLANK)
+        return false;
+    }
+    return true;
+  }
 }
