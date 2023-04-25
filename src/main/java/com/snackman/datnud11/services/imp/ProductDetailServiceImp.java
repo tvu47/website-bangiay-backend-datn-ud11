@@ -175,6 +175,7 @@ public class ProductDetailServiceImp implements ProductDetailService {
                 // list data from excel file
                 List<InventoryImportExcelDTO> list = ExcelUploadService.getDataFromExcel(multipartFile.getInputStream());
                 // to do ...
+              System.out.println("List size: "+ list.size());
                 this.repo.saveAll(swap(list));
             // this.inventoryImportExcelRepo.saveAll(list);
             } catch (IOException e) {
@@ -196,6 +197,7 @@ public class ProductDetailServiceImp implements ProductDetailService {
                 int quatity = repo.findById(inventoryImportExcelDTO.getProductDatailId()).get().getQuatity() + inventoryImportExcelDTO.getQuantity();
                 p.setQuatity(quatity);
             }catch (Exception e){
+              e.printStackTrace();
                 throw new RuntimeException("Something wrong in excel file template.");
             }
             productDetailList.add(p);

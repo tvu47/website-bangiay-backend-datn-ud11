@@ -34,6 +34,7 @@ public class SizeServiceImp implements SizeService {
 
     @Override
     public Size findById(Long id) {
+      System.out.println("size id: "+ id);
         Optional<Size> optional = this.repo.findById(id);
         if(optional.isEmpty()){
             throw new RuntimeException("Not found size id " + id);
