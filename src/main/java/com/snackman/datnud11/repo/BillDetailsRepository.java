@@ -22,7 +22,7 @@ public interface BillDetailsRepository extends JpaRepository<BillDetails, Long> 
     List<BillDetails> getBillDetailsByIdBill(@Param("ids") Long id);
 
 //    @Query(value = "select * from bill_details where bill_id in (:ids)", nativeQuery = true)
-    @Query(value = "select new com.snackman.datnud11.responses.BillDetailThongKeResponse(SUM(v.quantity),v), v from BillDetails v where v.billId in (:ids) group by v.productName, v.sizeName, v.colorName")
+    @Query(value = "select new com.snackman.datnud11.responses.BillDetailThongKeResponse(SUM(v.quantity),v) from BillDetails v where v.billId in (:ids) group by v.productName, v.sizeName, v.colorName")
     List<BillDetailThongKeResponse> getBillDetailsByListIDBill(@Param("ids") List<Long> id);
 
     //    @Query(value = "SELECT new com.snackman.datnud11.entity.Count(COUNT(v) as count, v.productId, v.billDetailId) FROM BillDetails v where v.billId=:ids GROUP BY v.productId")
