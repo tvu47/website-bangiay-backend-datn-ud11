@@ -291,9 +291,9 @@ public class CustomerServiceImp implements CustomerService {
                 customers.setGender(0);
                 customersRepository.save(customers);
 //                send gmail to customer
-                emailSenderService.sendEmail(username,
-                        EmailConstant.EMAIL_REGISTER_SUBJECT,
-                        EmailConstant.EMAIL_REGISTER_BODY);
+//                emailSenderService.sendEmail(username,
+//                        EmailConstant.EMAIL_REGISTER_SUBJECT,
+//                        EmailConstant.EMAIL_REGISTER_BODY);
                 return true;
             }
         } catch (UserExistedException e) {
