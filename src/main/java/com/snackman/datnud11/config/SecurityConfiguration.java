@@ -61,7 +61,7 @@ public class SecurityConfiguration {
         .csrf()
             .disable()
         .authorizeHttpRequests().requestMatchers("/api/v1/account/**", "/api/v1/admin/logout", "/api/v1/voucher/all", "/api/v1/voucher/add",
-                    "/api/v1/customers/store","/api/v1/admin/login","/api/v1/voucher/update", "api/v1/bills/**").hasAnyAuthority("ADMIN_ROLE","EMPLOYEE_ROLE")
+                    "/api/v1/customers/store","/api/v1/admin/login","/api/v1/voucher/update", "api/v1/bills/**","/api/v1/products/delete-product").hasAnyAuthority("ADMIN_ROLE","EMPLOYEE_ROLE")
             .requestMatchers("/api/v1/customers/register","/api/v1/admin/login","/api/v1/customers/forgot-password","/api/v1/materials",
                     "/api/v1/products/**","/api/v1/inventory/**","/api/v1/payment/**","/api/v1/category/**", "/api/v1/employee/**").permitAll()
             .requestMatchers("/api/v1/card","api/v1/customers/history","api/v1/customers/history-bills","api/v1/customers/history-bill-details",

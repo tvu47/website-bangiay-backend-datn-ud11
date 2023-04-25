@@ -25,6 +25,7 @@ public class ProductManagerResponse {
         private String size;
         private Integer quantity;
         private Double price;
+        private String image;
 
     }
 

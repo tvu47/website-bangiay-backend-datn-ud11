@@ -93,5 +93,11 @@ public class ProductsController {
         return new ResponseEntity<>(this.zProductService.getSameProducts(productSame.getCategoryId(), productSame.getProductId()), HttpStatus.OK);
     }
 
+    @PostMapping("/delete-product")
+    public ResponseEntity<NoticeResponse> deleteProduct(@RequestParam(value = "id", required = true) Long id){
+        this.productService.delete(id);
+        return new ResponseEntity<>(new NoticeResponse(200,"Xóa thành công",null), HttpStatus.OK);
+    }
+
 }
 

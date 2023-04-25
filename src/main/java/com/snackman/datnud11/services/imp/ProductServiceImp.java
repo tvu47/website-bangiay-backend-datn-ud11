@@ -69,7 +69,13 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public void delete(Long id) {
-        this.repo.deleteById(id);
+        try {
+            Products products = this.findById(id);
+            products.setStatus(false);
+            this.save(products);
+        }catch (Exception e){
+
+        }
     }
 
     @Override
@@ -170,6 +176,9 @@ public class ProductServiceImp implements ProductService {
         List<Materials> materials = this.materialService.findAll();
         List<ProductDetail> inventoriesList = this.productDetailService.findAll();
         for(Products product : products){
+            if(!product.getStatus()){
+                continue;
+            }
             ProductManagerResponse response = new ProductManagerResponse();
             response.setId(product.getId());
             response.setName(product.getProductName());
@@ -190,6 +199,7 @@ public class ProductServiceImp implements ProductService {
                 i.setSize(productDetail.getSizeName());
                 i.setQuantity(productDetail.getQuatity());
                 i.setPrice(productDetail.getPrice());
+                i.setImage(productDetail.getImage());
                 listInventories.add(i);
             }
             list.add(response);
