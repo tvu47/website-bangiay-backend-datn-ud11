@@ -79,7 +79,8 @@ public class ZProductServiceImp implements ZProductService {
                 haveInventory = true;
                 if(productDetail.getPrice() > maxPrice){
                     maxPrice = productDetail.getPrice();
-                } else if(productDetail.getPrice() < minPrice){
+                }
+                if(productDetail.getPrice() < minPrice){
                     minPrice = productDetail.getPrice();
                 }
             }
