@@ -2,6 +2,7 @@ package com.snackman.datnud11.services.imp;
 
 import com.snackman.datnud11.consts.SearchProducts;
 import com.snackman.datnud11.dto.ProductDTO;
+import com.snackman.datnud11.dto.ProductUpdateDTO;
 import com.snackman.datnud11.dto.ProductUpdateRequest;
 import com.snackman.datnud11.entity.*;
 import com.snackman.datnud11.repo.ProductsRepository;
@@ -54,6 +55,19 @@ public class ProductServiceImp implements ProductService {
         products1.setContent(request.getContent());
         products1.setManufactureAddress(request.getManufactory());
         return repo.save(products1);
+    }
+
+    @Override
+    public Products updateProduct(ProductUpdateDTO productUpdateDTO) throws Exception {
+        Products products = this.findById(productUpdateDTO.getId());
+        products.setProductName(productUpdateDTO.getName());
+        products.setCategoryId(productUpdateDTO.getCategory());
+        products.setMaterialId(productUpdateDTO.getMaterial());
+        products.setContent(productUpdateDTO.getContent());
+        products.setManufactureAddress(products.getManufactureAddress());
+        this.repo.save(products);
+
+        return products;
     }
 
     @Override

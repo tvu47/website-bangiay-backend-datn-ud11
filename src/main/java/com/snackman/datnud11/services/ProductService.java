@@ -1,6 +1,7 @@
 package com.snackman.datnud11.services;
 
 import com.snackman.datnud11.dto.ProductDTO;
+import com.snackman.datnud11.dto.ProductUpdateDTO;
 import com.snackman.datnud11.dto.ProductUpdateRequest;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.entity.Size;
@@ -16,6 +17,8 @@ public interface ProductService {
 
     Products save(Products products);
     Products updateProduct(ProductUpdateRequest products);
+
+    Products updateProduct(ProductUpdateDTO productUpdateDTO) throws Exception;
     Products save(ProductDTO productDTO);
     void delete(Products products);
 

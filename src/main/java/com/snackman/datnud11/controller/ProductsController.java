@@ -2,6 +2,7 @@ package com.snackman.datnud11.controller;
 
 import com.snackman.datnud11.dto.ProductDTO;
 import com.snackman.datnud11.dto.ProductSame;
+import com.snackman.datnud11.dto.ProductUpdateDTO;
 import com.snackman.datnud11.dto.ProductUpdateRequest;
 import com.snackman.datnud11.entity.Products;
 import com.snackman.datnud11.responses.NoticeResponse;
@@ -97,6 +98,11 @@ public class ProductsController {
     public ResponseEntity<NoticeResponse> deleteProduct(@RequestParam(value = "id", required = true) Long id){
         this.productService.delete(id);
         return new ResponseEntity<>(new NoticeResponse(200,"Xóa thành công",null), HttpStatus.OK);
+    }
+
+    @PostMapping("/update-product")
+    public ResponseEntity<NoticeResponse> updateProduct(@RequestBody ProductUpdateDTO productUpdateDTO) throws Exception {
+        return new ResponseEntity<>(new NoticeResponse(200,"Lưu thành công",this.productService.updateProduct(productUpdateDTO)), HttpStatus.OK);
     }
 
 }

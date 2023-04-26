@@ -47,8 +47,12 @@ public class VoucherController {
 
     @PostMapping("/add")
     public ResponseEntity<NoticeResponse> addNewVoucher(@RequestBody VoucherDTO voucherDTO) throws Exception {
-        VoucherResponse voucher = this.service.save(voucherDTO);
-        return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(), "Thêm mới thành công!", voucher), HttpStatus.OK);
+        try {
+            VoucherResponse voucher = this.service.save(voucherDTO);
+            return new ResponseEntity<>(new NoticeResponse(HttpStatus.OK.value(), "Thêm mới thành công!", voucher), HttpStatus.OK);
+        }catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @PostMapping("/{id}")

@@ -102,20 +102,19 @@ public class VoucherServiceImp implements VoucherService {
 
     @Override
     public VoucherResponse save(VoucherDTO voucherDTO) throws Exception{
-
         Voucher exist = this.repo.findByCode(voucherDTO.getCode());
         if(exist != null){
-            throw new Exception("Mã giảm giá " + voucherDTO.getCode() + " đã tồn tại");
+            throw new Exception("Code existed");
         }
 
         if(voucherDTO.getValue() <= 0 || voucherDTO.getValue() > 100){
-            throw new Exception("Giá trị không hợp lệ");
+            throw new Exception("Invalid value");
         }
         if(voucherDTO.getQuantity() <= 0){
-            throw new Exception("Số lượng không hợp lệ");
+            throw new Exception("Invalid quantity");
         }
         if(voucherDTO.getStartTime().getTime() > voucherDTO.getEndTime().getTime()){
-            throw new Exception("Thời gian kết thúc không hợp lệ");
+            throw new Exception("Invalid expired");
         }
         Voucher voucher = new Voucher();
         voucher.setCode(voucherDTO.getCode());
